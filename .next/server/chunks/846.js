@@ -29,7 +29,7 @@ function Blog() {
             date: "October 23, 2025",
             excerpt: "This post is the first in a series of case studies in which we apply AI-Driven Research for Systems (ADRS) to optimize performance in various systems. In this blog, we discuss the optimization of a key component in large language model (LLM) inference. Specifically, we demonstrate how OpenEvolve independently discovers and surpasses highly optimized algorithms engineered by human experts to achieve a 5.0x speedup.",
             image: "/moe.png",
-            url: "https://adrs-ucb.notion.site/"
+            url: "https://adrs-ucb.notion.site/moe-load-balancing"
         },
         {
             title: "Barbarians at The Gate: How AI is Upending Systems Research",
