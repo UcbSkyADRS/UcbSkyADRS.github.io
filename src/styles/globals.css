@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: theme('colors.paper');
+  color: theme('colors.primary');
+}
+
+::selection {
+  color: white;
+  background: theme('colors.primary');
+}
+
+a {
+  color: theme('colors.primary');
+  text-decoration: underline;
+}
+
+.full-container {
+  min-height: 100vh;
+}
+
+
