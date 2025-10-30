@@ -1,24 +1,24 @@
 {
-  "name": "ucb-sky-adrs",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "export": "next export && touch ./out/.nojekyll"
-  },
-  "dependencies": {
-    "next": "12.1.6",
-    "react": "18.1.0",
-    "react-dom": "18.1.0",
-    "react-icons": "^4.12.0"
-  },
-  "devDependencies": {
-    "autoprefixer": "^10.4.7",
-    "postcss": "^8.4.14",
-    "tailwindcss": "^3.1.2"
-  }
+	"name": "ucb-sky-adrs",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"export": "next export && touch ./out/.nojekyll && rm -rf ./docs && mv ./out ./docs"
+	},
+	"dependencies": {
+		"next": "12.1.6",
+		"react": "18.1.0",
+		"react-dom": "18.1.0",
+		"react-icons": "^4.12.0"
+	},
+	"devDependencies": {
+		"autoprefixer": "^10.4.7",
+		"postcss": "^8.4.14",
+		"tailwindcss": "^3.1.2"
+	}
 }
 
 
