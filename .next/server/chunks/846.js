@@ -16,10 +16,18 @@ __webpack_require__.r(__webpack_exports__);
 function Blog() {
     const posts = [
         {
+            title: "Automating Algorithm Discovery: A Case Study in Optimizing LLM Queries over Relational Workloads",
+            author: "ADRS Team",
+            date: "November 6, 2025",
+            excerpt: "This post is the third in our ADRS series, where we use AI to automatically discover better algorithms for real-world systems problems. In this blog, we revisit a recent research challenge from our MLSys\u201925 paper, \u201COptimizing LLM Queries in Relational Data Analytics Workloads \u201D, which tackles the high cost and latency of executing LLM queries over relational data. We show how using OpenEvolve, ADRS autonomously discovered a 3\xd7 faster algorithm that achieves the same prefix reuse ratio as the published solution.",
+            image: "/llmqueries.png",
+            url: "https://adrs-ucb.notion.site/llm-queries"
+        },
+        {
             title: "Automating Algorithm Discovery: A Case Study in Spot Instance Scheduling",
             author: "ADRS Team",
             date: "October 30, 2025",
-            excerpt: "This post is the second in our AI-Driven Research Systems (ADRS) series, where we apply AI to optimize complex system problems. Here, we tackle spot instance scheduling, a classic cost-versus-reliability problem in the cloud. Specifically, we demonstrate how OpenEvolve discovers novel algorithms that surpass the algorithm from an NSDI'24 Best Paper, achieving up to 16% and 48% cost savings in a single and multi-region setups, respectively.",
+            excerpt: "This post is the second in our ADRS series, where we apply AI to optimize complex system problems. Here, we tackle spot instance scheduling, a classic cost-versus-reliability problem in the cloud. Specifically, we demonstrate how OpenEvolve discovers novel algorithms that surpass the algorithm from an NSDI'24 Best Paper, achieving up to 16% and 48% cost savings in a single and multi-region setups, respectively.",
             image: "/spot.png",
             url: "https://adrs-ucb.notion.site/spot-instance-scheduling"
         },
@@ -27,7 +35,7 @@ function Blog() {
             title: "Automating Algorithm Discovery: A Case Study in MoE Load Balancing",
             author: "ADRS Team",
             date: "October 23, 2025",
-            excerpt: "This post is the first in a series of case studies in which we apply AI-Driven Research for Systems (ADRS) to optimize performance in various systems. In this blog, we discuss the optimization of a key component in large language model (LLM) inference. Specifically, we demonstrate how OpenEvolve independently discovers and surpasses highly optimized algorithms engineered by human experts to achieve a 5.0x speedup.",
+            excerpt: "This post is the first in a series of case studies in which we apply ADRS to optimize performance in various systems. In this blog, we discuss the optimization of a key component in large language model (LLM) inference. Specifically, we demonstrate how OpenEvolve independently discovers and surpasses highly optimized algorithms engineered by human experts to achieve a 5.0x speedup.",
             image: "/moe.png",
             url: "https://adrs-ucb.notion.site/moe-load-balancing"
         },
