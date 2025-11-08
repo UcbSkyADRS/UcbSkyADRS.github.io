@@ -7,7 +7,7 @@ export default function Blog() {
       excerpt:
         "This post is the third in our ADRS series, where we use AI to automatically discover better algorithms for real-world systems problems. In this blog, we revisit a recent research challenge from our MLSys’25 paper, “Optimizing LLM Queries in Relational Data Analytics Workloads ”, which tackles the high cost and latency of executing LLM queries over relational data. We show how using OpenEvolve, ADRS autonomously discovered a 3× faster algorithm that achieves the same prefix reuse ratio as the published solution.",
       image: "/llmqueries.png",
-      url: "https://adrs-ucb.notion.site/llm-queries",
+      url: "https://adrs-ucb.notion.site/llm-sql-evolution",
     },
     {
       title: "Automating Algorithm Discovery: A Case Study in Spot Instance Scheduling",
