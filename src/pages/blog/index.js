@@ -1,6 +1,24 @@
 export default function Blog() {
   const posts = [
     {
+      title: "Autocomp: An ADRS Framework for Optimizing Tensor Accelerator Code",
+      author: "ADRS Team",
+      date: "November 20, 2025",
+      excerpt:
+        "This post is the fifth in our ADRS series, where we explore how AI can be applied to systems research. This post was contributed by a team of our colleagues at UC Berkeley’s SLICE Lab! In this blog post, we go down the stack and explore how AI is being used to speed up AI—at the kernel level. Specifically, we highlight Autocomp, the first LLM-driven code optimizer for low-resource tensor accelerators. Autocomp helps hardware designers extract the full performance of tensor accelerators, outperforming human expert kernel writers by up to 17x on AWS Trainium while being highly portable and easy to use.",
+      image: "/autocomp.png",
+      url: "https://adrs-ucb.notion.site/autocomp",
+    },
+    {
+      title: "Automating Algorithm Discovery: A Case Study in Transaction Scheduling",
+      author: "ADRS Team",
+      date: "November 13, 2025",
+      excerpt:
+        "This post is the fourth in our ADRS series. In this blog, we revisit a recent research problem from our VLDB ‘24 paper, Towards Optimal Transaction Scheduling, which minimizes contention for database transactional workloads. We show how we leverage an ADRS framework to discover an algorithm with 34% faster schedules. This case study shows how AI can be used to develop solutions for different problem settings that would otherwise require manual redesign.",
+      image: "/transaction.png",
+      url: "https://adrs-ucb.notion.site/txn-scheduling",
+    },
+    {
       title: "Automating Algorithm Discovery: A Case Study in Optimizing LLM Queries over Relational Workloads",
       author: "ADRS Team",
       date: "November 6, 2025",
