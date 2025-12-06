@@ -3,17 +3,22 @@ import { FaDiscord, FaEnvelope, FaGithub, FaTwitter, FaSlack, FaRss } from "reac
 
 export default function Nav() {
   return (
-    <div className="navbar fixed w-full flex md:flex-col px-4 md:px-6 py-4 md:py-8 md:pb-10 z-30 bg-gradient-to-b from-sidebarTintStart to-sidebarTintEnd text-primary md:h-full items-center justify-between md:static md:w-auto md:max-h-screen md:justify-between">
+    <div className="navbar fixed w-full flex md:flex-col px-4 md:px-6 py-4 md:py-8 md:pb-10 z-30 bg-gradient-to-b from-sidebarTintStart to-sidebarTintEnd text-primary md:h-full items-center justify-between md:static md:w-56 md:max-h-screen md:justify-between">
       <div>
         <Link href="/">
-          <p className="text-5xl md:text-7xl cursor-pointer font-extrabold tracking-tight text-berkeleyBlue">ADRS</p>
+          <a className="cursor-pointer">
+            <p className="text-4xl md:text-5xl font-extrabold tracking-tight text-berkeleyBlue">ADRS</p>
+          </a>
         </Link>
         <div className="md:flex md:flex-col gap-5 hidden mt-6 md:mt-10">
           <Link href="/blog">
-            <a className="text-2xl md:text-3xl font-semibold leading-none opacity-90 hover:opacity-100">Blog</a>
+            <a className="text-lg md:text-xl font-semibold leading-none opacity-90 hover:opacity-100">Blog</a>
           </Link>
           <Link href="/about">
-            <a className="text-2xl md:text-3xl font-semibold leading-none opacity-90 hover:opacity-100">About</a>
+            <a className="text-lg md:text-xl font-semibold leading-none opacity-90 hover:opacity-100">About</a>
+          </Link>
+          <Link href="/leaderboard">
+            <a className="text-lg md:text-xl font-semibold leading-none opacity-90 hover:opacity-100">Leaderboard</a>
           </Link>
         </div>
       </div>
@@ -27,5 +32,3 @@ export default function Nav() {
     </div>
   );
 }
-
-
