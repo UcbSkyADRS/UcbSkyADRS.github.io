@@ -48,8 +48,8 @@ const DEMO_ROWS = [
   {
     model: "AutoEvolve",
     org: "ADRS Team",
-    avg: 77.3,
-    problems: [97.8, 70.2, 76.4, 50.0, 87.41, null, null, 88.9, 70.6],
+    avg: 81.9,
+    problems: [97.8, 70.2, 76.4, null, 87.41, null, null, 88.9, 70.6],
     date: "2025-12-06",
     link: "https://github.com/mert-cemri/autoevolve"
   }
