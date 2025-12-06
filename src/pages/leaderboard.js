@@ -44,6 +44,14 @@ const DEMO_ROWS = [
     problems: [72.0, 66.4, 68.5, null, 87.41, 63.65, 45.62, 86.5, 68.2],
     date: "2025-12-06",
     link: "https://github.com/SakanaAI/ShinkaEvolve"
+  },
+  {
+    model: "AutoEvolve",
+    org: "ADRS Team",
+    avg: 77.3,
+    problems: [97.8, 70.2, 76.4, 50.0, 87.41, null, null, 88.9, 70.6],
+    date: "2025-12-06",
+    link: "https://github.com/mert-cemri/autoevolve"
   }
 ];
 
@@ -127,19 +135,19 @@ export default function Leaderboard() {
   return (
     <div className="pb-8 origin-top-left" style={{ transform: 'scale(0.85)', width: '117.6%' }}>
       {/* Header - compact and clean */}
-      <div className="w-full bg-gradient-to-r from-berkeleyBlue to-blue-800 text-white py-6 md:py-8 mb-6 rounded-lg shadow-sm">
-        <div className="flex flex-col items-center gap-2">
-          <div className="flex items-center gap-4">
+      <div className="w-full bg-gradient-to-r from-berkeleyBlue to-blue-800 text-white py-4 md:py-5 mb-6 rounded-lg shadow-sm">
+        <div className="flex flex-col items-center mt-8">
+          <div className="flex items-center gap-3">
             <img
               src="/ADRS.png"
               alt="ADRS Logo"
-              className="w-14 h-14 md:w-16 md:h-16 rounded-lg object-contain bg-white p-1"
+              className="w-12 h-12 md:w-14 md:h-14 rounded-lg object-contain bg-white p-1"
             />
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
               ADRS Leaderboard
             </h1>
           </div>
-          <p className="text-base md:text-lg opacity-90 mt-2">
+          <p className="text-base md:text-lg opacity-90 mt-1">
             Scores averaged across <b>9 problems</b>
           </p>
         </div>
@@ -148,13 +156,13 @@ export default function Leaderboard() {
       {/* Table section */}
       <section className="w-full mb-8">
         <div className="w-full overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
-          <table className="w-full border-collapse text-sm md:text-base">
+          <table className="min-w-max border-collapse text-sm md:text-base">
             <thead className="sticky top-0 z-10">
               <tr className="bg-gray-50 border-b-2 border-gray-200">
                 {HEADERS.map((h, hi) => (
                   <th
                     key={h.key}
-                    className={`px-3 py-3 cursor-pointer whitespace-nowrap font-semibold text-gray-700 hover:bg-gray-100 transition-colors ${h.align === "right" ? "text-right" : "text-left"}`}
+                    className={`px-3 py-3 cursor-pointer whitespace-nowrap font-semibold text-gray-700 hover:bg-gray-100 transition-colors ${h.align === "right" ? "text-right" : "text-left"} ${hi === 0 ? "sticky left-0 z-20 bg-gray-50" : ""}`}
                     onClick={() => handleSort(h.key)}
                   >
                     <span className="inline-flex items-center gap-1">
@@ -177,7 +185,7 @@ export default function Leaderboard() {
                 {TYPE_UNITS.map((u, ui) => (
                   <td
                     key={ui}
-                    className={`px-3 py-1 text-sm text-gray-500 whitespace-nowrap ${ui < 2 || ui === HEADERS.length - 1 ? "text-left" : "text-right"}`}
+                    className={`px-3 py-1 text-sm text-gray-500 whitespace-nowrap ${ui < 2 || ui === HEADERS.length - 1 ? "text-left" : "text-right"} ${ui === 0 ? "sticky left-0 z-20 bg-gray-50" : ""}`}
                     style={{ minWidth: ui >= 2 && ui < HEADERS.length - 1 ? 70 : undefined }}
                   >
                     {typeof u === "string" ? u : u.note}
@@ -186,15 +194,16 @@ export default function Leaderboard() {
               </tr>
             </thead>
             <tbody>
-              {sortedRows.map((row, idx) => (
+              {sortedRows.map((row, idx) => {
+                return (
                 <tr
                   key={`${row.model}-${row.date}`}
                   className={`
                     border-b border-gray-100 transition-colors
-                    ${idx === 0 ? "bg-amber-50 hover:bg-amber-100" : idx % 2 === 1 ? "bg-gray-50/50 hover:bg-gray-100" : "bg-white hover:bg-gray-50"}
+                    ${idx === 0 ? "bg-amber-50 hover:bg-amber-100" : idx % 2 === 1 ? "bg-gray-100 hover:bg-gray-200" : "bg-white hover:bg-gray-50"}
                   `}
                 >
-                  <td className="py-3 px-3 text-left font-semibold text-gray-900">
+                  <td className={`py-3 px-3 text-left font-semibold text-gray-900 sticky left-0 z-10 ${idx === 0 ? "bg-amber-50" : idx % 2 === 1 ? "bg-gray-100" : "bg-white"}`}>
                     {row.link ? (
                       <a href={row.link} target="_blank" rel="noopener noreferrer" className="text-berkeleyBlue hover:underline">
                         {row.model}
@@ -215,7 +224,8 @@ export default function Leaderboard() {
                   ))}
                   <td className="py-3 px-3 text-left text-gray-400 text-sm whitespace-nowrap" style={{ minWidth: 100 }}>{row.date}</td>
                 </tr>
-              ))}
+              );
+              })}
             </tbody>
           </table>
         </div>
