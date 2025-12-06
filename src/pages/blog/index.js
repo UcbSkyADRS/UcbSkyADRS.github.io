@@ -59,7 +59,7 @@ export default function Blog() {
   return (
     <section className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-berkeleyBlue">Blog Series</h1>
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-berkeleyBlue">Blog Series</h1>
         <p className="text-xl md:text-2xl text-primary/80">
           Insights and case studies from AI-Driven Research Systems (ADRS).
         </p>

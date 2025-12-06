@@ -5,7 +5,7 @@ export default function About() {
   return (
     <section className="space-y-3">
       <header className="space-y-2">
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-berkeleyBlue">About</h1>
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-berkeleyBlue">About</h1>
         <p className="text-xl md:text-2xl text-primary/80"></p>
       </header>
 
