@@ -3,12 +3,10 @@ import { FaDiscord, FaEnvelope, FaGithub, FaTwitter, FaSlack, FaRss } from "reac
 
 export default function Nav() {
   return (
-    <div className="navbar fixed w-full flex md:flex-col px-4 md:px-6 py-4 md:py-8 md:pb-10 z-30 bg-gradient-to-b from-sidebarTintStart to-sidebarTintEnd text-primary md:h-full items-center justify-between md:static md:w-56 md:max-h-screen md:justify-between">
+    <div className="navbar fixed w-full flex md:flex-col px-4 md:px-6 py-4 md:py-8 md:pb-10 z-30 bg-gradient-to-b from-sidebarTintStart to-sidebarTintEnd text-primary md:h-full items-center justify-between md:static md:w-auto md:max-h-screen md:justify-between">
       <div>
         <Link href="/">
-          <a className="cursor-pointer">
-            <p className="text-4xl md:text-5xl font-extrabold tracking-tight text-berkeleyBlue">ADRS</p>
-          </a>
+          <p className="text-4xl md:text-5xl cursor-pointer font-extrabold tracking-tight text-berkeleyBlue">ADRS</p>
         </Link>
         <div className="md:flex md:flex-col gap-5 hidden mt-6 md:mt-10">
           <Link href="/blog">
