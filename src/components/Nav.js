@@ -9,14 +9,14 @@ export default function Nav() {
           <p className="text-4xl md:text-5xl cursor-pointer font-extrabold tracking-tight text-berkeleyBlue">ADRS</p>
         </Link>
         <div className="md:flex md:flex-col gap-5 hidden mt-6 md:mt-10">
-          <Link href="/blog">
-            <a className="text-lg md:text-xl font-semibold leading-none opacity-90 hover:opacity-100">Blog</a>
+          <Link href="/blog" className="text-lg md:text-xl font-semibold leading-none opacity-90 hover:opacity-100">
+            Blog
           </Link>
-          <Link href="/about">
-            <a className="text-lg md:text-xl font-semibold leading-none opacity-90 hover:opacity-100">About</a>
+          <Link href="/about" className="text-lg md:text-xl font-semibold leading-none opacity-90 hover:opacity-100">
+            About
           </Link>
-          <Link href="/leaderboard">
-            <a className="text-lg md:text-xl font-semibold leading-none opacity-90 hover:opacity-100">Leaderboard</a>
+          <Link href="/leaderboard" className="text-lg md:text-xl font-semibold leading-none opacity-90 hover:opacity-100">
+            Leaderboard
           </Link>
         </div>
       </div>

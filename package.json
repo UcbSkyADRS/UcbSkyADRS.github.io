@@ -9,9 +9,9 @@
 		"export": "next export -o ./docs && touch ./docs/.nojekyll"
 	},
 	"dependencies": {
-		"next": "12.1.6",
-		"react": "18.1.0",
-		"react-dom": "18.1.0",
+		"next": "^14.2.33",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
 		"react-icons": "^4.12.0"
 	},
 	"devDependencies": {
