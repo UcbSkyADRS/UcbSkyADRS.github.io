@@ -1,8 +1,17 @@
 export default function Blog() {
   const posts = [
     {
+      title: "BitsEvolve: Self-Optimizing GPU Code Generation at Datadog",
+      author: "Datadog & ADRS Team",
+      date: "December 4, 2025",
+      excerpt:
+        "This post is part of our ADRS series, where we explore how AI can be applied to systems research. We feature exciting work from Datadog this week! In this blog post, we examine the problem of generating production-ready, optimized GPU code from an evolutionary search perspective. Specifically, we share results from BitsEvolve, an ADRS framework built at Datadog that targets various modalities ranging from optimizing hotspots in CPU-bound code to policy/configuration tuning for applications like inference serving frameworks (e.g. vLLM), Load Balancers, Garbage Collectors and more. Through profile guidance and robust evaluation mechanisms, we show how BitsEvolve-generated code can outperform compiled models, achieving speedups of up to 1.6x with reasonable search costs.",
+      image: "/datadog.png",
+      url: "https://adrs-ucb.notion.site/datadog",
+    },
+    {
       title: "Autocomp: An ADRS Framework for Optimizing Tensor Accelerator Code",
-      author: "ADRS Team",
+      author: "Autocomp & ADRS Teams",
       date: "November 20, 2025",
       excerpt:
         "This post is the fifth in our ADRS series, where we explore how AI can be applied to systems research. This post was contributed by a team of our colleagues at UC Berkeley’s SLICE Lab! In this blog post, we go down the stack and explore how AI is being used to speed up AI—at the kernel level. Specifically, we highlight Autocomp, the first LLM-driven code optimizer for low-resource tensor accelerators. Autocomp helps hardware designers extract the full performance of tensor accelerators, outperforming human expert kernel writers by up to 17x on AWS Trainium while being highly portable and easy to use.",
@@ -58,39 +67,39 @@ export default function Blog() {
 
   return (
     <section className="space-y-8">
-      <header className="space-y-2">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-berkeleyBlue">Blog Series</h1>
-        <p className="text-xl md:text-2xl text-primary/80">
+      <header className="space-y-1">
+        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-berkeleyBlue mt-2">Blog Series</h1>
+        <p className="text-base md:text-lg text-primary/80">
           Insights and case studies from AI-Driven Research Systems (ADRS).
         </p>
       </header>
 
-      <div className="space-y-8">
+      <div className="space-y-5">
         {posts.map((post, idx) => (
           <a
             key={idx}
             href={post.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="block rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow no-underline"
+            className="block rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow no-underline"
             aria-label={`Read ${post.title} on Notion`}
           >
             <div className="bg-white md:flex md:items-stretch">
-              <div className="md:basis-5/12 bg-white flex items-center justify-center p-4 md:p-5">
+              <div className="md:basis-4/12 bg-white flex items-center justify-center p-3">
                 <img
                   src={post.image}
                   alt={post.title}
-                  className="w-full h-56 md:h-64 object-contain"
+                  className="w-full h-32 md:h-36 object-contain"
                 />
               </div>
-              <div className="md:basis-7/12 bg-berkeleyBlue text-white p-6 md:p-8">
-                <h2 className="text-3xl md:text-4xl font-bold leading-tight">
+              <div className="md:basis-8/12 bg-berkeleyBlue text-white p-4 md:p-5">
+                <h2 className="text-base md:text-lg font-semibold tracking-normal" style={{ lineHeight: '1.1' }}>
                   {post.title}
                 </h2>
-                <p className="mt-2 text-white/80 text-sm md:text-base border-b border-white/20 pb-3">
+                <p className="mt-1 text-white/70 text-[10px] md:text-xs border-b border-white/20 pb-1.5">
                   by: {post.author}, {post.date}
                 </p>
-                <p className="mt-4 text-white/90 text-base md:text-lg">
+                <p className="mt-2 text-white/90 text-sm leading-tight line-clamp-3">
                   {post.excerpt}
                 </p>
               </div>

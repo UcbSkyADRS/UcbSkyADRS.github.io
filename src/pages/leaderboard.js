@@ -204,11 +204,11 @@ export default function Leaderboard() {
                     )}
                   </td>
                   <td className={`py-3 px-3 text-gray-600 whitespace-nowrap ${row.org === "-" ? "text-center" : "text-left"}`} style={{ minWidth: 100 }}>{row.org}</td>
-                  <td className={`py-3 px-3 text-right font-bold ${row.avg === maxValues.avg ? 'text-green-600' : 'text-berkeleyBlue'}`}>{row.avg.toFixed(1)}</td>
+                  <td className={`py-3 px-3 text-right font-bold ${row.avg === maxValues.avg ? 'text-emerald-600 font-bold' : 'text-berkeleyBlue'}`}>{row.avg.toFixed(1)}</td>
                   {row.problems.map((score, pi) => (
                     <td
                       key={pi}
-                      className={`py-3 px-3 text-right tabular-nums ${score !== null && score === maxValues.problems[pi] ? 'text-green-600 font-semibold' : 'text-gray-700'}`}
+                      className={`py-3 px-3 text-right tabular-nums ${score !== null && score === maxValues.problems[pi] ? 'text-emerald-600 font-bold' : 'text-gray-700'}`}
                     >
                       {score !== null ? score.toFixed(1) : <span className="text-gray-300">-</span>}
                     </td>
