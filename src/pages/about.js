@@ -27,7 +27,7 @@ export default function About() {
           </figure>
           <div className="md:w-7/12 text-primary/90 text-lg md:text-xl leading-8 space-y-2">
             <p>
-              Our initial position paper, <em>“Barbarians at the Gate: How AI is Upending Systems Research”</em>, outlines ADRS as a practical framework for AI-driven algorithm discovery in systems, with case studies like multi-region cloud scheduling and MoE load balancing.
+              Our initial position paper, <em>"Barbarians at the Gate: How AI is Upending Systems Research"</em>, outlines ADRS as a practical framework for AI-driven algorithm discovery in systems, with case studies like multi-region cloud scheduling and MoE load balancing.
             </p>
             <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4">
               <a
@@ -72,5 +72,3 @@ export default function About() {
     </section>
   );
 }
-
-
