@@ -16,7 +16,7 @@ export default function Blog() {
       excerpt:
         "This post is the first in a series of case studies in which we apply AI-Driven Research for Systems (ADRS) to optimize performance in various systems. In this blog, we discuss the optimization of a key component in large language model (LLM) inference. Specifically, we demonstrate how OpenEvolve independently discovers and surpasses highly optimized algorithms engineered by human experts to achieve a 5.0x speedup.",
       image: "/moe.png",
-      url: "https://adrs-ucb.notion.site/",
+      url: "https://adrs-ucb.notion.site/moe-load-balancing",
     },
     {
       title: "Barbarians at The Gate: How AI is Upending Systems Research",
@@ -31,8 +31,8 @@ export default function Blog() {
 
   return (
     <section className="space-y-8">
-      <header className="space-y-2">
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-berkeleyBlue">Blog Series</h1>
+      <header className="space-y-2 pb-1">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-berkeleyBlue">Blog</h1>
         <p className="text-xl md:text-2xl text-primary/80">
           Insights and case studies from AI-Driven Research Systems (ADRS).
         </p>
@@ -74,5 +74,6 @@ export default function Blog() {
     </section>
   );
 }
+
 
 
