@@ -5,6 +5,7 @@
 body {
   background-color: theme('colors.paper');
   color: theme('colors.primary');
+  font-family: 'DM Sans', sans-serif;
 }
 
 ::selection {

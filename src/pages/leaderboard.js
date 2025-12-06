@@ -1,15 +1,15 @@
 import React, { useState, useMemo } from "react";
 
 const PROBLEMS = [
-  "Cloudcast",
-  "EPLB",
-  "LLM-SQL",
-  "MAS",
-  "Prism",
-  "Spot Multi-Reg",
-  "Spot Single-Reg",
-  "Telemetry Repair",
-  "Txn Sched"
+  { name: "Cloudcast", link: "https://www.usenix.org/system/files/nsdi24-wooders.pdf" },
+  { name: "EPLB", link: null },
+  { name: "LLM-SQL", link: "https://arxiv.org/pdf/2403.05821" },
+  { name: "MAS", link: "https://arxiv.org/pdf/2503.13657" },
+  { name: "Prism", link: "https://arxiv.org/pdf/2505.04021" },
+  { name: "Spot Multi-Reg", link: null },
+  { name: "Spot Single-Reg", link: "https://www.usenix.org/system/files/nsdi24-wu-zhanghao.pdf" },
+  { name: "Telemetry Repair", link: "https://dl.acm.org/doi/pdf/10.1145/3696348.3696874" },
+  { name: "Txn Scheduling", link: "https://www.vldb.org/pvldb/vol17/p2694-cheng.pdf" }
 ];
 
 const DEMO_ROWS = [
@@ -48,11 +48,11 @@ const DEMO_ROWS = [
 ];
 
 const HEADERS = [
-  { key: "model", label: "Scaffold", align: "left" },
-  { key: "org", label: "Submitter", align: "left" },
-  { key: "avg", label: "Average", align: "right" },
-  ...PROBLEMS.map((label, i) => ({ key: `pb${i}`, label, align: "right" })),
-  { key: "date", label: "Date", align: "left" }
+  { key: "model", label: "ADRS Framework", align: "left", link: null },
+  { key: "org", label: "Contributor", align: "left", link: null },
+  { key: "avg", label: "Average", align: "right", link: null },
+  ...PROBLEMS.map((p, i) => ({ key: `pb${i}`, label: p.name, align: "right", link: p.link })),
+  { key: "date", label: "Date", align: "left", link: null }
 ];
 
 const TYPE_UNITS = [
@@ -106,6 +106,15 @@ export default function Leaderboard() {
     return humanSota ? [humanSota, ...sorted] : sorted;
   }, [sortField, sortDir, filteredRows]);
 
+  // Calculate max values for each column (for highlighting)
+  const maxValues = useMemo(() => {
+    const maxAvg = Math.max(...filteredRows.map(r => r.avg));
+    const maxProblems = PROBLEMS.map((_, i) => 
+      Math.max(...filteredRows.map(r => r.problems[i] ?? -Infinity))
+    );
+    return { avg: maxAvg, problems: maxProblems };
+  }, [filteredRows]);
+
   function handleSort(field) {
     if (sortField === field) {
       setSortDir(d => (d === "asc" ? "desc" : "asc"));
@@ -116,7 +125,7 @@ export default function Leaderboard() {
   }
 
   return (
-    <div className="pb-8">
+    <div className="pb-8 origin-top-left" style={{ transform: 'scale(0.85)', width: '117.6%' }}>
       {/* Header - compact and clean */}
       <div className="w-full bg-gradient-to-r from-berkeleyBlue to-blue-800 text-white py-6 md:py-8 mb-6 rounded-lg shadow-sm">
         <div className="flex flex-col items-center gap-2">
@@ -130,7 +139,7 @@ export default function Leaderboard() {
               ADRS Leaderboard
             </h1>
           </div>
-          <p className="text-base md:text-lg opacity-90">
+          <p className="text-base md:text-lg opacity-90 mt-2">
             Scores averaged across <b>9 problems</b>
           </p>
         </div>
@@ -138,7 +147,7 @@ export default function Leaderboard() {
 
       {/* Table section */}
       <section className="w-full mb-8">
-        <div className="w-full overflow-x-auto">
+        <div className="w-full overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
           <table className="w-full border-collapse text-sm md:text-base">
             <thead className="sticky top-0 z-10">
               <tr className="bg-gray-50 border-b-2 border-gray-200">
@@ -149,7 +158,13 @@ export default function Leaderboard() {
                     onClick={() => handleSort(h.key)}
                   >
                     <span className="inline-flex items-center gap-1">
-                      {h.label}
+                      {h.link ? (
+                        <a href={h.link} target="_blank" rel="noopener noreferrer" className="text-berkeleyBlue hover:underline" onClick={(e) => e.stopPropagation()}>
+                          {h.label}
+                        </a>
+                      ) : (
+                        h.label
+                      )}
                       {sortField === h.key && (
                         <span className="text-berkeleyBlue">{sortDir === "asc" ? "↑" : "↓"}</span>
                       )}
@@ -162,7 +177,7 @@ export default function Leaderboard() {
                 {TYPE_UNITS.map((u, ui) => (
                   <td
                     key={ui}
-                    className={`px-3 py-1 text-xs text-gray-500 whitespace-nowrap ${ui < 2 || ui === HEADERS.length - 1 ? "text-left" : "text-right"}`}
+                    className={`px-3 py-1 text-sm text-gray-500 whitespace-nowrap ${ui < 2 || ui === HEADERS.length - 1 ? "text-left" : "text-right"}`}
                     style={{ minWidth: ui >= 2 && ui < HEADERS.length - 1 ? 70 : undefined }}
                   >
                     {typeof u === "string" ? u : u.note}
@@ -188,17 +203,17 @@ export default function Leaderboard() {
                       <span className="text-gray-600">{row.model}</span>
                     )}
                   </td>
-                  <td className="py-3 px-3 text-left text-gray-600">{row.org}</td>
-                  <td className="py-3 px-3 text-right font-bold text-berkeleyBlue">{row.avg.toFixed(1)}</td>
+                  <td className={`py-3 px-3 text-gray-600 whitespace-nowrap ${row.org === "-" ? "text-center" : "text-left"}`} style={{ minWidth: 100 }}>{row.org}</td>
+                  <td className={`py-3 px-3 text-right font-bold ${row.avg === maxValues.avg ? 'text-green-600' : 'text-berkeleyBlue'}`}>{row.avg.toFixed(1)}</td>
                   {row.problems.map((score, pi) => (
                     <td
                       key={pi}
-                      className="py-3 px-3 text-right text-gray-700 tabular-nums"
+                      className={`py-3 px-3 text-right tabular-nums ${score !== null && score === maxValues.problems[pi] ? 'text-green-600 font-semibold' : 'text-gray-700'}`}
                     >
-                      {score !== null ? score : <span className="text-gray-300">-</span>}
+                      {score !== null ? score.toFixed(1) : <span className="text-gray-300">-</span>}
                     </td>
                   ))}
-                  <td className="py-3 px-3 text-left text-gray-400 text-sm">{row.date}</td>
+                  <td className="py-3 px-3 text-left text-gray-400 text-sm whitespace-nowrap" style={{ minWidth: 100 }}>{row.date}</td>
                 </tr>
               ))}
             </tbody>
@@ -209,9 +224,9 @@ export default function Leaderboard() {
       {/* Bottom sections - side by side on desktop */}
       <section className="w-full grid md:grid-cols-2 gap-4">
         <div className="rounded-lg bg-gray-50 border border-gray-200 p-5">
-          <h2 className="text-lg font-semibold text-gray-800 mb-2">Submit Results</h2>
-          <p className="text-sm text-gray-600">
-            Have a new system or updated results? Add submissions here:{" "}
+          <h2 className="text-lg font-semibold text-gray-800 mb-2">Submit Results!</h2>
+          <p className="text-base text-gray-600">
+            Have a new ADRS framework or updated results? Add submissions here:{" "}
             <a href="https://github.com/UcbSkyADRS/ADRS-Leaderboard" target="_blank" rel="noopener noreferrer" className="text-berkeleyBlue hover:underline font-medium">
               github.com/UcbSkyADRS/ADRS-Leaderboard
             </a>.
@@ -219,7 +234,7 @@ export default function Leaderboard() {
         </div>
         <div className="rounded-lg bg-gray-50 border border-gray-200 p-5">
           <h2 className="text-lg font-semibold text-gray-800 mb-2">Acknowledgements</h2>
-          <p className="text-sm text-gray-600">
+          <p className="text-base text-gray-600">
             Thank you to the Berkeley Sky Computing Lab, our lab sponsors, and the ADRS community for supporting this project.
           </p>
         </div>
