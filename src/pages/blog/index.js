@@ -5,7 +5,7 @@ export default function Blog() {
       author: "Datadog & ADRS Team",
       date: "December 4, 2025",
       excerpt:
-        "This post is part of our ADRS series, where we explore how AI can be applied to systems research. We feature exciting work from Datadog this week! In this blog post, we examine the problem of generating production-ready, optimized GPU code from an evolutionary search perspective. Specifically, we share results from BitsEvolve, an ADRS framework built at Datadog that targets various modalities ranging from optimizing hotspots in CPU-bound code to policy/configuration tuning for applications like inference serving frameworks (e.g. vLLM), Load Balancers, Garbage Collectors and more. Through profile guidance and robust evaluation mechanisms, we show how BitsEvolve-generated code can outperform compiled models, achieving speedups of up to 1.6x with reasonable search costs.",
+        "This post is the sixth in our ADRS series, where we explore how AI can be applied to systems research. We feature exciting work from Datadog this week! In this blog post, we examine the problem of generating production-ready, optimized GPU code from an evolutionary search perspective. Specifically, we share results from BitsEvolve, an ADRS framework built at Datadog that targets various modalities ranging from optimizing hotspots in CPU-bound code to policy/configuration tuning for applications like inference serving frameworks (e.g. vLLM), Load Balancers, Garbage Collectors and more. Through profile guidance and robust evaluation mechanisms, we show how BitsEvolve-generated code can outperform compiled models, achieving speedups of up to 1.6x with reasonable search costs.",
       image: "/datadog.png",
       url: "https://adrs-ucb.notion.site/datadog",
     },
@@ -93,7 +93,7 @@ export default function Blog() {
                 />
               </div>
               <div className="md:basis-8/12 bg-berkeleyBlue text-white p-4 md:p-5">
-                <h2 className="text-base md:text-lg font-semibold tracking-normal" style={{ lineHeight: '1.1' }}>
+                <h2 className="text-lg md:text-xl font-semibold tracking-normal" style={{ lineHeight: '1.1' }}>
                   {post.title}
                 </h2>
                 <p className="mt-1 text-white/70 text-[10px] md:text-xs border-b border-white/20 pb-1.5">
