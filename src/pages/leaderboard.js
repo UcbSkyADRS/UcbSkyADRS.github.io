@@ -48,8 +48,8 @@ const DEMO_ROWS = [
   {
     model: "AutoEvolve",
     org: "ADRS Team",
-    avg: 81.9,
-    problems: [97.8, 70.2, 76.4, null, 87.41, null, null, 88.9, 70.6],
+    avg: 75.9,
+    problems: [97.8, 70.2, 76.4, null, 87.41, 46.28, 69.98, 88.9, 70.6],
     date: "2025-12-06",
     link: "https://github.com/mert-cemri/autoevolve"
   }
@@ -159,16 +159,16 @@ export default function Leaderboard() {
           <table className="min-w-max border-collapse text-sm md:text-base">
             <thead className="sticky top-0 z-10">
               <tr className="bg-gray-50 border-b-2 border-gray-200">
-                {HEADERS.map((h, hi) => (
-                  <th
-                    key={h.key}
+                  {HEADERS.map((h, hi) => (
+                    <th
+                      key={h.key}
                     className={`px-3 py-3 cursor-pointer whitespace-nowrap font-semibold text-gray-700 hover:bg-gray-100 transition-colors ${h.align === "right" ? "text-right" : "text-left"} ${hi === 0 ? "sticky left-0 z-20 bg-gray-50" : ""}`}
-                    onClick={() => handleSort(h.key)}
-                  >
+                      onClick={() => handleSort(h.key)}
+                    >
                     <span className="inline-flex items-center gap-1">
                       {h.link ? (
                         <a href={h.link} target="_blank" rel="noopener noreferrer" className="text-berkeleyBlue hover:underline" onClick={(e) => e.stopPropagation()}>
-                          {h.label}
+                      {h.label}
                         </a>
                       ) : (
                         h.label
@@ -177,27 +177,27 @@ export default function Leaderboard() {
                         <span className="text-berkeleyBlue">{sortDir === "asc" ? "↑" : "↓"}</span>
                       )}
                     </span>
-                  </th>
-                ))}
-              </tr>
+                    </th>
+                  ))}
+                </tr>
               {/* Units row */}
               <tr className="bg-gray-50 border-b border-gray-200">
-                {TYPE_UNITS.map((u, ui) => (
-                  <td
-                    key={ui}
+                  {TYPE_UNITS.map((u, ui) => (
+                    <td
+                      key={ui}
                     className={`px-3 py-1 text-sm text-gray-500 whitespace-nowrap ${ui < 2 || ui === HEADERS.length - 1 ? "text-left" : "text-right"} ${ui === 0 ? "sticky left-0 z-20 bg-gray-50" : ""}`}
                     style={{ minWidth: ui >= 2 && ui < HEADERS.length - 1 ? 70 : undefined }}
-                  >
-                    {typeof u === "string" ? u : u.note}
-                  </td>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
+                    >
+                      {typeof u === "string" ? u : u.note}
+                    </td>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
               {sortedRows.map((row, idx) => {
                 return (
-                <tr
-                  key={`${row.model}-${row.date}`}
+                  <tr
+                    key={`${row.model}-${row.date}`}
                   className={`
                     border-b border-gray-100 transition-colors
                     ${idx === 0 ? "bg-amber-50 hover:bg-amber-100" : idx % 2 === 1 ? "bg-gray-100 hover:bg-gray-200" : "bg-white hover:bg-gray-50"}
@@ -214,20 +214,20 @@ export default function Leaderboard() {
                   </td>
                   <td className={`py-3 px-3 text-gray-600 whitespace-nowrap ${row.org === "-" ? "text-center" : "text-left"}`} style={{ minWidth: 100 }}>{row.org}</td>
                   <td className={`py-3 px-3 text-right font-bold ${row.avg === maxValues.avg ? 'text-emerald-600 font-bold' : 'text-berkeleyBlue'}`}>{row.avg.toFixed(1)}</td>
-                  {row.problems.map((score, pi) => (
-                    <td
-                      key={pi}
+                    {row.problems.map((score, pi) => (
+                      <td
+                        key={pi}
                       className={`py-3 px-3 text-right tabular-nums ${score !== null && score === maxValues.problems[pi] ? 'text-emerald-600 font-bold' : 'text-gray-700'}`}
-                    >
+                      >
                       {score !== null ? score.toFixed(1) : <span className="text-gray-300">-</span>}
-                    </td>
-                  ))}
+                      </td>
+                    ))}
                   <td className="py-3 px-3 text-left text-gray-400 text-sm whitespace-nowrap" style={{ minWidth: 100 }}>{row.date}</td>
-                </tr>
+                  </tr>
               );
               })}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
         </div>
       </section>
 
