@@ -237,7 +237,7 @@ export default function Leaderboard() {
           <h2 className="text-lg font-semibold text-gray-800 mb-2">Submit Results!</h2>
           <p className="text-base text-gray-600">
             Have a new ADRS framework or updated results? Add submissions here:{" "}
-            <a href="https://github.com/UcbSkyADRS/ADRS-Leaderboard" target="_blank" rel="noopener noreferrer" className="text-berkeleyBlue hover:underline font-medium">
+            <a href="https://github.com/UCB-ADRS/ADRS-Leaderboard" target="_blank" rel="noopener noreferrer" className="text-berkeleyBlue hover:underline font-medium">
               github.com/UcbSkyADRS/ADRS-Leaderboard
             </a>.
           </p>
