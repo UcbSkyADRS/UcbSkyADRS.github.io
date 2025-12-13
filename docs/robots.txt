@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://ucbskyadrs.github.io
+
+# Sitemaps
+Sitemap: https://ucbskyadrs.github.io/sitemap.xml
