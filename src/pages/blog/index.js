@@ -6,7 +6,7 @@ export default function Blog() {
       date: "December 15, 2025",
       excerpt:
         "This post is the seventh in our ADRS series, where we use AI to automatically discover better algorithms for real-world systems problems. Designing effective multi-agent systems typically requires debugging workloads via execution logs and iteratively refining the agentic systems’ behavior. Previously, we demonstrated how the MAST Annotator provides scalable, systematic feedback on failure modes to guide agents builders to make design improvements. However, that approach still relied on hand-crafted solutions and implementations. In this blog, we replace hand-tuning with OpenEvolve to optimize the Multi-Agent System (MAS) code directly. By leveraging MAST feedback, OpenEvolve continuously mutates the architecture, automatically converging toward a more reliable system, improving failure rates by 7x.",
-      image: "/adrs-sys.png",
+      image: "/mast.png",
       url: "https://adrs-ucb.notion.site/mast",
     },
     {
