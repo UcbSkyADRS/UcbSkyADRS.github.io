@@ -1,6 +1,24 @@
 export default function Blog() {
   const posts = [
     {
+      title: "Automating Algorithm Discovery: A Case Study in Optimizing LLM Serving with Prism",
+      author: "ADRS Team",
+      date: "January 8, 2026",
+      excerpt:
+        "This post is the ninth in our ADRS series, where we use AI to automatically discover better algorithms for real-world systems problems. In this blog, we explore the challenges of managing GPU memory for LLM inference serving. We highlight Prism, a system that optimizes memory management and model placement. By leveraging an exact-caching mechanism and optimized scheduling, Prism achieves ~70% cost savings compared to static assignments, allowing for significantly higher throughput and efficiency in serving workloads.",
+      image: "/prism.jpg",
+      url: "https://adrs-ucb.notion.site/prism",
+    },
+    {
+      title: "Let the Barbarians In: How AI Can Accelerate Systems Performance Research",
+      author: "ADRS Team",
+      date: "January 2, 2026",
+      excerpt:
+        "This post is the eighth in our ADRS series, which expands upon our work on AI-Driven Research for Systems (ADRS). We evaluate three open-source frameworks across ten real-world research problems, demonstrating their ability to generate solutions that outperform human experts, including a 13x speedup in load balancing and 35% cost savings in cloud scheduling. Based on these findings, we outline best practices for problem specification, evaluation, and feedback, providing a roadmap for applying these tools effectively.",
+      image: "/adrs-2.png",
+      url: "https://adrs-ucb.notion.site/let-the-barbarians-in",
+    },
+    {
       title: "Automating Algorithm Discovery: A Case Study in Improving Multi-Agent System Design using MAST",
       author: "ADRS Team",
       date: "December 15, 2025",
