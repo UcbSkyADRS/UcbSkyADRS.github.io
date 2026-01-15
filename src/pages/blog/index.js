@@ -1,6 +1,15 @@
 export default function Blog() {
   const posts = [
     {
+      title: "Automating Algorithm Discovery: A Case Study in Policy Optimization with Bauplan",
+      author: "Bauplan & ADRS Teams",
+      date: "January 15, 2026",
+      excerpt:
+        "This post is the tenth in our ADRS series, where we use AI to automatically discover better algorithms for real-world systems problems. In this blog, we partner with Bauplan to explore how ADRS can optimize policy generation for data pipeline systems. By combining simulation-driven evaluation with an evolutionary search loop, we demonstrate how AI can iteratively refine scheduling policies and configuration parameters, achieving significant performance improvements over hand-tuned baselines.",
+      image: "/bauplan.jpg",
+      url: "https://adrs-ucb.notion.site/bauplan",
+    },
+    {
       title: "Automating Algorithm Discovery: A Case Study in Optimizing LLM Serving with Prism",
       author: "ADRS Team",
       date: "January 8, 2026",
