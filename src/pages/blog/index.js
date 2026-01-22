@@ -1,6 +1,15 @@
 export default function Blog() {
   const posts = [
     {
+      title: "Automating Algorithm Discovery: A Case Study in Multi-Cloud Data Access with Cloudcast",
+      author: "ADRS Team",
+      date: "January 22, 2026",
+      excerpt:
+        "This post is the eleventh in our ADRS series, where we use AI to automatically discover better algorithms for real-world systems problems. In this blog, we tackle the challenge of efficiently accessing data across multiple cloud providers and regions. We introduce Cloudcast, which optimizes data placement and access strategies for multi-cloud environments. By leveraging ADRS to evolve scheduling policies, Cloudcast discovers novel algorithms that minimize latency and cost when accessing data from different clouds.",
+      image: "/cloudcast.png",
+      url: "https://adrs-ucb.notion.site/cloudcast",
+    },
+    {
       title: "Automating Algorithm Discovery: A Case Study in Policy Optimization with Bauplan",
       author: "Bauplan & ADRS Teams",
       date: "January 15, 2026",
