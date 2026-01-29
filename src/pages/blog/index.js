@@ -1,11 +1,20 @@
 export default function Blog() {
   const posts = [
     {
+      title: "Automating Algorithm Discovery: A Case Study in Optimizing Attention Mechanisms with Skylight",
+      author: "ADRS Team",
+      date: "January 29, 2026",
+      excerpt:
+        "This post is the twelfth in our ADRS series, where we use AI to automatically discover better algorithms for real-world systems problems. In this blog, we study sparse attention for accelerating decoding in Large Language Models (LLMs). The goal is to reduce the memory traffic and latency during the decoding phase, which is a fundamental bottleneck in LLM inference. We explore how AI, specifically a Cursor agent within the SkyLight framework, can evolve towards state-of-the-art solutions like vAttention.",
+      image: "/skylight.png",
+      url: "https://adrs-ucb.notion.site/skylight",
+    },
+    {
       title: "Automating Algorithm Discovery: A Case Study in Multi-Cloud Data Access with Cloudcast",
       author: "ADRS Team",
       date: "January 22, 2026",
       excerpt:
-        "This post is the eleventh in our ADRS series, where we use AI to automatically discover better algorithms for real-world systems problems. In this blog, we tackle the challenge of efficiently accessing data across multiple cloud providers and regions. We introduce Cloudcast, which optimizes data placement and access strategies for multi-cloud environments. By leveraging ADRS to evolve scheduling policies, Cloudcast discovers novel algorithms that minimize latency and cost when accessing data from different clouds.",
+        "This post is the eleventh in our ADRS series, where we use AI to automatically discover better algorithms for real-world systems problems. In this blog, we tackle the challenge of efficiently accessing data across multiple cloud providers and regions, previously addressed by Cloudcast. By leveraging ADRS to evolve scheduling policies, we discover novel algorithms that minimize latency and cost when accessing data from different clouds.",
       image: "/cloudcast.png",
       url: "https://adrs-ucb.notion.site/cloudcast",
     },
