@@ -1,23 +1,27 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        primary: "#0a2540", // navy text
-        accent: "#d9a600",  // gold accent
-        paper: "#ffffff",    // white background
-        sidebarStart: "#ffffff",
-        sidebarEnd: "#ffffff"
-        ,
         berkeleyBlue: "#003262",
-        berkeleyGold: "#FDB515"
-        ,
-        sidebarTintStart: "#f5f8fc",
-        sidebarTintEnd: "#eaf1fb"
+        berkeleyGold: "#FDB515",
+        primary: "#0f172a",
+        secondary: "#475569",
+        muted: "#94a3b8",
+        surface: "#f8fafc",
+      },
+      fontFamily: {
+        sans: [
+          "Inter",
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "sans-serif",
+        ],
       },
     },
   },
   plugins: [],
 };
-
-

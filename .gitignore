@@ -34,3 +34,11 @@ yarn-error.log*
 next-env.d.ts
 
 .envrc
+
+# Import processing
+imports/done/
+imports/_tmp_*
+
+# Screenshot artifacts
+*-screenshots/
+*-screenshot-script.js
