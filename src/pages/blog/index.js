@@ -91,7 +91,7 @@ export default function Blog({ mdxPosts }) {
           <h1 className="text-2xl md:text-[2rem] font-bold tracking-tight text-primary">
             Blog
           </h1>
-          <p className="mt-2 text-gray-500 text-base">
+          <p className="mt-2 text-gray-400 text-[15px]">
             Insights and case studies from AI-Driven Research Systems.
           </p>
         </header>

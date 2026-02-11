@@ -46,8 +46,10 @@ export default function Home() {
       <section className="bg-gradient-to-br from-berkeleyBlue via-[#002855] to-[#001a3d] relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 relative z-10">
           <div className="max-w-2xl">
-            <p className="text-blue-300/80 text-sm md:text-base font-semibold tracking-[0.15em] uppercase mb-6">
-              UC Berkeley Sky Computing Lab
+            <p className="text-sm md:text-base font-semibold tracking-[0.15em] uppercase mb-6">
+              <a href="https://sky.cs.berkeley.edu/" target="_blank" rel="noopener noreferrer" className="text-blue-300/80 hover:text-white transition-colors">
+                UC Berkeley Sky Computing Lab
+              </a>
             </p>
 
             <h1 className="text-[2rem] md:text-[3.25rem] font-extrabold text-white tracking-tight leading-[1.1]">
@@ -196,7 +198,7 @@ export default function Home() {
       {/* ═══ GET INVOLVED ═══ */}
       <section className="bg-gradient-to-b from-white to-gray-50/50 border-t border-gray-100">
         <div className="max-w-3xl mx-auto px-6 py-20 md:py-24 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-primary tracking-tight">
+          <h2 className="text-xl md:text-2xl font-bold text-primary tracking-tight">
             Get Involved
           </h2>
           <p className="mt-3 text-gray-500 text-base leading-relaxed max-w-md mx-auto">

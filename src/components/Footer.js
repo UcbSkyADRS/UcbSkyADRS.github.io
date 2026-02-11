@@ -47,7 +47,10 @@ export default function Footer() {
               <span className="text-lg font-bold tracking-tight text-white">ADRS</span>
             </div>
             <p className="text-[13px] text-blue-200/50 leading-relaxed">
-              AI-Driven Research for Systems. A UC Berkeley Sky Computing Lab
+              AI-Driven Research for Systems. A{" "}
+              <a href="https://sky.cs.berkeley.edu/" target="_blank" rel="noopener noreferrer" className="text-blue-200/70 hover:text-white transition-colors">
+                UC Berkeley Sky Computing Lab
+              </a>{" "}
               initiative harnessing AI to discover and optimize algorithms for
               real-world systems.
             </p>
@@ -94,7 +97,10 @@ export default function Footer() {
         {/* Divider + bottom */}
         <div className="border-t border-white/[0.08] py-5 flex flex-col sm:flex-row justify-between items-center gap-1.5">
           <p className="text-[11px] text-blue-200/30">
-            &copy; {new Date().getFullYear()} UC Berkeley Sky Computing Lab
+            &copy; {new Date().getFullYear()}{" "}
+            <a href="https://sky.cs.berkeley.edu/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-200/50 transition-colors">
+              UC Berkeley Sky Computing Lab
+            </a>
           </p>
           <p className="text-[11px] text-blue-200/20">
             Built with Next.js &middot; Deployed on GitHub Pages

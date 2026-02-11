@@ -98,7 +98,7 @@ export default function Leaderboard() {
           <h1 className="text-2xl md:text-[2rem] font-bold tracking-tight text-primary">
             Leaderboard
           </h1>
-          <p className="mt-2 text-gray-500 text-base">
+          <p className="mt-2 text-gray-400 text-[15px]">
             Scores averaged across <strong className="text-primary font-semibold">9 problems</strong>. Click any column header to sort.
           </p>
         </div>
@@ -196,7 +196,7 @@ export default function Leaderboard() {
           <div className="rounded-2xl border border-gray-200/80 bg-gray-50/50 p-6">
             <h3 className="text-sm font-semibold text-primary mb-2">Acknowledgements</h3>
             <p className="text-sm text-gray-500 leading-relaxed">
-              Thank you to the Berkeley Sky Computing Lab, our sponsors, and the ADRS community.
+              Thank you to the <a href="https://sky.cs.berkeley.edu/" target="_blank" rel="noopener noreferrer" className="text-berkeleyBlue hover:underline underline-offset-2 font-medium">Berkeley Sky Computing Lab</a>, our sponsors, and the ADRS community.
             </p>
           </div>
         </div>

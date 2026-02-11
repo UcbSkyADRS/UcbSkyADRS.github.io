@@ -55,11 +55,11 @@ export default function About() {
           <h1 className="text-2xl md:text-[2rem] font-bold tracking-tight text-primary">
             About ADRS
           </h1>
-          <p className="mt-4 text-gray-600 text-base md:text-lg leading-relaxed">
+          <p className="mt-4 text-gray-500 text-[15px] md:text-base leading-relaxed">
             ADRS (AI-Driven Research for Systems) is a{" "}
-            <strong className="text-primary font-semibold">
+            <a href="https://sky.cs.berkeley.edu/" target="_blank" rel="noopener noreferrer" className="text-primary font-semibold hover:text-berkeleyBlue transition-colors underline underline-offset-2 decoration-berkeleyBlue/30">
               Berkeley Sky Computing Lab
-            </strong>{" "}
+            </a>{" "}
             initiative exploring how AI can accelerate scientific discovery. We
             build systems that leverage large-scale models to automatically
             design, optimize, and reason about complex algorithms &mdash; across
@@ -69,7 +69,7 @@ export default function About() {
 
         {/* ── Paper ── */}
         <section className="mb-16">
-          <h2 className="text-lg md:text-xl font-bold text-primary tracking-tight mb-5">
+          <h2 className="text-xl md:text-2xl font-bold text-primary tracking-tight mb-5">
             Our Paper
           </h2>
           <div className="rounded-2xl border border-gray-200 bg-gray-50/50 overflow-hidden shadow-sm">
@@ -85,7 +85,7 @@ export default function About() {
                 <h3 className="text-base md:text-lg font-semibold text-primary leading-snug">
                   Barbarians at the Gate: How AI is Upending Systems Research
                 </h3>
-                <p className="mt-3 text-gray-600 text-sm md:text-base leading-relaxed">
+                <p className="mt-3 text-gray-500 text-[15px] leading-relaxed">
                   Our position paper outlines ADRS as a practical framework for
                   AI-driven algorithm discovery, with case studies in
                   multi-region cloud scheduling, MoE load balancing, and more.
@@ -115,10 +115,10 @@ export default function About() {
 
         {/* ── Team ── */}
         <section className="mb-16">
-          <h2 className="text-lg md:text-xl font-bold text-primary tracking-tight mb-2">
+          <h2 className="text-xl md:text-2xl font-bold text-primary tracking-tight mb-2">
             Team
           </h2>
-          <p className="text-sm text-gray-500 mb-7">
+          <p className="text-[13px] text-gray-400 mb-7">
             The researchers behind ADRS
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
@@ -143,20 +143,20 @@ export default function About() {
         <section className="mb-16">
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h2 className="text-lg md:text-xl font-bold text-primary tracking-tight mb-4">
+              <h2 className="text-xl md:text-2xl font-bold text-primary tracking-tight mb-4">
                 Affiliations
               </h2>
               <div className="flex flex-wrap gap-3">
-                <div className="px-5 py-3 rounded-xl border border-dashed border-gray-300 bg-gray-50 text-sm text-gray-400 italic">
+                <a href="https://sky.cs.berkeley.edu/" target="_blank" rel="noopener noreferrer" className="px-5 py-3 rounded-xl border border-gray-200 bg-white text-sm text-gray-600 font-medium hover:border-berkeleyBlue hover:text-berkeleyBlue transition-all hover:shadow-sm">
                   UC Berkeley Sky Computing Lab
-                </div>
+                </a>
                 <div className="px-5 py-3 rounded-xl border border-dashed border-gray-300 bg-gray-50 text-sm text-gray-400 italic">
                   + Add affiliation
                 </div>
               </div>
             </div>
             <div>
-              <h2 className="text-lg md:text-xl font-bold text-primary tracking-tight mb-4">
+              <h2 className="text-xl md:text-2xl font-bold text-primary tracking-tight mb-4">
                 Funding &amp; Acknowledgements
               </h2>
               <div className="p-5 rounded-xl border border-dashed border-gray-300 bg-gray-50">
@@ -170,7 +170,7 @@ export default function About() {
 
         {/* ── Contact ── */}
         <section>
-          <h2 className="text-lg md:text-xl font-bold text-primary tracking-tight mb-5">
+          <h2 className="text-xl md:text-2xl font-bold text-primary tracking-tight mb-5">
             Contact
           </h2>
           <div className="grid sm:grid-cols-2 gap-3">
