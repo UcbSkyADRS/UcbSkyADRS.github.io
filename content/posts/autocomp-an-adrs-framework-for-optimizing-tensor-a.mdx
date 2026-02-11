@@ -26,7 +26,7 @@ One key reason is **software**. In practice, accelerators don't dominate because
 
 ## What is a Tensor Accelerator?
 
-Tensor accelerators are specialized hardware architectures optimized to run AI models. Due to AI models' regular tensor-based computations and low precision requirements, tensor accelerators can allocate larger percentages of chip area (compared to CPUs/GPUs) towards specialized structures like systolic arrays. This can lead to orders-of-magnitude improvements in performance and energy efficiency for AI workloads such as LLMs. However, despite being simpler than CPUs or GPUs, accelerators still vary widely in size, dataflow, and programming model. They can range from tiny devices like the Raspberry Pi AI HAT to wafer-scale systems like Cerebras's CS-3. Furthermore, simpler accelerator hardware architectures can often mean that more aspects of performance optimization must be handled by software, making said software more complex. [Fig. 1](https://www.notion.so/2a90d7ffff2c80afa567d2cd2e2c04c5?pvs=21), based on [Gemmini](https://github.com/ucb-bar/gemmini)'s architecture, shows how a representative tensor accelerator's hardware might be organized.
+Tensor accelerators are specialized hardware architectures optimized to run AI models. Due to AI models' regular tensor-based computations and low precision requirements, tensor accelerators can allocate larger percentages of chip area (compared to CPUs/GPUs) towards specialized structures like systolic arrays. This can lead to orders-of-magnitude improvements in performance and energy efficiency for AI workloads such as LLMs. However, despite being simpler than CPUs or GPUs, accelerators still vary widely in size, dataflow, and programming model. They can range from tiny devices like the Raspberry Pi AI HAT to wafer-scale systems like Cerebras's CS-3. Furthermore, simpler accelerator hardware architectures can often mean that more aspects of performance optimization must be handled by software, making said software more complex. Fig. 1, based on [Gemmini](https://github.com/ucb-bar/gemmini)'s architecture, shows how a representative tensor accelerator's hardware might be organized.
 
 ![Fig. 1: Architecture and dataflow of a tensor accelerator system.](/blog/autocomp-an-adrs-framework-for-optimizing-tensor-a/image.png)
 
@@ -44,13 +44,13 @@ As researchers at UC Berkeley's [SLICE Lab](https://slice.eecs.berkeley.edu/), w
 
 So, what do these difficult-to-write programs actually look like? To begin with, programming tensor accelerators differs greatly from programming general-purpose CPUs. Tensor accelerators focus on efficiently executing fixed-size (e.g., 16×16) matrix multiplications. Rather than trying to reduce the number or type of these instructions, software optimization emphasizes:
 
-- Minimizing explicitly managed data movement between main memory and smaller accelerator-local memories (in [Fig. 1,](https://www.notion.so/2a90d7ffff2c80afa567d2cd2e2c04c5?pvs=21) the scratchpad and accumulator).
+- Minimizing explicitly managed data movement between main memory and smaller accelerator-local memories (in Fig. 1, the scratchpad and accumulator).
 - Setting global configuration state at runtime for varying types of tensor computation and data movement.
 - Scheduling or reordering operations to maximally overlap computation and data movement.
 
 Code transformations that enable these optimizations range from low-level arithmetic simplifications and instruction selection to higher-level changes like loop tiling, hoisting, or software pipelining.
 
-[Fig. 3](https://www.notion.so/2a90d7ffff2c80afa567d2cd2e2c04c5?pvs=21) shows an example of software pipelining in a pseudocode tensor accelerator DSL. While bearing resemblance to the classical CPU version of software pipelining, explicitly managed data movement in tensor accelerators means that in addition to reordering instructions, scratchpad addresses must also be carefully managed to achieve functional correctness. Furthermore, hardware performance characteristics must also be carefully considered to evaluate whether such a change is even worthwhile.
+Fig. 3 shows an example of software pipelining in a pseudocode tensor accelerator DSL. While bearing resemblance to the classical CPU version of software pipelining, explicitly managed data movement in tensor accelerators means that in addition to reordering instructions, scratchpad addresses must also be carefully managed to achieve functional correctness. Furthermore, hardware performance characteristics must also be carefully considered to evaluate whether such a change is even worthwhile.
 
 ```c
 // Unoptimized
@@ -79,7 +79,7 @@ To address these challenges, we present Autocomp, an ADRS framework that uses an
 
 ## *Plan-then-Implement*: Two-Phase Optimization
 
-Prior work across general-purpose LLM prompt design and LLM code generation shows that decomposing tasks into multiple steps can improve an LLM's ability to solve them. As a result, we split our workflow into two phases (shown in [Fig. 4](https://www.notion.so/2a90d7ffff2c80afa567d2cd2e2c04c5?pvs=21)): optimization plan generation and code implementation.
+Prior work across general-purpose LLM prompt design and LLM code generation shows that decomposing tasks into multiple steps can improve an LLM's ability to solve them. As a result, we split our workflow into two phases (shown in Fig. 4): optimization plan generation and code implementation.
 
 ![Fig 4: One "optimization pass" over a code implementation, generating N*K candidates for an optimized version of the original code. This two-stage process is repeated many times throughout Autocomp's beam search.](/blog/autocomp-an-adrs-framework-for-optimizing-tensor-a/image-2.png)
 
@@ -95,7 +95,7 @@ Autocomp relies on models with good coding capabilities and long context lengths
 
 ## Survival of the Fastest (and Correct): Beam Search
 
-To efficiently explore several optimizations in parallel, we use a traditional beam search, with beam width B. [Fig. 5](https://www.notion.so/2a90d7ffff2c80afa567d2cd2e2c04c5?pvs=21) above shows how beam search would work for a beam size B=2. Our beam search integrates the two phases described above, but only candidates which meet the following criteria can enter the beam:
+To efficiently explore several optimizations in parallel, we use a traditional beam search, with beam width B. Fig. 5 above shows how beam search would work for a beam size B=2. Our beam search integrates the two phases described above, but only candidates which meet the following criteria can enter the beam:
 
 - ✅ **Correctness.** After each code generation step, every candidate is compiled and run against our functional test suite.
 - ⚡ **Performance.** Next, we measure the latency of functionally correct candidates via cycle-accurate simulation. Only candidates that are faster than their "parent" i.e., the version they were derived from are retained.
@@ -155,11 +155,11 @@ Now, let's dive into the results!
 
 ## Results
 
-Many of the optimizations in our **Optimization Menu** for Trainium are based on the Tutorial workloads, so we expect Autocomp to at least match the performance of the fully optimized code. Autocomp not only does so, but outperforms hand-optimized code by a geomean of **1.36x** ([Fig. 7](https://www.notion.so/2a90d7ffff2c80afa567d2cd2e2c04c5?pvs=21)). In doing so, Autocomp speeds up the starting code used as input (either unoptimized or optimized NKI code) by a geomean of **2.51x** and outperforms Trainium's PyTorch compiler by **13.52x**.
+Many of the optimizations in our **Optimization Menu** for Trainium are based on the Tutorial workloads, so we expect Autocomp to at least match the performance of the fully optimized code. Autocomp not only does so, but outperforms hand-optimized code by a geomean of **1.36x** (Fig. 7). In doing so, Autocomp speeds up the starting code used as input (either unoptimized or optimized NKI code) by a geomean of **2.51x** and outperforms Trainium's PyTorch compiler by **13.52x**.
 
 ![Fig. 7: Performance of Autocomp-generated code on *Tutorial* workloads.](/blog/autocomp-an-adrs-framework-for-optimizing-tensor-a/tutorial_speedup_chart.png)
 
-Advanced workloads are already highly optimized, so our initial expectation was that any improvement would be a highly positive result. As shown in [Fig. 8](https://www.notion.so/2a90d7ffff2c80afa567d2cd2e2c04c5?pvs=21), Autocomp managed to optimize these workloads by a geomean of **1.9x**, far surpassing our expectations. 1D depthwise convolution was optimized by a whopping **17.37x**!
+Advanced workloads are already highly optimized, so our initial expectation was that any improvement would be a highly positive result. As shown in Fig. 8, Autocomp managed to optimize these workloads by a geomean of **1.9x**, far surpassing our expectations. 1D depthwise convolution was optimized by a whopping **17.37x**!
 
 ![Fig. 8: Performance of Autocomp-generated code on *Advanced* workloads.](/blog/autocomp-an-adrs-framework-for-optimizing-tensor-a/advanced_speedup_chart.png)
 
@@ -167,7 +167,7 @@ Advanced workloads are already highly optimized, so our initial expectation was 
 
 Thanks to Autocomp's plan-then-implement prompting strategy, we can see exactly what reasoning was used at each stage of optimization. We have released a [detailed case study](https://charleshong3.github.io/blog/autocomp_trainium_conv1d.html) of the 1D depthwise convolution in our blog series.
 
-In summary, Autocomp is able to achieve this impressive speedup through a sequence of optimizations that takes advantage of both the specific target shape as well as the code's inherent inefficiencies. [Fig. 9](https://www.notion.so/2a90d7ffff2c80afa567d2cd2e2c04c5?pvs=21) shows the effect of each of these optimizations on latency.
+In summary, Autocomp is able to achieve this impressive speedup through a sequence of optimizations that takes advantage of both the specific target shape as well as the code's inherent inefficiencies. Fig. 9 shows the effect of each of these optimizations on latency.
 
 ![Fig. 9: A plot showing the latency after each step of Autocomp's optimization of `conv1d` on Trainium.](/blog/autocomp-an-adrs-framework-for-optimizing-tensor-a/image-5.png)
 

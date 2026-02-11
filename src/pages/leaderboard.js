@@ -92,45 +92,40 @@ export default function Leaderboard() {
         url="/leaderboard"
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-14">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="w-12 h-9 overflow-hidden rounded-lg flex-shrink-0">
-              <img src="/ADRS.png" alt="" className="w-full scale-[1.5] origin-top object-contain" />
-            </div>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-primary">
-              Leaderboard
-            </h1>
-          </div>
-          <p className="text-gray-500 text-sm">
-            Scores averaged across <strong className="text-primary">9 problems</strong>. Click headers to sort.
+        <div className="mb-10">
+          <h1 className="text-2xl md:text-[2rem] font-bold tracking-tight text-primary">
+            Leaderboard
+          </h1>
+          <p className="mt-2 text-gray-500 text-base">
+            Scores averaged across <strong className="text-primary font-semibold">9 problems</strong>. Click any column header to sort.
           </p>
         </div>
 
         {/* Table */}
-        <div className="mb-8 w-full overflow-x-auto rounded-lg border border-gray-200">
-          <table className="min-w-max w-full border-collapse text-[13px]">
+        <div className="mb-10 w-full overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
+          <table className="min-w-max w-full border-collapse text-sm">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
+              <tr className="bg-gray-50/80 border-b border-gray-200">
                 {HEADERS.map((h, hi) => (
                   <th
                     key={h.key}
                     onClick={() => doSort(h.key)}
-                    className={`px-2.5 py-2.5 cursor-pointer whitespace-nowrap font-semibold text-gray-600 hover:text-primary hover:bg-gray-100 transition-colors select-none ${
+                    className={`px-3 py-3.5 cursor-pointer whitespace-nowrap font-semibold text-gray-500 hover:text-primary hover:bg-gray-100/80 transition-colors select-none text-[13px] ${
                       h.align === "right" ? "text-right" : "text-left"
-                    } ${hi === 0 ? "sticky left-0 z-20 bg-gray-50 pl-3" : ""}`}
+                    } ${hi === 0 ? "sticky left-0 z-20 bg-gray-50/80 pl-4" : ""}`}
                   >
                     <span className="inline-flex items-center gap-0.5">
                       {h.link ? (
                         <a href={h.link} target="_blank" rel="noopener noreferrer"
-                          className="text-berkeleyBlue hover:underline" onClick={(e) => e.stopPropagation()}>
+                          className="text-berkeleyBlue hover:underline underline-offset-2" onClick={(e) => e.stopPropagation()}>
                           {h.label}
                         </a>
                       ) : h.label}
                       {sortField === h.key && (
                         <span className="text-berkeleyBlue ml-0.5">
-                          {sortDir === "asc" ? "↑" : "↓"}
+                          {sortDir === "asc" ? "\u2191" : "\u2193"}
                         </span>
                       )}
                     </span>
@@ -146,31 +141,31 @@ export default function Leaderboard() {
                     key={row.model}
                     className={`border-b border-gray-100 transition-colors ${
                       human
-                        ? "bg-amber-50 hover:bg-amber-100/60 border-l-[3px] border-l-amber-400"
+                        ? "bg-amber-50/60 hover:bg-amber-100/50"
                         : idx % 2 === 0
-                        ? "bg-white hover:bg-gray-50/50"
-                        : "bg-gray-50/30 hover:bg-gray-50/50"
+                        ? "bg-white hover:bg-gray-50/60"
+                        : "bg-gray-50/30 hover:bg-gray-50/60"
                     }`}
                   >
-                    <td className={`py-2.5 px-2.5 pl-3 font-semibold sticky left-0 z-10 ${
-                      human ? "bg-amber-50" : idx % 2 === 0 ? "bg-white" : "bg-gray-50/30"
+                    <td className={`py-3 px-3 pl-4 font-semibold sticky left-0 z-10 ${
+                      human ? "bg-amber-50/60 border-l-[3px] border-l-berkeleyGold" : idx % 2 === 0 ? "bg-white" : "bg-gray-50/30"
                     }`}>
                       {row.link ? (
-                        <a href={row.link} target="_blank" rel="noopener noreferrer" className="text-berkeleyBlue hover:underline">
+                        <a href={row.link} target="_blank" rel="noopener noreferrer" className="text-berkeleyBlue hover:underline underline-offset-2">
                           {row.model}
                         </a>
                       ) : (
-                        <span className="text-gray-500">{row.model}</span>
+                        <span className={human ? "text-amber-700" : "text-gray-500"}>{row.model}</span>
                       )}
                     </td>
-                    <td className="py-2.5 px-2.5 text-gray-500 whitespace-nowrap">{row.org}</td>
-                    <td className={`py-2.5 px-2.5 text-right font-bold tabular-nums ${
+                    <td className="py-3 px-3 text-gray-500 whitespace-nowrap">{row.org}</td>
+                    <td className={`py-3 px-3 text-right font-bold tabular-nums ${
                       row.avg === maxVals.avg ? "text-emerald-600" : "text-berkeleyBlue"
                     }`}>
                       {row.avg.toFixed(1)}
                     </td>
                     {row.problems.map((s, pi) => (
-                      <td key={pi} className={`py-2.5 px-2.5 text-right tabular-nums ${
+                      <td key={pi} className={`py-3 px-3 text-right tabular-nums ${
                         s != null && s === maxVals.problems[pi]
                           ? "text-emerald-600 font-semibold"
                           : "text-gray-600"
@@ -178,7 +173,7 @@ export default function Leaderboard() {
                         {s != null ? s.toFixed(1) : <span className="text-gray-300">&mdash;</span>}
                       </td>
                     ))}
-                    <td className="py-2.5 px-2.5 text-gray-400 text-xs whitespace-nowrap">{row.date}</td>
+                    <td className="py-3 px-3 text-gray-400 text-xs whitespace-nowrap">{row.date}</td>
                   </tr>
                 );
               })}
@@ -187,20 +182,20 @@ export default function Leaderboard() {
         </div>
 
         {/* Bottom */}
-        <div className="grid md:grid-cols-2 gap-3">
-          <div className="rounded-lg border border-gray-200/80 bg-gray-50/50 p-5">
-            <h3 className="text-sm font-semibold text-primary mb-1.5">Submit Results</h3>
-            <p className="text-[13px] text-gray-500 leading-relaxed">
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="rounded-2xl border border-gray-200/80 bg-gray-50/50 p-6">
+            <h3 className="text-sm font-semibold text-primary mb-2">Submit Results</h3>
+            <p className="text-sm text-gray-500 leading-relaxed">
               Have a new framework or updated results?{" "}
               <a href="https://github.com/UCB-ADRS/ADRS-Leaderboard" target="_blank" rel="noopener noreferrer"
-                className="text-berkeleyBlue hover:underline font-medium">
+                className="text-berkeleyBlue hover:underline underline-offset-2 font-medium">
                 Submit via GitHub
               </a>.
             </p>
           </div>
-          <div className="rounded-lg border border-gray-200/80 bg-gray-50/50 p-5">
-            <h3 className="text-sm font-semibold text-primary mb-1.5">Acknowledgements</h3>
-            <p className="text-[13px] text-gray-500 leading-relaxed">
+          <div className="rounded-2xl border border-gray-200/80 bg-gray-50/50 p-6">
+            <h3 className="text-sm font-semibold text-primary mb-2">Acknowledgements</h3>
+            <p className="text-sm text-gray-500 leading-relaxed">
               Thank you to the Berkeley Sky Computing Lab, our sponsors, and the ADRS community.
             </p>
           </div>

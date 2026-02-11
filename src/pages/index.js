@@ -8,28 +8,28 @@ const stats = [
   { value: "13x", label: "Speedup in load balancing" },
   { value: "35%", label: "Cost savings in cloud scheduling" },
   { value: "13", label: "Case studies published" },
-  { value: "5+", label: "Frameworks benchmarked" },
+  { value: "4", label: "Frameworks benchmarked" },
 ];
 
-/* ── Latest posts ── */
+/* ── Latest posts (local blog) ── */
 const recentPosts = [
   {
-    title: "Optimizing Attention Mechanisms with Skylight",
+    title: "Congestion Control Optimization",
+    date: "Feb 5, 2026",
+    image: "/congestion-control-optimization.png",
+    href: "/blog/congestion-control-optimization/",
+  },
+  {
+    title: "Sparse Attention Design with SkyLight",
     date: "Jan 29, 2026",
-    image: "/skylight.png",
-    url: "https://adrs-ucb.notion.site/skylight",
+    image: "/automating-algorithm-discovery-a-case-study-on-spa.png",
+    href: "/blog/automating-algorithm-discovery-a-case-study-on-spa/",
   },
   {
-    title: "Multi-Cloud Data Access with Cloudcast",
+    title: "Multi-Cloud Data Transfer",
     date: "Jan 22, 2026",
-    image: "/cloudcast.png",
-    url: "https://adrs-ucb.notion.site/cloudcast",
-  },
-  {
-    title: "Policy Optimization with Bauplan",
-    date: "Jan 15, 2026",
-    image: "/bauplan.jpg",
-    url: "https://adrs-ucb.notion.site/bauplan",
+    image: "/multi-cloud-data-transfer.png",
+    href: "/blog/multi-cloud-data-transfer/",
   },
 ];
 
@@ -44,36 +44,34 @@ export default function Home() {
 
       {/* ═══ HERO ═══ */}
       <section className="bg-gradient-to-br from-berkeleyBlue via-[#002855] to-[#001a3d] relative overflow-hidden">
-        <div className="max-w-6xl mx-auto px-6 py-16 md:py-24 relative z-10">
+        <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 relative z-10">
           <div className="max-w-2xl">
-            <p className="text-blue-300/60 text-[11px] font-semibold tracking-[0.2em] uppercase mb-6">
+            <p className="text-blue-300/80 text-sm md:text-base font-semibold tracking-[0.15em] uppercase mb-6">
               UC Berkeley Sky Computing Lab
             </p>
 
-            <h1 className="text-[1.8rem] md:text-[2.75rem] font-extrabold text-white tracking-tight leading-[1.15]">
+            <h1 className="text-[2rem] md:text-[3.25rem] font-extrabold text-white tracking-tight leading-[1.1]">
               AI-Driven Research
               <span className="text-berkeleyGold"> for Systems</span>
             </h1>
 
-            <p className="mt-5 text-blue-200/60 text-[15px] md:text-base leading-relaxed max-w-lg">
+            <p className="mt-6 text-blue-200/70 text-base md:text-lg leading-relaxed max-w-lg">
               Harnessing AI to automatically discover, optimize, and evolve
               algorithms for real-world systems &mdash; from cloud
               infrastructure to LLM serving.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-9 flex flex-wrap gap-3">
               <a
                 href="https://arxiv.org/pdf/2510.06189"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white text-berkeleyBlue font-semibold text-sm hover:bg-gray-100 transition-colors shadow-lg shadow-black/10"
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-white text-berkeleyBlue font-semibold text-sm hover:bg-gray-50 transition-all shadow-lg shadow-black/15 hover:shadow-xl hover:-translate-y-0.5 duration-200"
               >
-                <SiArxiv /> Read the Paper
+                <SiArxiv className="text-base" /> Read the Paper
               </a>
-              <Link href="/blog">
-                <a className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/[0.08] text-white font-medium text-sm border border-white/[0.15] hover:bg-white/[0.15] transition-colors backdrop-blur-sm">
-                  Explore Blog <FaArrowRight className="text-xs" />
-                </a>
+              <Link href="/blog" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-white/[0.08] text-white font-medium text-sm border border-white/[0.15] hover:bg-white/[0.15] transition-all backdrop-blur-sm hover:-translate-y-0.5 duration-200">
+                Explore Blog <FaArrowRight className="text-xs" />
               </Link>
             </div>
           </div>
@@ -93,15 +91,15 @@ export default function Home() {
       </section>
 
       {/* ═══ KEY RESULTS ═══ */}
-      <section className="border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-6 py-10 md:py-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
+      <section className="border-b border-gray-100 bg-white">
+        <div className="max-w-6xl mx-auto px-6 py-12 md:py-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             {stats.map(({ value, label }) => (
-              <div key={label} className="text-center">
-                <div className="text-2xl md:text-[2rem] font-extrabold text-berkeleyBlue tracking-tight">
+              <div key={label} className="text-center p-5 rounded-2xl bg-gray-50/80 border border-gray-100">
+                <div className="text-3xl md:text-[2.5rem] font-extrabold text-berkeleyBlue tracking-tight">
                   {value}
                 </div>
-                <div className="mt-1 text-[13px] text-gray-500 leading-snug">
+                <div className="mt-2 text-sm text-gray-500 leading-snug">
                   {label}
                 </div>
               </div>
@@ -115,11 +113,13 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
           <div className="md:flex md:items-center md:gap-14">
             <div className="md:w-5/12 mb-8 md:mb-0">
-              <img
-                src="/evolve-sys.png"
-                alt="ADRS Evolution Framework"
-                className="w-full rounded-lg"
-              />
+              <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100/50 p-6 md:p-8 shadow-sm">
+                <img
+                  src="/adrs-2.png"
+                  alt="How AI is Upending Systems Research — 13x Faster, 35% Cost Reduction"
+                  className="w-full rounded-lg"
+                />
+              </div>
             </div>
             <div className="md:w-7/12">
               <h2 className="text-xl md:text-2xl font-bold text-primary tracking-tight">
@@ -133,10 +133,8 @@ export default function Home() {
                 discovering solutions that outperform human experts.
               </p>
               <div className="mt-5">
-                <Link href="/about">
-                  <a className="inline-flex items-center gap-1.5 text-sm font-medium text-berkeleyBlue hover:underline underline-offset-2">
-                    Learn more about ADRS <FaArrowRight className="text-xs" />
-                  </a>
+                <Link href="/about" className="inline-flex items-center gap-1.5 text-sm font-medium text-berkeleyBlue hover:underline underline-offset-2">
+                  Learn more about ADRS <FaArrowRight className="text-xs" />
                 </Link>
               </div>
             </div>
@@ -156,30 +154,26 @@ export default function Home() {
                 Recent case studies from the ADRS blog
               </p>
             </div>
-            <Link href="/blog">
-              <a className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-berkeleyBlue hover:underline underline-offset-2">
-                All posts <FaArrowRight className="text-xs" />
-              </a>
+            <Link href="/blog" className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-berkeleyBlue hover:underline underline-offset-2">
+              All posts <FaArrowRight className="text-xs" />
             </Link>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {recentPosts.map((post) => (
-              <a
+              <Link
                 key={post.title}
-                href={post.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-lg hover:border-gray-300 hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
+                href={post.href}
+                className="group rounded-2xl border border-gray-200/80 bg-white shadow-sm hover:shadow-xl hover:border-gray-300 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
               >
-                <div className="aspect-[16/10] bg-gray-50 flex items-center justify-center p-6">
+                <div className="aspect-[16/10] bg-gradient-to-br from-gray-50 to-gray-100/50 flex items-center justify-center p-8">
                   <img
                     src={post.image}
                     alt={post.title}
-                    className="w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-300"
+                    className="w-full h-full object-contain group-hover:scale-[1.04] transition-transform duration-300"
                   />
                 </div>
-                <div className="px-5 pb-5 pt-3.5">
+                <div className="px-5 pb-5 pt-4">
                   <p className="text-[11px] text-gray-400 font-medium uppercase tracking-wide mb-2">
                     {post.date}
                   </p>
@@ -187,34 +181,32 @@ export default function Home() {
                     {post.title}
                   </h3>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
 
           <div className="mt-6 text-center sm:hidden">
-            <Link href="/blog">
-              <a className="inline-flex items-center gap-1.5 text-sm font-medium text-berkeleyBlue hover:underline">
-                All posts <FaArrowRight className="text-xs" />
-              </a>
+            <Link href="/blog" className="inline-flex items-center gap-1.5 text-sm font-medium text-berkeleyBlue hover:underline">
+              All posts <FaArrowRight className="text-xs" />
             </Link>
           </div>
         </div>
       </section>
 
       {/* ═══ GET INVOLVED ═══ */}
-      <section className="bg-white border-t border-gray-100">
-        <div className="max-w-3xl mx-auto px-6 py-16 md:py-20 text-center">
-          <h2 className="text-xl md:text-2xl font-bold text-primary tracking-tight">
+      <section className="bg-gradient-to-b from-white to-gray-50/50 border-t border-gray-100">
+        <div className="max-w-3xl mx-auto px-6 py-20 md:py-24 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-primary tracking-tight">
             Get Involved
           </h2>
-          <p className="mt-2.5 text-gray-500 text-[15px] leading-relaxed max-w-md mx-auto">
+          <p className="mt-3 text-gray-500 text-base leading-relaxed max-w-md mx-auto">
             Join our community, contribute to benchmarks, or reach out to
             collaborate.
           </p>
-          <div className="mt-7 flex flex-wrap justify-center gap-2.5">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a
               href="mailto:ucbskyadrs@gmail.com"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-berkeleyBlue text-white text-sm font-medium hover:bg-blue-800 transition-colors shadow-md shadow-berkeleyBlue/20"
+              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-berkeleyBlue text-white text-sm font-medium hover:bg-blue-800 transition-all shadow-md shadow-berkeleyBlue/20 hover:shadow-lg hover:-translate-y-0.5 duration-200"
             >
               <FaEnvelope /> Email Us
             </a>
@@ -232,7 +224,7 @@ export default function Home() {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:border-berkeleyBlue hover:text-berkeleyBlue transition-all hover:shadow-sm"
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:border-berkeleyBlue hover:text-berkeleyBlue transition-all hover:shadow-md hover:-translate-y-0.5 duration-200"
               >
                 <Icon /> {label}
               </a>

@@ -30,34 +30,32 @@ export default function Nav() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center justify-between h-[68px]">
           {/* Logo — show the airplane portion prominently */}
-          <Link href="/">
-            <a className="flex items-center gap-3 group">
-              <div className="w-14 h-11 overflow-hidden rounded-lg flex-shrink-0">
-                <img
-                  src="/ADRS.png"
-                  alt="ADRS"
-                  className="w-full scale-[1.6] origin-top object-contain"
-                />
-              </div>
-              <span className="text-[22px] font-bold tracking-tight text-berkeleyBlue group-hover:text-berkeleyGold transition-colors">
-                ADRS
-              </span>
-            </a>
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 flex-shrink-0">
+              <img
+                src="/ADRS.png"
+                alt="ADRS"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <span className="text-[22px] font-bold tracking-tight text-berkeleyBlue group-hover:text-berkeleyGold transition-colors">
+              ADRS
+            </span>
           </Link>
 
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-1">
             {links.map(({ href, label }) => (
-              <Link key={href} href={href}>
-                <a
-                  className={`px-4 py-2 rounded-lg text-[15px] font-medium transition-colors ${
-                    isActive(href)
-                      ? "bg-berkeleyBlue/[0.07] text-berkeleyBlue"
-                      : "text-gray-500 hover:text-primary hover:bg-gray-50"
-                  }`}
-                >
-                  {label}
-                </a>
+              <Link
+                key={href}
+                href={href}
+                className={`px-4 py-2 rounded-lg text-[15px] font-medium transition-colors ${
+                  isActive(href)
+                    ? "bg-berkeleyBlue/[0.07] text-berkeleyBlue"
+                    : "text-gray-500 hover:text-primary hover:bg-gray-50"
+                }`}
+              >
+                {label}
               </Link>
             ))}
           </div>
@@ -108,17 +106,17 @@ export default function Nav() {
         <div className="md:hidden border-t border-gray-100 bg-white/95 backdrop-blur-md">
           <div className="px-6 py-3 space-y-0.5">
             {links.map(({ href, label }) => (
-              <Link key={href} href={href}>
-                <a
-                  onClick={() => setOpen(false)}
-                  className={`block px-4 py-2.5 rounded-lg text-[15px] font-medium transition-colors ${
-                    isActive(href)
-                      ? "bg-berkeleyBlue/[0.07] text-berkeleyBlue"
-                      : "text-gray-500 hover:text-primary hover:bg-gray-50"
-                  }`}
-                >
-                  {label}
-                </a>
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className={`block px-4 py-2.5 rounded-lg text-[15px] font-medium transition-colors ${
+                  isActive(href)
+                    ? "bg-berkeleyBlue/[0.07] text-berkeleyBlue"
+                    : "text-gray-500 hover:text-primary hover:bg-gray-50"
+                }`}
+              >
+                {label}
               </Link>
             ))}
             <div className="flex items-center gap-2 pt-3 mt-2 border-t border-gray-100">

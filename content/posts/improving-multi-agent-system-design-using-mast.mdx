@@ -8,11 +8,11 @@ excerpt: "In this work, we demonstrate that you can replace manual agent debuggi
 ---
 > This post is part of our **AI-Driven Research for Systems (ADRS)** case study series, where we use AI to automatically discover better algorithms for real-world systems problems.
 >
-> Designing effective multi-agent systems typically requires debugging workloads via execution logs and iteratively refining the agentic systems' behavior. [Previously](https://mast-ucb.notion.site/improve-agents-with-mast), we demonstrated how the MAST Annotator provides scalable, systematic feedback on failure modes to guide agents builders to make design improvements. However, that approach still relied on hand-crafted solutions and implementations.
+> Designing effective multi-agent systems typically requires debugging workloads via execution logs and iteratively refining the agentic systems' behavior. [Previously](https://arxiv.org/abs/2503.13657), we demonstrated how the MAST Annotator provides scalable, systematic feedback on failure modes to guide agents builders to make design improvements. However, that approach still relied on hand-crafted solutions and implementations.
 >
 > In this blog, we replace hand-tuning with **OpenEvolve** to optimize the Multi-Agent System (MAS) code directly. By leveraging MAST feedback, OpenEvolve continuously mutates the architecture, automatically converging toward a more reliable system, **improving failure rates by 7x**.
 >
-> - **✍️ Previous MAST Blog**: [https://mast-ucb.notion.site/improve-agents-with-mast](https://mast-ucb.notion.site/improve-agents-with-mast)
+> - **✍️ Previous MAST Blog**: [https://arxiv.org/abs/2503.13657](https://arxiv.org/abs/2503.13657)
 > - 📝  **MAST** **Paper:**  [https://arxiv.org/abs/2503.13657](https://arxiv.org/abs/2503.13657)
 > - **✍️ Previous ADRS Blogs:** [https://ucbskyadrs.github.io/](https://ucbskyadrs.github.io/)
 > - 📝  **ADRS** **Paper:**  [https://arxiv.org/abs/2510.06189](https://arxiv.org/abs/2510.06189)
@@ -36,7 +36,7 @@ We also expose the risks of automated design: without strict guardrails (like ma
 
 Multi-agent systems are easy to prototype but painfully to *improve*. When a run goes wrong, you rarely get a single clear signal. Often, you see a spaghetti trace where agents repeat steps, drift roles, drop context, ignore each other's messages, "verify" hand-wavily, or declare success early. The result is that every design decision becomes a guessing game: **How many agents? How to breakdown the task? How agents should communicate with each other?**
 
-In a previous [blog](https://www.notion.so/Automating-Algorithm-Discovery-A-Case-Study-in-Improving-Multi-Agent-System-Design-using-MAST-2ca8d1e3404480f78f76ccabb3c9cfd8?pvs=21), we introduce [MAST [NeurIPS'25 Spotlight]](https://arxiv.org/abs/2503.13657), a failure taxonomy and LLM annotator that turns those messy agent traces into structured, actionable failure signals (instead of vibes-based log reading). But even with good diagnostics, the development loop is still mostly manual:
+In a previous [blog](/blog/), we introduce [MAST [NeurIPS'25 Spotlight]](https://arxiv.org/abs/2503.13657), a failure taxonomy and LLM annotator that turns those messy agent traces into structured, actionable failure signals (instead of vibes-based log reading). But even with good diagnostics, the development loop is still mostly manual:
 
 1. Run tasks
 2. Read long traces

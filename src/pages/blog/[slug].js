@@ -141,26 +141,24 @@ export default function BlogPost({ frontmatter, mdxSource }) {
         type="article"
       />
 
-      <article className="max-w-3xl mx-auto px-6 py-10 md:py-16">
+      <article className="max-w-3xl mx-auto px-6 py-12 md:py-20">
         {/* Back link */}
-        <Link href="/blog">
-          <a className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-berkeleyBlue mb-10 transition-colors group">
-            <FaArrowLeft className="text-xs group-hover:-translate-x-0.5 transition-transform" />{" "}
-            All posts
-          </a>
+        <Link href="/blog" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-berkeleyBlue mb-12 transition-colors group">
+          <FaArrowLeft className="text-xs group-hover:-translate-x-0.5 transition-transform" />{" "}
+          All posts
         </Link>
 
         {/* Header */}
-        <header className="mb-10">
+        <header className="mb-12">
           {tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-4">
+            <div className="flex flex-wrap gap-2 mb-5">
               {tags.map((tag) => {
                 const cls =
                   TAG_STYLE[tag] || "bg-gray-50 text-gray-600 border-gray-200";
                 return (
                   <span
                     key={tag}
-                    className={`inline-block border rounded-full px-3 py-0.5 text-xs font-medium ${cls}`}
+                    className={`inline-block border rounded-lg px-3 py-1 text-xs font-medium ${cls}`}
                   >
                     {tag}
                   </span>
@@ -169,11 +167,11 @@ export default function BlogPost({ frontmatter, mdxSource }) {
             </div>
           )}
 
-          <h1 className="text-[1.6rem] md:text-[2rem] font-bold text-primary tracking-tight leading-[1.25]">
+          <h1 className="text-[1.75rem] md:text-[2.25rem] font-bold text-primary tracking-tight leading-[1.2]">
             {title}
           </h1>
 
-          <div className="mt-4 flex items-center gap-3 text-sm text-gray-400">
+          <div className="mt-5 flex items-center gap-3 text-sm text-gray-400">
             <span className="font-medium text-gray-500">{author}</span>
             <span className="w-1 h-1 rounded-full bg-gray-300" />
             <time dateTime={date}>{formattedDate}</time>
@@ -182,11 +180,11 @@ export default function BlogPost({ frontmatter, mdxSource }) {
 
         {/* Hero image */}
         {image && (
-          <div className="mb-10 rounded-xl border border-gray-200 bg-gray-50/50 p-6 md:p-8 flex items-center justify-center">
+          <div className="mb-12 rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100/50 p-8 md:p-10 flex items-center justify-center">
             <img
               src={image}
               alt={title}
-              className="max-w-full max-h-72 object-contain"
+              className="max-w-full max-h-80 object-contain"
             />
           </div>
         )}
@@ -198,11 +196,9 @@ export default function BlogPost({ frontmatter, mdxSource }) {
 
         {/* Bottom share / back */}
         <div className="mt-14 pt-6 border-t border-gray-200 flex items-center justify-between">
-          <Link href="/blog">
-            <a className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-berkeleyBlue transition-colors group">
-              <FaArrowLeft className="text-xs group-hover:-translate-x-0.5 transition-transform" />{" "}
-              Back to blog
-            </a>
+          <Link href="/blog" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-berkeleyBlue transition-colors group">
+            <FaArrowLeft className="text-xs group-hover:-translate-x-0.5 transition-transform" />{" "}
+            Back to blog
           </Link>
           <a
             href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
