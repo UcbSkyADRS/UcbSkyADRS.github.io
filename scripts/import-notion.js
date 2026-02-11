@@ -33,14 +33,12 @@ const BLOG_IMAGES_DIR = path.join(PUBLIC_DIR, "blog");
 const TAG_KEYWORDS = {
   "Case Study": ["case study"],
   "Position Paper": ["position paper", "barbarians at the gate"],
-  Benchmark: ["benchmark", "let the barbarians"],
-  "LLM Serving": ["llm serving", "llm inference", "attention", "prism", "skylight", "llm quer"],
-  "Cloud Scheduling": ["cloud", "spot instance", "scheduling", "cloudcast", "bauplan", "multi-cloud"],
+  "AI Systems": ["llm serving", "llm inference", "attention", "prism", "skylight", "llm quer", "multi-agent", "mast", "moe", "load balanc"],
+  "Distributed Systems": ["cloud", "spot instance", "cloudcast", "multi-cloud"],
   "GPU Optimization": ["gpu", "tensor", "autocomp", "bitsevolve", "datadog", "cuda"],
-  "Load Balancing": ["load balanc", "moe"],
-  Databases: ["database", "transaction", "transactional", "sql", "relational"],
-  "Multi-Agent Systems": ["multi-agent", "mast"],
-  Industry: ["datadog", "bauplan", "autocomp", "bitsevolve", "industry"],
+  "Databases": ["database", "transaction", "transactional", "sql", "relational", "bauplan"],
+  "Industry": ["datadog", "bauplan", "autocomp", "bitsevolve", "industry"],
+  "Networking": ["networking", "congestion control"],
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -222,8 +220,16 @@ function processZip(zipPath) {
   fs.mkdirSync(tmpDir, { recursive: true });
 
   try {
-    // Unzip
+    // Unzip (handle nested zips from Notion's "Export block" format)
     execSync(`unzip -o -q "${zipPath}" -d "${tmpDir}"`);
+
+    // If the outer zip only contains another zip, extract that too
+    const innerZips = findFiles(tmpDir, ".zip");
+    for (const iz of innerZips) {
+      console.log(`  📦 Extracting nested zip: ${path.basename(iz)}`);
+      execSync(`unzip -o -q "${iz}" -d "${tmpDir}"`);
+      fs.unlinkSync(iz);
+    }
 
     // Find the .md file
     const mdFiles = findFiles(tmpDir, ".md");

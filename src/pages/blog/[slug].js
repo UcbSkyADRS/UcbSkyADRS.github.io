@@ -10,14 +10,12 @@ import { getAllPostSlugs, getPostBySlug } from "../../lib/posts";
 const TAG_STYLE = {
   "Case Study": "bg-blue-50 text-blue-700 border-blue-200",
   "Position Paper": "bg-purple-50 text-purple-700 border-purple-200",
-  Benchmark: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  "LLM Serving": "bg-indigo-50 text-indigo-700 border-indigo-200",
-  "Cloud Scheduling": "bg-cyan-50 text-cyan-700 border-cyan-200",
+  "AI Systems": "bg-indigo-50 text-indigo-700 border-indigo-200",
+  "Distributed Systems": "bg-cyan-50 text-cyan-700 border-cyan-200",
   "GPU Optimization": "bg-orange-50 text-orange-700 border-orange-200",
-  "Load Balancing": "bg-teal-50 text-teal-700 border-teal-200",
   Databases: "bg-amber-50 text-amber-700 border-amber-200",
-  "Multi-Agent Systems": "bg-pink-50 text-pink-700 border-pink-200",
   Industry: "bg-rose-50 text-rose-700 border-rose-200",
+  Networking: "bg-teal-50 text-teal-700 border-teal-200",
 };
 
 /* ── Custom MDX components ── */

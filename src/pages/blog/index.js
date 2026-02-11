@@ -8,14 +8,12 @@ import { getAllPosts } from "../../lib/posts";
 const TAG_STYLE = {
   "Case Study":          "bg-blue-50 text-blue-700 border-blue-100",
   "Position Paper":      "bg-purple-50 text-purple-700 border-purple-100",
-  Benchmark:             "bg-emerald-50 text-emerald-700 border-emerald-100",
-  "LLM Serving":         "bg-indigo-50 text-indigo-700 border-indigo-100",
-  "Cloud Scheduling":    "bg-cyan-50 text-cyan-700 border-cyan-100",
+  "AI Systems":          "bg-indigo-50 text-indigo-700 border-indigo-100",
+  "Distributed Systems": "bg-cyan-50 text-cyan-700 border-cyan-100",
   "GPU Optimization":    "bg-orange-50 text-orange-700 border-orange-100",
-  "Load Balancing":      "bg-teal-50 text-teal-700 border-teal-100",
   Databases:             "bg-amber-50 text-amber-700 border-amber-100",
-  "Multi-Agent Systems": "bg-pink-50 text-pink-700 border-pink-100",
   Industry:              "bg-rose-50 text-rose-700 border-rose-100",
+  Networking:            "bg-teal-50 text-teal-700 border-teal-100",
 };
 
 const ALL_TAGS = Object.keys(TAG_STYLE);

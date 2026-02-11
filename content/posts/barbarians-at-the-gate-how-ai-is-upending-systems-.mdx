@@ -1,0 +1,118 @@
+---
+title: "Barbarians at The Gate: How AI is Upending Systems Research"
+author: "Audrey Cheng, Shu Liu, Melissa Pan, Ion Stoica, ADRS Team"
+date: "2025-10-17"
+tags: ["Position Paper"]
+image: "/barbarians-at-the-gate-how-ai-is-upending-systems-.png"
+excerpt: "Using AI to improve computer systems has been an active area of research for the past decade. However, most prior work has treated systems as black boxes, leveraging AI to tune configuration knobs or using DNNs, and more recently LLMs, to replace ..."
+---
+> AI is no longer just tuning systems as a "black box." It's now rewriting their core algorithms by treating the system as a "white box" and discovering solutions that can outperform human experts. This new approach, which we term AI-Driven Research for Systems (ADRS), can automate some of the most tedious parts of research.
+>
+> - 📝  **Paper:**  [https://arxiv.org/abs/2510.06189](https://arxiv.org/abs/2510.06189)
+> - 👩‍💻 **Code:** [github.com/UCB-ADRS/ADRS](https://github.com/UCB-ADRS/ADRS)
+> - 💬 **Join us**: [join.slack.com/t](https://join.slack.com/t/adrs-global/shared_invite/zt-3fgme22n5-PKYyAc9aIeTyX5iSQTKIoA) and [Discord](https://discord.gg/mz8gAnpt)
+> - 🌎 **Follow us**: [x.com/ai4research_ucb](https://x.com/ai4research_ucb)
+
+# **From Black Box to White Box: AI-Driven Research for Systems**
+
+Using AI to improve computer systems has been an active area of research for the past decade. However, most prior work has treated systems as **black boxes**, leveraging AI to tune configuration knobs or using DNNs, and more recently LLMs, to replace individual components such as schedulers or query optimizers.
+
+This is now changing. Instead of treating systems as black boxes, we are beginning to view them as **white boxes,** where AI tools can *rewrite* system code itself to improve performance (Figure 1). In other words, AI is starting to do what systems researchers have traditionally done.
+
+![Figure 1. A phase change from black box to white box.](/blog/barbarians-at-the-gate-how-ai-is-upending-systems-/screenshot_2025-10-16_at_10.22.09_am.png)
+
+This shift is being enabled by the recent emergence of LLM-based evolutionary tools to automate the discovery and evaluation of algorithms. [FunSearch](https://www.nature.com/articles/s41586-023-06924-6) from DeepMind demonstrated it was possible to improve state-of-the-art algorithms in mathematics. Subsequently, [AlphaEvolve](https://storage.googleapis.com/deepmind-media/DeepMind.com/Blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/AlphaEvolve.pdf) from Google showed evolutionary techniques could dramatically improve system performance. Similarly, [GEPA](https://arxiv.org/abs/2507.19457) demonstrated success in discovering high-performing solutions using genetic prompt evolution. Recently, [OpenEvolve](https://github.com/codelion/openevolve) emerged as a powerful open-source implementation, and of course, general-purpose coding assistants are becoming more capable every day.
+
+Over this summer, we ran a seminar asking students in our lab (Sky Computing Lab) to apply these tools to their own research projects. The results, across nearly a dozen projects, have been encouraging. In multiple cases, using these tools didn't just match state-of-the-art, human-designed algorithms--it outperformed them!
+
+[https://drive.google.com/file/d/1KhbOSYIpxL0m4ZxGenVFrN-SR2OzDlnx/view?usp=sharing](https://drive.google.com/file/d/1KhbOSYIpxL0m4ZxGenVFrN-SR2OzDlnx/view?usp=sharing)
+
+Table 1 presents an overview of our results. In nearly all cases, LLMs were able to discover solutions that outperformed state-of-the-art baselines. Most of these solutions were discovered in **under 12 hours**, at a cost of **less than $20**. Importantly, the results we're sharing should be seen as a starting point; as the frameworks and models improve, we expect even more improvements.
+
+![Table 1. Results of applying ADRS to 11 different research problems.](/blog/barbarians-at-the-gate-how-ai-is-upending-systems-/screenshot_2025-10-16_at_9.48.40_pm.png)
+
+The key to these successes lies in automating the core research loop, the iterative cycle of designing, implementing, and evaluating solutions, where researchers typically spend most of their time. We refer to this approach as **AI-Driven Research for Systems (ADRS)**.
+
+# AI-Driven Research for Systems (ADRS)
+
+The ADRS framework automates several important parts of the research process. Typically, when working on a systems problem, a researcher follows the following stages (Figure 2):
+
+1. **Problem Formulation:** Define the problem to solve (e.g., improve system throughput).
+2. **Evaluation Framework:** Decide which system to use for evaluating the solution, and instrument it. Alternatively, build a new system prototype or simulator.
+3. **Solution:** Manually design a new algorithm or technique.
+4. **Evaluation:** Implement the solution, run it, and compare it against baselines. Iterate on this solution by going back to stage 3, until a satisfactory solution is found.
+5. **Paper Write-Up:** Document the findings.
+
+![Figure 2. The five stages of the systems research process. We show how AI can automate the **Solution** and **Evaluation** stages (grey area).](/blog/barbarians-at-the-gate-how-ai-is-upending-systems-/screenshot_2025-10-16_at_10.16.21_am.png)
+
+Researchers traditionally spend a significant amount of time (e.g., often weeks or even months) on the **Solution** and **Evaluation** stages. These are the stages that ADRS automates today (though we expect its scope to expand as the framework matures and evolves).
+
+As illustrated in Figure 3, ADRS automates these stages through an iterative loop in which LLMs generate and refine candidate solutions by rewriting parts of the Evaluation Framework code, which is then used to assess their performance.
+
+![Figure 3. The AI-driven Research for Systems (ADRS) architecture shown in the context of the systems research process. ADRS (grey area) automates the **Solution** and **Evaluation** stages.](/blog/barbarians-at-the-gate-how-ai-is-upending-systems-/screenshot_2025-10-16_at_10.16.46_am.png)
+
+The ADRS architecture consists of five components:
+
+- **Prompt Generator**: creates prompts for the LLM. The initial prompt includes a description of the problem and the code of the evaluation framework (e.g., simulator) indicating the code segments that implement the algorithm or the policy to evolve.
+- **Solution Generator**: proposes a new solution by using LLMs to modify the salient parts of the evaluation framework.
+- **Evaluator:** evaluates the proposed solutions, typically by running the evaluation framework on a given set of workloads (e.g., traces, benchmarks).
+- **Storage:** stores all previously generated solutions and their results.
+- **Solution Selector**: chooses a subset of solutions to refine future prompts.
+
+This creates an automated feedback loop that can be guided by a human researcher.
+
+There are already a number of ADRS implementations. Examples range from specialized research frameworks like Google's [**AlphaEvolve**](https://storage.googleapis.com/deepmind-media/DeepMind.com/Blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/AlphaEvolve.pdf), its open-source version [**OpenEvolve**](https://github.com/codelion/openevolve), and [**GEPA**](https://arxiv.org/abs/2507.19457), which use evolutionary and optimization techniques, and interactive **Coding Assistants**, such as Cursor, which a researcher can guide to perform similar tasks.
+
+# Why Systems Research is a Good Fit for ADRS
+
+We argue that ADRS is particularly well-suited to systems performance problems because such problems share one crucial property: verifiability.
+
+The standard AI approach to problem-solving involves two steps:
+
+1. **Generate:** Produce a diverse set of candidate solutions.
+2. **Verify:** Evaluate which, if any, satisfy the problem requirements.
+
+The second step, verification, is often the bottleneck in many domains. For example, it is nontrivial to determine whether the answer to a trivia question is correct or whether an AI-generated program is free of bugs.
+
+In contrast, verification in systems research is often straightforward. A proposed solution--such as a new scheduling algorithm or routing protocol--can be implemented in a real system or high-fidelity simulator. Because performance optimizations rarely alter system semantics, the solution can simply be run against representative workloads and its effectiveness measured empirically (e.g., latency, throughput, cost). This tight, objective feedback loop between generation and verification is what makes AI-driven exploration particularly powerful in this domain.
+
+# Lessons Learned
+
+After running many experiments over a range of case studies, we summarize some early best practices for applying ADRS to systems problems.
+
+**1. Less is More (and More is Less)**
+
+We consistently found that giving the AI *less* help often produced *more* creative and powerful solutions.
+
+- **Start with weaker baselines:** Giving the AI a highly-optimized, state-of-the-art baseline can trap it in local minima and encourage it to make only small tweaks. A simpler starting point gives it more freedom to explore the solution space.
+- **Provide fewer hints:** While detailed instructions can lead to faster initial progress, they also restrict the search space. Fewer hints lead to more flexibility to find better solutions.
+- **Restrict access to high-level APIs:** While providing ADRS high-level library APIs leads to faster evolution, we find that restricting access can lead to discovery of better optimizations.
+
+**2. Your Solution is Only as Good as Your Evaluator**
+
+A flawed or incomplete evaluator is the primary cause of flawed solutions. The AI will exploit loopholes in your scoring function to maximize its reward, which leads to two practical rules:
+
+- **Prevent overfitting with diverse workloads:** Just like in traditional systems research, you should test on diverse workloads to ensure a general solution. We also recommend using hold out workloads for robust validation.
+- **Prevent "reward hacking".** Use a comprehensive test suite to cover correctness, especially edge cases. For example, we had a proposed load balancing algorithm that seemed to perform well but was actually dropping some work to get better results!
+
+# A New Role for the Human Researcher
+
+This development goes beyond AI uncovering a few clever optimizations; it signals a significant shift in how research will be conducted. As AI systems assume the labor-intensive tasks of algorithm discovery and optimization, the role of the human researcher will evolve.
+
+We can view these tools as **AI Research Assistants** that elevate researchers to the role of **problem architects and AI advisors**. Rather than focusing on manual implementation, researchers will concentrate on identifying the most impactful problems, designing promising initial approaches, and critically assessing AI-generated solutions.
+
+Importantly, this transition has the potential to create a virtuous cycle: the same AI-driven methods we employ for systems research can be used to enhance the AI tools themselves, thereby accelerating scientific discovery. Ultimately, the limiting factor will no longer be computational power, but our capacity to effectively guide and manage these AI collaborators.
+
+# What Does This Mean for Systems Performance Research?
+
+In short, a significant and much-needed acceleration.
+
+Despite remarkable progress, system performance problems have become both harder and more consequential. Modern workloads and software stacks are increasingly heterogeneous and complex, encompassing distributed training and inference, large-scale multimodal data processing, and reinforcement learning. Meanwhile, the underlying hardware infrastructure has also grown in complexity: production clusters now span thousands of servers, integrate dozens of accelerator and GPU types, and employ diverse interconnect technologies such as InfiniBand, RDMA, and Ultra Ethernet. Compounding the challenge, hardware generations are advancing at an unprecedented pace. By the time today's GPUs are fully supported by production frameworks, the next generation has already arrived. The result is that manually optimizing these cross-layer, rapidly evolving systems remains an expensive and labor-intensive endeavor.
+
+This is precisely where AI-Driven Research for Systems (ADRS) offers transformative potential. These frameworks are already demonstrating better-than-human performance across a variety of optimization problems, with strong indications of continued improvement as the technology matures. Moreover, we believe the ADRS approach will eventually extend beyond performance optimization to tackle other critical dimensions of systems research, including security, architecture design, and fault tolerance.
+
+The evidence is compelling: the field is transitioning from black-box to white-box AI optimization of systems. The tools required for this transformation are already accessible and producing results that surpass traditional, human-engineered approaches. Yet this marks only the beginning of a broader shift. As models grow more capable and frameworks evolve, the gap between AI-driven discovery and conventional methods will continue to widen. The systems community must therefore embrace this transformation, not as a replacement for human ingenuity, but as a multiplier of it.
+
+# What's Next?
+
+We are planning a series of blog posts that will dive into various use cases of ADRS. Stay tuned for more!
