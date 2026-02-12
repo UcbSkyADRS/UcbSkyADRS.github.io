@@ -4,7 +4,7 @@ author: "Shu Liu, Shubham Agarwal, Audrey Cheng, Ion Stoica, ADRS Team"
 date: "2026-01-22"
 tags: ["Case Study", "Distributed Systems"]
 image: "/multi-cloud-data-transfer.png"
-excerpt: "In real-world multi-cloud deployments, systems frequently need to multicast the same data from a source node to many destination nodes across different clouds and regions. These multicasts traverse heterogeneous and asymmetric cloud networks, wher..."
+excerpt: "This post is the eleventh in our ADRS series. We tackle the challenge of efficiently accessing data across multiple cloud providers and regions, previously addressed by Cloudcast. By leveraging ADRS to evolve scheduling policies, we discover novel algorithms that minimize latency and cost when accessing data from different clouds."
 ---
 > This post is part of our **AI-Driven Research for Systems (ADRS)** case study series, where we use AI to automatically discover better algorithms for real-world systems problems.
 >
@@ -29,7 +29,7 @@ In real-world multi-cloud deployments, systems frequently need to multicast the 
 
 # **The Multi-Cloud Data Transfer Cost Problem**
 
-In multi-cloud data multicasting, the primary cost is often **data egress**. When data is transferred across cloud providers or regions, each transfer incurs a monetary charge that can vary significantly depending on the source, destination, and network path. As shown in Figure 2 below, transferring the same data item independently form a source region to each destination region can lead to substantial costs.
+In multi-cloud data multicasting, the primary cost is often **data egress**. When data is transferred across cloud providers or regions, each transfer incurs a monetary charge that can vary significantly depending on the source, destination, and network path. As shown in Figure 2 below, transferring the same data item independently from a source region to each destination region can lead to substantial costs.
 
 Indeed, sending identical data directly from the source to every destination leads to **redundant transfers** over expensive inter-cloud links, unnecessarily inflating total egress cost. In contrast, by carefully designing a multicast tree, we can reuse intermediate transfers, route data through cheaper links, and reduce the overall cost of moving data across clouds. Cloudcast therefore seeks multicast trees that minimize total egress cost while delivering data to all destinations.
 
@@ -39,7 +39,7 @@ This problem is deceptively simple to state. Given:
 - a set of **destination nodes** located in multiple clouds and regions
 - a **multi-cloud network topology**, where different links can have different egress costs
 - a **completion time deadline**, the maximum allowable time to finish the transfer, typically defined as a multiple of the fastest direct transfer time
-- partition the data into multiple **stripes** to enable parallel transfers (each stripe can be transferred independently
+- partition the data into multiple **stripes** to enable parallel transfers (each stripe can be transferred independently)
 - compute a tree topology that **minimizes the total data transfer (egress) cost** to deliver the data from the source to all destinations.
 
 ![Figure 2. Multi-cloud data multicasting incurs heterogeneous egress costs across regions and providers.](/blog/multi-cloud-data-transfer/figure-1.png)

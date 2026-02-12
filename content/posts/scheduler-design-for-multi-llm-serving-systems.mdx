@@ -4,11 +4,11 @@ author: "Jiarong Xing, Yifan Qiao, Audrey Cheng, Shu Liu, Ion Stoica, ADRS Team"
 date: "2026-01-08"
 tags: ["Case Study", "AI Systems", "Distributed Systems"]
 image: "/scheduler-design-for-multi-llm-serving-systems.png"
-excerpt: "In real-world deployments, LLM inference providers host many models with long-tailed popularity: a small number of models are hot and receive most requests, while many others are cold and remain largely idle. Moreover, inference workloads are pret..."
+excerpt: "This post is the ninth in our ADRS series, where we use AI to automatically discover better algorithms for real-world systems problems. We explore the challenges of managing GPU memory for LLM inference serving and highlight Prism, a system that optimizes memory management and model placement. By leveraging an exact-caching mechanism and optimized scheduling, Prism achieves ~70% cost savings compared to static assignments."
 ---
 > This post is part of our **AI-Driven Research for Systems (ADRS)** case study series, where we use AI to automatically discover better algorithms for real-world systems problems.
 >
-> Low GPU utilization is a long-standing pain point for cloud LLM inference providers. As GPUs are become more powerful (e.g., faster compute and larger memory), **sharing GPUs across multiple models** becomes a natural approach to improve efficiency. In our [Prism](https://arxiv.org/abs/2505.04021) project, we explore flexible GPU sharing for multi-LLM serving.
+> Low GPU utilization is a long-standing pain point for cloud LLM inference providers. As GPUs become more powerful (e.g., faster compute and larger memory), **sharing GPUs across multiple models** becomes a natural approach to improve efficiency. In our [Prism](https://arxiv.org/abs/2505.04021) project, we explore flexible GPU sharing for multi-LLM serving.
 >
 > A central challenge in Prism is **model placement**: co-locating the right models on shared GPUs to avoid latency SLO violations under dynamic workloads. In this blog, we first present a **manually designed placement heuristic**, then show how **OpenEvolve** automatically rediscovers and further improves it, **improving the original by 17%**.
 
@@ -23,7 +23,7 @@ excerpt: "In real-world deployments, LLM inference providers host many models wi
 
 # **Background: Multi-LLM Serving with GPU Sharing**
 
-In real-world deployments, LLM inference providers host *many* models with **long-tailed popularity**: a small number of models are hot and receive most requests, while many others are cold and remain largely idle. Moreover, inference workloads are pretty dynamic The request rates could fluctuate over time, and models frequently can switch between hot and cold states. The traditional approach of dedicating GPUs to individual models therefore leads to poor GPU utilization, especially for cold models with low resource demand.
+In real-world deployments, LLM inference providers host *many* models with **long-tailed popularity**: a small number of models are hot and receive most requests, while many others are cold and remain largely idle. Moreover, inference workloads are pretty dynamic. The request rates could fluctuate over time, and models frequently can switch between hot and cold states. The traditional approach of dedicating GPUs to individual models therefore leads to poor GPU utilization, especially for cold models with low resource demand.
 
 **Prism** addresses this inefficiency by enabling **flexible GPU sharing** across multiple models. By co-locating models on shared GPUs, Prism significantly improves resource utilization and reduces serving costs. At its core, Prism introduces [**kvcached**](https://github.com/ovg-project/kvcached), a memory sharing mechanism that dynamically allocates KV cache across models using a virtual-memory abstraction. On top of this foundation, Prism provides scheduling algorithms that coordinate resource sharing among models to meet their diverse latency SLO requirements.
 
@@ -103,7 +103,7 @@ The key changes made by OpenEvolve are:
 
 - **Look-ahead global KVPR minimization.** Unlike the manual heuristic, which assigns each model to the GPU with the lowest *current* KVPR, this algorithm performs a one-step look-ahead. For each incoming model, it tentatively places the model on every feasible GPU and evaluates the **resulting global maximum KVPR**. The algorithm then commits the placement that minimizes this worst-case KVPR, explicitly preventing decisions that appear locally optimal but create future memory hotspots.
 - **Local hill-climbing refinement.** After the initial greedy placement, this algorithm introduces a **local improvement phase** that iteratively reduces the worst-case KVPR.
-    - **Single-model move.** In each iteration, the refinement first tries a single-model migration. ****It identifies the most "pressured" GPUs (highest KVPR) and attempts to move one model from a high-KVPR source GPU to a different target GPU that has enough free memory. A move is accepted only if it **strictly reduces the global worst-case KVPR** . This operator is lightweight and could fix obvious imbalances created by the greedy placement.
+    - **Single-model move.** In each iteration, the refinement first tries a single-model migration. It identifies the most "pressured" GPUs (highest KVPR) and attempts to move one model from a high-KVPR source GPU to a different target GPU that has enough free memory. A move is accepted only if it **strictly reduces the global worst-case KVPR** . This operator is lightweight and could fix obvious imbalances created by the greedy placement.
     - **Pairwise model swap.** If no improving single-model move exists, the refinement falls back to a more flexible pairwise swap. It considers swapping a model on a high-KVPR GPU with a model on another GPU, as long as the swap is memory-feasible on both sides. Like above, a swap is committed only when it **strictly lowers the maximum KVPR** across GPUs. This swap step helps escape local minima where no single model can be moved without making another GPU worse, but exchanging two models can still improve the overall balance.
 
 ![OpenEvolve produces an improved model-GPU placement algorithm with two previously unexplored optimizations.](/blog/scheduler-design-for-multi-llm-serving-systems/alg2.png)

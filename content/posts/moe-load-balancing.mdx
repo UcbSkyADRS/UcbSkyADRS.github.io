@@ -4,7 +4,7 @@ author: "Audrey Cheng, Bowen Wang, Shu Liu, Melissa Pan, Ion Stoica, ADRS Team"
 date: "2025-10-23"
 tags: ["Case Study", "AI Systems"]
 image: "/moe-load-balancing.png"
-excerpt: "The immense scale of modern LLMs is made manageable by architectures like Mixture-of-Experts (MoE). In this model, a router dynamically sends each token of an input to a small subset of specialized \"expert\" networks. This allows requests to be pro..."
+excerpt: "This post is the first in a series of case studies in which we apply ADRS to optimize performance in various systems. We discuss the optimization of a key component in large language model (LLM) inference. Specifically, we demonstrate how OpenEvolve independently discovers and surpasses highly optimized algorithms engineered by human experts to achieve a 5.0x speedup."
 ---
 > This post is the first in a series of case studies in which we apply AI-Driven Research for Systems (ADRS) to optimize performance in various systems. In this blog, we discuss the optimization of a key component in large language model (LLM) inference. Specifically, we demonstrate how [OpenEvolve](https://github.com/codelion/openevolve) independently discovers and surpasses highly optimized algorithms engineered by human experts to achieve a 5.0x speedup.
 >
@@ -28,14 +28,14 @@ The solution is an **Expert Parallelism Load Balancer (EPLB)**, an algorithm tha
 - (ii) create replicas for hot experts
 - (iii) assign these replicas to  GPUs to further maximize load balancing.
 
-Given a workload, an MoE setup, and some GPUs, the EPLB algorithm determines the number of replicas for each experts and then maps these replicas on GPUs.
+Given a workload, an MoE setup, and some GPUs, the EPLB algorithm determines the number of replicas for each expert and then maps these replicas onto GPUs.
 
 The EPLB algorithm has two objectives:
 
 1. **Minimize imbalance:** Distribute the load as evenly as possible.
 2. **Minimize runtime:** The rearrangement process itself must be fast to avoid becoming a new bottleneck.
 
-The EPLB algorithm has direct impact on the cost and performance of production LLM serving (Figure 2).
+The EPLB algorithm has a direct impact on the cost and performance of production LLM serving (Figure 2).
 
 ![Figure 2. With load balancing under an EPLB algorithm, GPUs can be more fully utilized to lower costs and provide better LLM serving performance. In this figure, we have 64 logical experts and 16 replicated experts.](/blog/moe-load-balancing/load2.png)
 
@@ -43,7 +43,7 @@ The EPLB algorithm has direct impact on the cost and performance of production L
 
 We consider two baselines in searching for a better EPLB algorithm.
 
-First, we evaluate DeepSeek's open-source [EPLB implementation](https://github.com/deepseek-ai/eplb). This employs a greedy bin-packing strategy: experts are sorted by load in descending order, and each is placed onto the least-loaded GPU that has capacity (Figure 3a, Example 1). While simple, the solution is slow because it written in Python and uses a for-loop to performs linear search for finding the best-fit GPU choice. On average, it takes about 540 ms to re-balance the experts and achieves a load balance factor of 0.66 (calculated as the ratio of average to maximum tokens generated per GPU).
+First, we evaluate DeepSeek's open-source [EPLB implementation](https://github.com/deepseek-ai/eplb). This employs a greedy bin-packing strategy: experts are sorted by load in descending order, and each is placed onto the least-loaded GPU that has capacity (Figure 3a, Example 1). While simple, the solution is slow because it is written in Python and uses a for-loop to perform linear search for finding the best-fit GPU choice. On average, it takes about 540 ms to re-balance the experts and achieves a load balance factor of 0.66 (calculated as the ratio of average to maximum tokens generated per GPU).
 
 [Example 1. The original EPLB algorithm greedily places the heaviest expert onto the least-loaded GPU in a step-by-step manner, implemented with slow Python for-loops.](Automating%20Algorithm%20Discovery%20A%20Case%20Study%20in%20MoE/GreedyBinPacking.mp4)
 
@@ -77,4 +77,4 @@ In summary, OpenEvolve independently rediscovered and fully exploited a zigzag p
 
 # Parting Thoughts
 
-The 5.0x speedup achieved in this case study is a compelling demonstration of a new research paradigm. In just five hours, an ADRS framework was able discover a state-of-the-art solution that would typically consume days or weeks of an expert engineer's time, validating the core promise of ADRS to accelerate discovery. Crucially, the AI delivered both **engineering optimizations**, such as replacing loops with vectorized tensor operations, and a fundamental **algorithmic improvement** by discovering the zigzag partitioning scheme. We'll [integrate this optimized algorithm](https://github.com/vllm-project/vllm/pull/18343) into vLLM, a popular open source LLM inference and serving engine. The ability to devise sophisticated computational strategies proves that ADRS can tackle complex, real-world problems, moving far beyond black-box tuning for applying AI to systems. This exploration of MoE load balancing is the first of several deep dives we will share in the coming weeks, as we continue to demonstrate the transformative potential of this new framework.
+The 5.0x speedup achieved in this case study is a compelling demonstration of a new research paradigm. In just five hours, an ADRS framework was able to discover a state-of-the-art solution that would typically consume days or weeks of an expert engineer's time, validating the core promise of ADRS to accelerate discovery. Crucially, the AI delivered both **engineering optimizations**, such as replacing loops with vectorized tensor operations, and a fundamental **algorithmic improvement** by discovering the zigzag partitioning scheme. We'll [integrate this optimized algorithm](https://github.com/vllm-project/vllm/pull/18343) into vLLM, a popular open-source LLM inference and serving engine. The ability to devise sophisticated computational strategies proves that ADRS can tackle complex, real-world problems, moving far beyond black-box tuning for applying AI to systems. This exploration of MoE load balancing is the first of several deep dives we will share in the coming weeks, as we continue to demonstrate the transformative potential of this new framework.

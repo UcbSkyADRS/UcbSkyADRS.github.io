@@ -2,7 +2,8 @@ import Link from "next/link";
 import {
   FaGithub,
   FaTwitter,
-  FaDiscord,
+  FaLinkedin,
+  // FaDiscord,
   FaSlack,
   FaEnvelope,
 } from "react-icons/fa";
@@ -11,8 +12,9 @@ import { SiArxiv } from "react-icons/si";
 const socials = [
   { icon: FaEnvelope, href: "mailto:ucbskyadrs@gmail.com", label: "Email" },
   { icon: FaTwitter, href: "https://x.com/ai4research_ucb", label: "X" },
+  { icon: FaLinkedin, href: "https://www.linkedin.com/company/ucb-adrs", label: "LinkedIn" },
   { icon: FaGithub, href: "https://github.com/UCB-ADRS/ADRS", label: "GitHub" },
-  { icon: FaDiscord, href: "https://discord.gg/4z7Yy3e4", label: "Discord" },
+  // { icon: FaDiscord, href: "https://discord.gg/4z7Yy3e4", label: "Discord" },
   {
     icon: FaSlack,
     href: "https://join.slack.com/t/adrs-global/shared_invite/zt-3fgme22n5-PKYyAc9aIeTyX5iSQTKIoA",
@@ -47,11 +49,11 @@ export default function Footer() {
               <span className="text-lg font-bold tracking-tight text-white">ADRS</span>
             </div>
             <p className="text-[13px] text-blue-200/50 leading-relaxed">
-              AI-Driven Research for Systems. A{" "}
+              AI-Driven Research for Systems (ADRS) is an initiative from the{" "}
               <a href="https://sky.cs.berkeley.edu/" target="_blank" rel="noopener noreferrer" className="text-blue-200/70 hover:text-white transition-colors">
                 UC Berkeley Sky Computing Lab
               </a>{" "}
-              initiative harnessing AI to discover and optimize algorithms for
+              that harnesses AI to discover and optimize algorithms for
               real-world systems.
             </p>
           </div>
@@ -64,7 +66,10 @@ export default function Footer() {
             <ul className="space-y-1.5">
               {navLinks.map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href} className="text-[13px] text-blue-100/50 hover:text-white transition-colors duration-200">
+                  <Link
+                    href={href}
+                    className="text-[13px] text-blue-100/50 hover:text-white transition-colors duration-200"
+                  >
                     {label}
                   </Link>
                 </li>

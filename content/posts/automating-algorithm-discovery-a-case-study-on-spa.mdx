@@ -1,10 +1,10 @@
 ---
 title: "Automating Algorithm Discovery: A Case Study on Sparse Attention Design using SkyLight"
-author: "Aditya Desai (, SkyLight Team),, Audrey Cheng, Ion Stoica, ADRS Team"
+author: "Aditya Desai (SkyLight Team), Audrey Cheng, Ion Stoica, ADRS Team"
 date: "2026-01-29"
 tags: ["Case Study", "AI Systems", "GPU Optimization"]
 image: "/automating-algorithm-discovery-a-case-study-on-spa.png"
-excerpt: "Modern auto regressive LLM inference proceeds in two distinct phases: prefill and decode. In a typical single turn interaction, the model first processes the entire prompt, which may include long textual instructions or visual inputs, and computes..."
+excerpt: "This post is the twelfth in our ADRS series. We study sparse attention for accelerating decoding in Large Language Models (LLMs). We explore how AI, specifically a Cursor agent within the SkyLight framework, can evolve towards state-of-the-art solutions like vAttention, transitioning from basic windowed attention to a complex, hardware-aware strategy that significantly accelerates the decoding phase."
 ---
 > This post is part of our **AI-Driven Research for Systems (ADRS)** case study series, where we use AI to automatically discover better algorithms for real-world systems problems.
 >
@@ -26,9 +26,9 @@ excerpt: "Modern auto regressive LLM inference proceeds in two distinct phases: 
 
 # **The Problem: Designing Sparse Attention for Accelerating Decoding**
 
-Modern auto regressive LLM inference proceeds in two distinct phases: **prefill** and **decode**. In a typical single turn interaction, the model first processes the entire prompt, which may include long textual instructions or visual inputs, and computes token representations across all transformer layers while materializing the key value cache. This stage, referred to as the prefill phase, is largely compute bound and can be executed efficiently on modern accelerators.
+Modern autoregressive LLM inference proceeds in two distinct phases: **prefill** and **decode**. In a typical single turn interaction, the model first processes the entire prompt, which may include long textual instructions or visual inputs, and computes token representations across all transformer layers while materializing the key value cache. This stage, referred to as the prefill phase, is largely compute bound and can be executed efficiently on modern accelerators.
 
-The subsequent decode phase behaves very differently, leading to **performance challenges**. During decoding, the model generates one token at a time while repeatedly accessing the previously constructed key value cache. Despite operating on far fewer tokens per step, decoding is often significantly slow. **This slowdown is fundamental**. The decode phase is dominated by **memory traffic** rather than computation, which limits effective GPU utilization and makes memory bandwidth and latency the primary bottlenecks (Figure 1).
+The subsequent decode phase behaves very differently, leading to **performance challenges**. During decoding, the model generates one token at a time while repeatedly accessing the previously constructed key value cache. Despite operating on far fewer tokens per step, decoding is often significantly slower. **This slowdown is fundamental**. The decode phase is dominated by **memory traffic** rather than computation, which limits effective GPU utilization and makes memory bandwidth and latency the primary bottlenecks (Figure 1).
 
 For more information, check out this blog from [FlashInfer](https://flashinfer.ai/2024/02/02/introduce-flashinfer.html).
 
@@ -86,9 +86,9 @@ Detailed instructions for running exploration with open-evolve and the Cursor na
 
 ## Case Study: Evolving From Scratch to vAttention
 
-In our case study, we present the Cursor agent with a starter code ask it to optimize the sparsity pattern selection algorithm under a density target of 10% (i.e., selecting 10% of tokens) to minimize the attention approximation error. The evolution of the Cursor agent is shown below in Figure 7 in terms of combined score versus iterations. The combined score is defined as:
+In our case study, we present the Cursor agent with a starter code and ask it to optimize the sparsity pattern selection algorithm under a density target of 10% (i.e., selecting 10% of tokens) to minimize the attention approximation error. The evolution of the Cursor agent is shown below in Figure 7 in terms of combined score versus iterations. The combined score is defined as:
 
-- **−(approximation error + density penalty)**, where density penalty applied when density exceeds the target, so higher values indicate better performance.
+- **−(approximation error + density penalty)**, where a density penalty is applied when density exceeds the target, so higher values indicate better performance.
 
 ![image](https://hackmd.io/_uploads/H1GPjelIZe.png)
 

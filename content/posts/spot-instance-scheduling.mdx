@@ -3,8 +3,8 @@ title: "Automating Algorithm Discovery: A Case Study in Spot Instance Scheduling
 author: "Zhifei Li, Tian Xia, Shu Liu, Audrey Cheng, Melissa Pan, Ion Stoica, ADRS Team"
 date: "2025-10-30"
 tags: ["Case Study", "Distributed Systems"]
-image: "/spot-instance-scheduling.png"
-excerpt: "AI compute costs have become a significant bottleneck for innovation (as a16z recently points out). Compounding this challenge, many applications have strict deadlines for which missing them means lost revenue and degraded performance. Examples in..."
+image: "/spot-instance-evolution.png"
+excerpt: "This post is the second in our ADRS series, where we apply AI to optimize complex system problems. Here, we tackle spot instance scheduling, a classic cost-versus-reliability problem in the cloud. We demonstrate how OpenEvolve discovers novel algorithms that surpass the algorithm from an NSDI'24 Best Paper, achieving up to 16% and 48% cost savings in single and multi-region setups, respectively."
 ---
 > This post is the second in our *AI-Driven Research Systems (ADRS)* series, where we apply AI to optimize complex system problems. Here, we tackle **spot instance scheduling,** a classic cost-versus-reliability problem in the cloud. Specifically, we demonstrate how OpenEvolve discovers novel algorithms that surpass the algorithm from an [NSDI'24 Best Paper](https://www.usenix.org/conference/nsdi24/presentation/wu-zhanghao), achieving **up to** **16% and 48% cost savings** in a single and multi-region setups on our final evaluation traces, respectively.
 >
@@ -24,7 +24,7 @@ The ***NSDI '24 best paper* [Can't Be Late](https://www.usenix.org/conference/ns
 
 ## The Challenge in Practice
 
-Consider a typical scenario: running a large-scale data analysis that needs 40 hours of computation and must complete within 60 hours before a conference submission deadline. With this 20 hour buffer, the scheduler can choose between:
+Consider a typical scenario: running a large-scale data analysis that needs 40 hours of computation and must complete within 60 hours before a conference submission deadline. With this 20-hour buffer, the scheduler can choose between:
 
 - ***Spot instances:*** ~$25/hour, cheap but unreliable (can be preempted anytime)
 - ***On-demand instances:*** ~$98/hour, expensive but guaranteed
@@ -32,7 +32,7 @@ Consider a typical scenario: running a large-scale data analysis that needs 40 h
 
 The scheduler continuously monitors the system and makes decisions whenever the state changes - when a spot instance becomes available or unavailable, or when the current instance gets preempted.
 
-At each moment, the scheduler must pick one of three actions: (1) **Wait** - No instance running, no cost, no progress, (2) **Spot** - Run on cheap instances but that may be preempted at any time, or (3) **On-Demand** - Run on expensive but guaranteed instance.
+At each moment, the scheduler must pick one of three actions: (1) **Wait** - No instance running, no cost, no progress, (2) **Spot** - Run on cheap instances but that may be preempted at any time, or (3) **On-Demand** - Run on an expensive but guaranteed instance.
 
 The simplest policy, **Always On-Demand**, runs the job entirely on on-demand instances and ignores all spot opportunities. It guarantees completion but at maximum cost (~$4k for a two-day run), since it never uses cheaper spot capacity.
 
@@ -46,7 +46,7 @@ These limitations motivate the [Can't Be Late](https://www.usenix.org/conference
 
 Figure 1. Uniform Progress Algorithm. Upper: instance usage over time; Lower: progress curve showing target line (pink) vs actual progress (green). The algorithm tracks a target progress line and switches to on-demand whenever actual progress falls behind, even if cheaper spots would become available shortly.
 
-The Uniform Progress algorithm proposed from the [NSDI'24 paper](https://www.usenix.org/conference/nsdi24/presentation/wu-zhanghao) follows a simple idea: use on-demand instances early and stay close to the **target progress line** (illustrated in Figure 1)**,** which represents the ideal steady progress rate**,** ensuring sufficient slack time to fall back to on-demand instances.
+The Uniform Progress algorithm proposed in the [NSDI'24 paper](https://www.usenix.org/conference/nsdi24/presentation/wu-zhanghao) follows a simple idea: use on-demand instances early and stay close to the **target progress line** (illustrated in Figure 1), which represents the ideal steady progress rate, ensuring sufficient slack time to fall back to on-demand instances.
 
 The core algorithm logic is as follows:
 
@@ -134,17 +134,17 @@ We now share a few key observations from our experiments.
 
 ### 💡 Less is More: Weaker Baselines Can Lead to Better Discoveries
 
-Interestingly, evolution only made progress when initialized from the greedy policy. When we tried starting from the more advanced *Uniform Progress* baseline, nothing improved for dozens of rounds. Sometimes, a **weaker starting point** opens up more room for creativity by letting evolution find entirely new directions instead of getting stuck polishing what has already optimized. One hypothesis is that SOTA represents a local minima and it is harder for the evolution process to escape from such local minima.
+Interestingly, evolution only made progress when initialized from the greedy policy. When we tried starting from the more advanced *Uniform Progress* baseline, nothing improved for dozens of rounds. Sometimes, a **weaker starting point** opens up more room for creativity by letting evolution find entirely new directions instead of getting stuck polishing what has already been optimized. One hypothesis is that SOTA represents a local minimum and it is harder for the evolution process to escape from such local minima.
 
 ### 💡 Prevent Overfitting
 
-When tested on a subset of workloads, they pick up workload-specific patterns instead of real strategies. In this case, we found that testing on just one spot pattern caused the evolved policy fail on other workloads (Shown in Figure 6.). The fix is simple: use broader, more varied test sets so evolution learns to generalize, not memorize.
+When tested on a subset of workloads, they pick up workload-specific patterns instead of real strategies. In this case, we found that testing on just one spot pattern caused the evolved policy to fail on other workloads (shown in Figure 6). The fix is simple: use broader, more varied test sets so evolution learns to generalize, not memorize.
 
 ![Figure 6. Demonstration of overfitting in algorithm evolution. When trained on limited data (left), the evolved policy learns trace-specific shortcuts that fail to generalize. Using diverse training sets (right) ensures the algorithm learns robust strategies rather than memorizing patterns.](/blog/spot-instance-scheduling/image-4.png)
 
 # Discussion
 
-This problem is no a toy example: it is a complex, research-level scheduling challenge previously tackled by an NSDI'24 Best Paper. Our evaluation setup mirrors what was used in that paper, making this an apples-to-apples comparison. Yet, ADRS independently surpasses the state-of-the-art and uncovers new ideas like *selective waiting* and *adaptive multi-region migration* that cut costs by up to **48%**. And all for just under $20 of compute!
+This problem is not a toy example: it is a complex, research-level scheduling challenge previously tackled by an NSDI'24 Best Paper. Our evaluation setup mirrors what was used in that paper, making this an apples-to-apples comparison. Yet, ADRS independently surpasses the state-of-the-art and uncovers new ideas like *selective waiting* and *adaptive multi-region migration* that cut costs by up to **48%**. And all for just under $20 of compute!
 
 These results highlight how ADRS can take on problems of genuine research complexity and autonomously produce novel, interpretable algorithms in hours; this is work that would otherwise take human researchers weeks or months. Try it out yourself: see what your system can evolve next!
 

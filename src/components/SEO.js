@@ -32,7 +32,7 @@ export default function SEO({
     sameAs: [
       "https://x.com/ai4research_ucb",
       "https://github.com/UCB-ADRS/ADRS",
-      "https://discord.gg/4z7Yy3e4",
+      // "https://discord.gg/4z7Yy3e4",
     ],
   };
 

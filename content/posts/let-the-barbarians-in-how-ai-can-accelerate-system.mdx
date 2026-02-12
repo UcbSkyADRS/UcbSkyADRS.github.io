@@ -3,8 +3,8 @@ title: "Let the Barbarians In: How AI Can Accelerate Systems Performance Researc
 author: "Audrey Cheng, Shu Liu, Melissa Pan, Zhifei Li, Shubham Agarwal, Mert Cemri, Ion Stoica"
 date: "2025-12-18"
 tags: ["Position Paper"]
-image: "/let-the-barbarians-in-how-ai-can-accelerate-system.png"
-excerpt: "One of the most ambitious goals of artificial intelligence is to automate the scientific discovery process itself, from algorithm design to experiment execution. We argue that computer systems research is uniquely positioned to benefit from this s..."
+image: "/adrs-2.png"
+excerpt: "This post is the eighth in our ADRS series, which expands upon our work on AI-Driven Research for Systems (ADRS). We evaluate three open-source frameworks across ten real-world research problems, demonstrating their ability to generate solutions that outperform human experts, including a 13x speedup in load balancing and 35% cost savings in cloud scheduling. Based on these findings, we outline best practices for problem specification, evaluation, and feedback, providing a roadmap for applying these tools effectively."
 ---
 > This post expands our work on AI-Driven Research for Systems (ADRS). We evaluate three open-source frameworks across ten real-world research problems, demonstrating their ability to generate solutions that outperform human experts, including a **13x speedup** in load balancing and **35% cost savings** in cloud scheduling. Based on these findings, we outline best practices for problem specification, evaluation, and feedback, providing a roadmap for applying these tools effectively.
 >
@@ -74,7 +74,7 @@ The ADRS architecture comprises five key components.
 - **Storage:** stores all previously generated solutions and their results.
 - **Solution Selector**: chooses a subset of solutions to refine future prompts.
 
-This automated loop is the foundation of several existing implementations, ranging from specialized frameworks like Google's [**AlphaEvolve**](https://www.google.com/url?sa=E&q=https%3A%2F%2Fstorage.googleapis.com%2Fdeepmind-media%2FDeepMind.com%2FBlog%2Falphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms%2FAlphaEvolve.pdf), [**GEPA,](https://www.google.com/url?sa=E&q=https%3A%2F%2Farxiv.org%2Fabs%2F2507.19457) [OpenEvolve](https://www.google.com/url?sa=E&q=https%3A%2F%2Fgithub.com%2Fcodelion%2Fopenevolve)**, and [**ShinkaEvolve**](https://github.com/SakanaAI/ShinkaEvolve), to workflows using interactive coding assistants like Cursor.
+This automated loop is the foundation of several existing implementations, ranging from specialized frameworks like Google's [**AlphaEvolve**](https://www.google.com/url?sa=E&q=https%3A%2F%2Fstorage.googleapis.com%2Fdeepmind-media%2FDeepMind.com%2FBlog%2Falphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms%2FAlphaEvolve.pdf), [**GEPA**](https://www.google.com/url?sa=E&q=https%3A%2F%2Farxiv.org%2Fabs%2F2507.19457), [**OpenEvolve**](https://www.google.com/url?sa=E&q=https%3A%2F%2Fgithub.com%2Fcodelion%2Fopenevolve), and [**ShinkaEvolve**](https://github.com/SakanaAI/ShinkaEvolve), to workflows using interactive coding assistants like Cursor.
 
 # **Why Systems Research is a Good Fit for ADRS**
 
@@ -100,7 +100,7 @@ By automating these bottleneck stages--**Solution** and **Evaluation**--without 
 
 Having demonstrated that various ADRS frameworks **consistently surpass** state-of-the-art solutions, we now focus on effective strategies for applying these frameworks. Drawing from our experiences running these frameworks on a wide range of systems performance problems, we consolidate our findings into actionable best practices categorized across three critical axes: **Specifications**, **Evaluation**, and **Feedback**.
 
-To assist researchers, in applying these frameworks, we provide a workflow guide in Figure 3 that illustrates how these insights integrate into the end-to-end ADRS process. This serves as a practical roadmap for researchers looking to apply these tools to new systems problems.
+To assist researchers in applying these frameworks, we provide a workflow guide in Figure 3 that illustrates how these insights integrate into the end-to-end ADRS process. This serves as a practical roadmap for researchers looking to apply these tools to new systems problems.
 
 ![Figure 3. Workflow diagram that illustrates how these insights integrate into the end-to-end ADRS process](/blog/let-the-barbarians-in-how-ai-can-accelerate-system/image.png)
 

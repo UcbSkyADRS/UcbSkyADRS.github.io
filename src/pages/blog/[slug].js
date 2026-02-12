@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm";
 import Link from "next/link";
 import { FaArrowLeft, FaTwitter } from "react-icons/fa";
 import SEO from "../../components/SEO";
+import AuthorList from "../../components/AuthorList";
 import { getAllPostSlugs, getPostBySlug } from "../../lib/posts";
 
 /* ── Tag styling ── */
@@ -143,7 +144,10 @@ export default function BlogPost({ frontmatter, mdxSource }) {
 
       <article className="max-w-3xl mx-auto px-6 py-12 md:py-20">
         {/* Back link */}
-        <Link href="/blog" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-berkeleyBlue mb-12 transition-colors group">
+        <Link
+          href="/blog"
+          className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-berkeleyBlue mb-12 transition-colors group"
+        >
           <FaArrowLeft className="text-xs group-hover:-translate-x-0.5 transition-transform" />{" "}
           All posts
         </Link>
@@ -172,7 +176,7 @@ export default function BlogPost({ frontmatter, mdxSource }) {
           </h1>
 
           <div className="mt-5 flex items-center gap-3 text-sm text-gray-400">
-            <span className="font-medium text-gray-500">{author}</span>
+            <AuthorList author={author} className="font-medium text-gray-500" />
             <span className="w-1 h-1 rounded-full bg-gray-300" />
             <time dateTime={date}>{formattedDate}</time>
           </div>
@@ -196,7 +200,10 @@ export default function BlogPost({ frontmatter, mdxSource }) {
 
         {/* Bottom share / back */}
         <div className="mt-14 pt-6 border-t border-gray-200 flex items-center justify-between">
-          <Link href="/blog" className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-berkeleyBlue transition-colors group">
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-berkeleyBlue transition-colors group"
+          >
             <FaArrowLeft className="text-xs group-hover:-translate-x-0.5 transition-transform" />{" "}
             Back to blog
           </Link>

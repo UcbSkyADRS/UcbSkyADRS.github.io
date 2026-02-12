@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FaGithub, FaTwitter, FaDiscord } from "react-icons/fa";
+import { FaGithub, FaTwitter, FaLinkedin, FaSlack } from "react-icons/fa";
 
 const links = [
   { href: "/", label: "Home" },
@@ -12,8 +12,10 @@ const links = [
 
 const socials = [
   { icon: FaTwitter, href: "https://x.com/ai4research_ucb", label: "X" },
+  { icon: FaLinkedin, href: "https://www.linkedin.com/company/ucb-adrs", label: "LinkedIn" },
   { icon: FaGithub, href: "https://github.com/UCB-ADRS/ADRS", label: "GitHub" },
-  { icon: FaDiscord, href: "https://discord.gg/4z7Yy3e4", label: "Discord" },
+  // { icon: FaDiscord, href: "https://discord.gg/4z7Yy3e4", label: "Discord" },
+  { icon: FaSlack, href: "https://join.slack.com/t/adrs-global/shared_invite/zt-3fgme22n5-PKYyAc9aIeTyX5iSQTKIoA", label: "Slack" },
 ];
 
 export default function Nav() {
@@ -31,16 +33,16 @@ export default function Nav() {
         <div className="flex items-center justify-between h-[68px]">
           {/* Logo — show the airplane portion prominently */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 flex-shrink-0">
-              <img
-                src="/ADRS.png"
-                alt="ADRS"
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <span className="text-[22px] font-bold tracking-tight text-berkeleyBlue group-hover:text-berkeleyGold transition-colors">
-              ADRS
-            </span>
+              <div className="w-10 h-10 flex-shrink-0">
+                <img
+                  src="/ADRS.png"
+                  alt="ADRS"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <span className="text-[22px] font-bold tracking-tight text-berkeleyBlue group-hover:text-berkeleyGold transition-colors">
+                ADRS
+              </span>
           </Link>
 
           {/* Desktop links */}
@@ -55,7 +57,7 @@ export default function Nav() {
                     : "text-gray-500 hover:text-primary hover:bg-gray-50"
                 }`}
               >
-                {label}
+                  {label}
               </Link>
             ))}
           </div>

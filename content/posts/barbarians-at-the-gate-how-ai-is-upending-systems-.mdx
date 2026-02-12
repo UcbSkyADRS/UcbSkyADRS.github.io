@@ -1,10 +1,10 @@
 ---
-title: "Barbarians at The Gate: How AI is Upending Systems Research"
+title: "Barbarians at the Gate: How AI is Upending Systems Research"
 author: "Audrey Cheng, Shu Liu, Melissa Pan, Ion Stoica, ADRS Team"
 date: "2025-10-17"
 tags: ["Position Paper"]
-image: "/barbarians-at-the-gate-how-ai-is-upending-systems-.png"
-excerpt: "Using AI to improve computer systems has been an active area of research for the past decade. However, most prior work has treated systems as black boxes, leveraging AI to tune configuration knobs or using DNNs, and more recently LLMs, to replace ..."
+image: "/barbarians.png"
+excerpt: "AI is no longer just tuning systems as a black box. It's now rewriting their core algorithms by treating the system as a white box and discovering solutions that can outperform human experts. This new approach, which we term AI-Driven Research for Systems (ADRS), can automate some of the most tedious parts of research."
 ---
 > AI is no longer just tuning systems as a "black box." It's now rewriting their core algorithms by treating the system as a "white box" and discovering solutions that can outperform human experts. This new approach, which we term AI-Driven Research for Systems (ADRS), can automate some of the most tedious parts of research.
 >
@@ -92,7 +92,7 @@ We consistently found that giving the AI *less* help often produced *more* creat
 
 A flawed or incomplete evaluator is the primary cause of flawed solutions. The AI will exploit loopholes in your scoring function to maximize its reward, which leads to two practical rules:
 
-- **Prevent overfitting with diverse workloads:** Just like in traditional systems research, you should test on diverse workloads to ensure a general solution. We also recommend using hold out workloads for robust validation.
+- **Prevent overfitting with diverse workloads:** Just like in traditional systems research, you should test on diverse workloads to ensure a general solution. We also recommend using holdout workloads for robust validation.
 - **Prevent "reward hacking".** Use a comprehensive test suite to cover correctness, especially edge cases. For example, we had a proposed load balancing algorithm that seemed to perform well but was actually dropping some work to get better results!
 
 # A New Role for the Human Researcher

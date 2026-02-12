@@ -3,8 +3,8 @@ title: "Autocomp: An ADRS Framework for Optimizing Tensor Accelerator Code"
 author: "Charles Hong, Sahil Bhatia, Alvin Cheung, Yakun Sophia Shao, ADRS Team"
 date: "2025-11-20"
 tags: ["Case Study", "GPU Optimization"]
-image: "/autocomp-an-adrs-framework-for-optimizing-tensor-a.png"
-excerpt: "One key reason is software. In practice, accelerators don't dominate because their software stacks are immature. Each accelerator requires custom kernels, compilers, and runtime code tuned to its unique programming model, and writing this software..."
+image: "/autocomp.png"
+excerpt: "This post is the fifth in our ADRS series. We highlight Autocomp, the first LLM-driven code optimizer for low-resource tensor accelerators. Autocomp helps hardware designers extract the full performance of tensor accelerators, outperforming human expert kernel writers by up to 17x on AWS Trainium while being highly portable and easy to use."
 ---
 > This post is part of the **AI-Driven Research for Systems (ADRS)** blog series, where we explore how AI can be applied to systems research. This post was contributed by a team of our colleagues at UC Berkeley's [SLICE Lab](https://slice.eecs.berkeley.edu/)!
 >
@@ -20,7 +20,7 @@ excerpt: "One key reason is software. In practice, accelerators don't dominate b
 
 # The Problem: Accelerators are Hard to Program
 
-NVIDIA (briefly) became a [5 trillion dollar company](https://www.reuters.com/business/nvidia-poised-record-5-trillion-market-valuation-2025-10-29/) by accelerating AI. Tensor accelerator offerings from [Amazon](https://aws.amazon.com/ai/machine-learning/trainium/), [Apple](https://apple.fandom.com/wiki/Neural_Engine), [Cerebras](https://www.cerebras.ai/chip), [Google](https://cloud.google.com/tpu?hl=en), [Groq](https://groq.com/), [Meta](https://ai.meta.com/blog/next-generation-meta-training-inference-accelerator-AI-MTIA/), [Qualcomm](https://www.qualcomm.com/processors/hexagon), and many other companies promise to do even better -- but why aren't these accelerators dominating the market?
+NVIDIA (briefly) became a [$5 trillion company](https://www.reuters.com/business/nvidia-poised-record-5-trillion-market-valuation-2025-10-29/) by accelerating AI. Tensor accelerator offerings from [Amazon](https://aws.amazon.com/ai/machine-learning/trainium/), [Apple](https://apple.fandom.com/wiki/Neural_Engine), [Cerebras](https://www.cerebras.ai/chip), [Google](https://cloud.google.com/tpu?hl=en), [Groq](https://groq.com/), [Meta](https://ai.meta.com/blog/next-generation-meta-training-inference-accelerator-AI-MTIA/), [Qualcomm](https://www.qualcomm.com/processors/hexagon), and many other companies promise to do even better -- but why aren't these accelerators dominating the market?
 
 One key reason is **software**. In practice, accelerators don't dominate because their software stacks are immature. Each accelerator requires custom kernels, compilers, and runtime code tuned to its unique programming model, and writing this software is slow and error-prone. GPUs succeed largely because of their deep, battle-tested software ecosystem, not just their hardware. This raises the question: **can ADRS help close this software gap?** To answer this question, let's go in more depth on what a tensor accelerator is and why exactly writing software for one is challenging.
 
@@ -155,11 +155,11 @@ Now, let's dive into the results!
 
 ## Results
 
-Many of the optimizations in our **Optimization Menu** for Trainium are based on the Tutorial workloads, so we expect Autocomp to at least match the performance of the fully optimized code. Autocomp not only does so, but outperforms hand-optimized code by a geomean of **1.36x** (Fig. 7). In doing so, Autocomp speeds up the starting code used as input (either unoptimized or optimized NKI code) by a geomean of **2.51x** and outperforms Trainium's PyTorch compiler by **13.52x**.
+Many of the optimizations in our **Optimization Menu** for Trainium are based on the Tutorial workloads, so we expect Autocomp to at least match the performance of the fully optimized code. Autocomp not only does so, but outperforms hand-optimized code by a geometric mean of **1.36x** (Fig. 7). In doing so, Autocomp speeds up the starting code used as input (either unoptimized or optimized NKI code) by a geometric mean of **2.51x** and outperforms Trainium's PyTorch compiler by **13.52x**.
 
 ![Fig. 7: Performance of Autocomp-generated code on *Tutorial* workloads.](/blog/autocomp-an-adrs-framework-for-optimizing-tensor-a/tutorial_speedup_chart.png)
 
-Advanced workloads are already highly optimized, so our initial expectation was that any improvement would be a highly positive result. As shown in Fig. 8, Autocomp managed to optimize these workloads by a geomean of **1.9x**, far surpassing our expectations. 1D depthwise convolution was optimized by a whopping **17.37x**!
+Advanced workloads are already highly optimized, so our initial expectation was that any improvement would be a highly positive result. As shown in Fig. 8, Autocomp managed to optimize these workloads by a geometric mean of **1.9x**, far surpassing our expectations. 1D depthwise convolution was optimized by a whopping **17.37x**!
 
 ![Fig. 8: Performance of Autocomp-generated code on *Advanced* workloads.](/blog/autocomp-an-adrs-framework-for-optimizing-tensor-a/advanced_speedup_chart.png)
 

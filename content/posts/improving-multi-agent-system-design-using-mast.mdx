@@ -2,17 +2,17 @@
 title: "Automating Algorithm Discovery: A Case Study in Improving Multi-Agent System Design using MAST"
 author: "Mert Cemri, Melissa Pan, Audrey Cheng, Shu Liu, Ion Stoica, ADRS Team"
 date: "2025-12-15"
-tags: ["Case Study", "Multi-Agent Systems"]
+tags: ["Case Study", "AI Systems"]
 image: "/improving-multi-agent-system-design-using-mast.png"
-excerpt: "In this work, we demonstrate that you can replace manual agent debugging with automated architectural search. By combining OpenEvolve (evolutionary optimization) with MAST (fine-grained failure signals), we took a standard MetaGPT-style software d..."
+excerpt: "This post is the seventh in our ADRS series. Designing effective multi-agent systems typically requires debugging workloads via execution logs and iteratively refining the agentic systems' behavior. In this blog, we replace hand-tuning with OpenEvolve to optimize the Multi-Agent System code directly. By leveraging MAST feedback, OpenEvolve continuously mutates the architecture, automatically converging toward a more reliable system, improving failure rates by 7x."
 ---
 > This post is part of our **AI-Driven Research for Systems (ADRS)** case study series, where we use AI to automatically discover better algorithms for real-world systems problems.
 >
-> Designing effective multi-agent systems typically requires debugging workloads via execution logs and iteratively refining the agentic systems' behavior. [Previously](https://arxiv.org/abs/2503.13657), we demonstrated how the MAST Annotator provides scalable, systematic feedback on failure modes to guide agents builders to make design improvements. However, that approach still relied on hand-crafted solutions and implementations.
+> Designing effective multi-agent systems typically requires debugging workloads via execution logs and iteratively refining the agentic systems' behavior. [Previously](https://mast-ucb.notion.site/improve-agents-with-mast), we demonstrated how the MAST Annotator provides scalable, systematic feedback on failure modes to guide agent builders to make design improvements. However, that approach still relied on hand-crafted solutions and implementations.
 >
 > In this blog, we replace hand-tuning with **OpenEvolve** to optimize the Multi-Agent System (MAS) code directly. By leveraging MAST feedback, OpenEvolve continuously mutates the architecture, automatically converging toward a more reliable system, **improving failure rates by 7x**.
 >
-> - **✍️ Previous MAST Blog**: [https://arxiv.org/abs/2503.13657](https://arxiv.org/abs/2503.13657)
+> - **✍️ Previous MAST Blog**: [https://mast-ucb.notion.site/improve-agents-with-mast](https://mast-ucb.notion.site/improve-agents-with-mast)
 > - 📝  **MAST** **Paper:**  [https://arxiv.org/abs/2503.13657](https://arxiv.org/abs/2503.13657)
 > - **✍️ Previous ADRS Blogs:** [https://ucbskyadrs.github.io/](https://ucbskyadrs.github.io/)
 > - 📝  **ADRS** **Paper:**  [https://arxiv.org/abs/2510.06189](https://arxiv.org/abs/2510.06189)
@@ -24,7 +24,7 @@ excerpt: "In this work, we demonstrate that you can replace manual agent debuggi
 
 In this work, we demonstrate that you can replace manual agent debugging with automated architectural search. By combining **OpenEvolve** (evolutionary optimization) with **MAST** (fine-grained failure signals), we took a standard MetaGPT-style software development team and let the code rewrite itself.
 
-Over 46 iterations, the system autonomously evolved a fragile baseline (**0.136 score**, ~7 failures/trace) into a robust architecture (**0.50 score**, ~1 failure/trace), with 7x fewer failure. Crucially, the optimizer discovered sophisticated design patterns that usually take humans days to identify:
+Over 46 iterations, the system autonomously evolved a fragile baseline (**0.136 score**, ~7 failures/trace) into a robust architecture (**0.50 score**, ~1 failure/trace), with 7x fewer failures. Crucially, the optimizer discovered sophisticated design patterns that usually take humans days to identify:
 
 - **Negative Constraints:** Shifting prompts from "be helpful" to strict negative boundaries (e.g., "do not explain," "do not plan") to prevent role drift.
 - **Structural Verification:** Spontaneously inventing a dedicated `SimpleVerifier` agent to decouple execution from checking.
@@ -34,9 +34,9 @@ We also expose the risks of automated design: without strict guardrails (like ma
 
 ## The Problem: MAS Debugging Does Not Scale
 
-Multi-agent systems are easy to prototype but painfully to *improve*. When a run goes wrong, you rarely get a single clear signal. Often, you see a spaghetti trace where agents repeat steps, drift roles, drop context, ignore each other's messages, "verify" hand-wavily, or declare success early. The result is that every design decision becomes a guessing game: **How many agents? How to breakdown the task? How agents should communicate with each other?**
+Multi-agent systems are easy to prototype but painful to *improve*. When a run goes wrong, you rarely get a single clear signal. Often, you see a spaghetti trace where agents repeat steps, drift roles, drop context, ignore each other's messages, "verify" hand-wavily, or declare success early. The result is that every design decision becomes a guessing game: **How many agents? How to break down the task? How agents should communicate with each other?**
 
-In a previous [blog](/blog/), we introduce [MAST [NeurIPS'25 Spotlight]](https://arxiv.org/abs/2503.13657), a failure taxonomy and LLM annotator that turns those messy agent traces into structured, actionable failure signals (instead of vibes-based log reading). But even with good diagnostics, the development loop is still mostly manual:
+In a previous [blog](https://www.notion.so/Automating-Algorithm-Discovery-A-Case-Study-in-Improving-Multi-Agent-System-Design-using-MAST-2ca8d1e3404480f78f76ccabb3c9cfd8?pvs=21), we introduce [MAST [NeurIPS'25 Spotlight]](https://arxiv.org/abs/2503.13657), a failure taxonomy and LLM annotator that turns those messy agent traces into structured, actionable failure signals (instead of vibes-based log reading). But even with good diagnostics, the development loop is still mostly manual:
 
 1. Run tasks
 2. Read long traces
@@ -91,7 +91,7 @@ We frame MAS improvement as a tight inner loop:
 
 Since multi-agent design has a wide design space, we restrict what OpenEvolve can mutate to a small set of "knobs":
 
-- **Roles & Responsibilities** -- builder vs. berifier separation, approval rights, escalation
+- **Roles & Responsibilities** -- builder vs. verifier separation, approval rights, escalation
 - **Topology & Routing** -- who talks to whom, ordering, retries, timeouts
 - **Communication Protocols** -- message schemas, ACK rules, handoff contracts
 - **Memory & State** -- pinned facts, artifact propagation, anti-repetition guards
@@ -304,7 +304,7 @@ team.hire([
 ])
 ```
 
-What happened next was an example of reward hacking: the evolutionary algorithm simply removed the verification agent and… voilà--no more verification-related errors. The system quickly reached a similar combine score as the SOTA baseline (~0.5), but for the wrong reason: it "improved" by deleting the component that would have caught failures, and the resulting code perform worse in downstream evaluation.
+What happened next was an example of reward hacking: the evolutionary algorithm simply removed the verification agent and… voilà--no more verification-related errors. The system quickly reached a similar combined score as the SOTA baseline (~0.5), but for the wrong reason: it "improved" by deleting the component that would have caught failures, and the resulting code performs worse in downstream evaluation.
 
 ```python
 # Create team

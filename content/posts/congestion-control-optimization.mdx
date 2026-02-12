@@ -4,11 +4,11 @@ author: "Shulu Li, Audrey Cheng, Ion Stoica, ADRS Team"
 date: "2026-02-05"
 tags: ["Case Study", "Networking"]
 image: "/congestion-control-optimization.png"
-excerpt: "In this blog post, we apply ADRS frameworks to improve SOTA congestion control algorithms (CCAs) in datacenter networking. Since the late 1980s, congestion control algorithms (CCAs) have played a central role in maintaining network stability and f..."
+excerpt: "In this blog post, we apply ADRS frameworks to improve state-of-the-art congestion control algorithms in datacenter networking. In just 1.5 hours of autonomous evolution, the AI evolved the SOTA baseline from PowerTCP into a more responsive algorithm, reducing average queue length by 49% while maintaining high throughput."
 ---
 > This post is part of our **AI-Driven Research for Systems (ADRS)** case study series, where we use AI to automatically discover better algorithms for real-world systems problems.
 >
-> In this post, we apply ADRS frameworks to improve **congestion control algorithms (CCAs) in datacenter networking**. The goal is to reduce the queue length ****in data center networks and thus reduce latency. We explore how evolutionary frameworks, such as OpenEvolve, can improve congestion control algorithms. We use ***NSDI '22 PowerTCP's*** 10:1 incast benchmark to evaluate congestion algorithms. The evolved algorithm **reduces queue length by 49%**.
+> In this post, we apply ADRS frameworks to improve **congestion control algorithms (CCAs) in datacenter networking**. The goal is to reduce the queue length in data center networks and thus reduce latency. We explore how evolutionary frameworks, such as OpenEvolve, can improve congestion control algorithms. We use ***NSDI '22 PowerTCP's*** 10:1 incast benchmark to evaluate congestion algorithms. The evolved algorithm **reduces queue length by 49%**.
 >
 > - **🕸️ ADRS Blog Series:** [https://ucbskyadrs.github.io/](https://ucbskyadrs.github.io/)
 > - 📝  **Paper:**  [https://arxiv.org/abs/2510.06189](https://arxiv.org/abs/2510.06189)
@@ -30,7 +30,7 @@ Traditionally, there are two main categories of congestion control algorithms. T
 
 ![Figure 1. Classification of Congestion Control Algorithms](/blog/congestion-control-optimization/image.png)
 
-PowerTCP takes into consideration both "voltage" and "current" (shown in Figure 1) for control action using measurements taken within the network and propagated through in-band network telemetry (INT). This allows the algorithm to maintain low queue length and resolve congestion rapidly. Since in-band network telemetry are not supported by a lot of legacy switches widely used in data centers, the paper also proposes θ-PowerTCP through accurate RTT measurement capabilities at the end-host that allows for deployment when INT is not supported by switches in the datacenter. In this case study, we use the existing SOTA, θ-PowerTCP, as the baseline algorithm and starting point for our evolution.
+PowerTCP takes into consideration both "voltage" and "current" (shown in Figure 1) for control action using measurements taken within the network and propagated through in-band network telemetry (INT). This allows the algorithm to maintain low queue length and resolve congestion rapidly. Since in-band network telemetry is not supported by a lot of legacy switches widely used in data centers, the paper also proposes θ-PowerTCP through accurate RTT measurement capabilities at the end-host that allow for deployment when INT is not supported by switches in the datacenter. In this case study, we use the existing SOTA, θ-PowerTCP, as the baseline algorithm and starting point for our evolution.
 
 ## Evaluation of Baselines
 
@@ -38,7 +38,7 @@ We first discuss the baselines, benchmarks and SOTAs for evaluation. Unfortunate
 
 ![Figure 2. State-of-the-art congestion control algorithms vs PowerTCP in response to an incast. For each algorithm, we show the corresponding reaction to 10 : 1 incast in the top row and to 255 : 1 incast in the bottom row.](/blog/congestion-control-optimization/image-1.png)
 
-For the purposes of improving CCA algorithms, we use the incast benchmark in the PowerTCP paper. The benchmark is built with the deterministic Network Simulator 3 (NS3).  Specifically, the benchmark focus on a deployment scenario in the context of Remote Direct Memory Access(RDMA) networks, where the CC algorithm is implemented on a Network Interface Card (NIC). At time t = 0, we launch ten flows simultaneously towards the receiver of a long flow leading to a 10:1 incast. PowerTCP and θ-PowerTCP are SOTA algorithms, and in this benchmark, they quickly mitigate the incast and reach near zero queue lengths without losing throughput, while other algorithms such as [TIMELY](https://conferences.sigcomm.org/sigcomm/2015/pdf/papers/p537.pdf), [HPCC](https://dl.acm.org/doi/10.1145/3341302.3342085) and [HOMA](https://people.csail.mit.edu/alizadeh/papers/homa-sigcomm18.pdf) suffer (see Figure 2).
+For the purposes of improving CCA algorithms, we use the incast benchmark in the PowerTCP paper. The benchmark is built with the deterministic Network Simulator 3 (NS3).  Specifically, the benchmark focuses on a deployment scenario in the context of Remote Direct Memory Access (RDMA) networks, where the CC algorithm is implemented on a Network Interface Card (NIC). At time t = 0, we launch ten flows simultaneously towards the receiver of a long flow leading to a 10:1 incast. PowerTCP and θ-PowerTCP are SOTA algorithms, and in this benchmark, they quickly mitigate the incast and reach near zero queue lengths without losing throughput, while other algorithms such as [TIMELY](https://conferences.sigcomm.org/sigcomm/2015/pdf/papers/p537.pdf), [HPCC](https://dl.acm.org/doi/10.1145/3341302.3342085) and [HOMA](https://people.csail.mit.edu/alizadeh/papers/homa-sigcomm18.pdf) suffer (see Figure 2).
 
 # Improving θ-PowerTCP with OpenEvolve
 
@@ -66,13 +66,13 @@ In the best program highlighted in Figure 3, the combined score was able to impr
 
 ## Evolution Results
 
-The resulting algorithm tuned a few parameters as shown [here](https://www.diffchecker.com/89wBRG5v/). Specifically, OpenEvolve's CCA lowers initial transmission rates and made the algorithm more sensitive and responsive to changes. This allows the algorithm to avoid congestions and respond to rate changes quickly to utilize the bandwidth.
+The resulting algorithm tuned a few parameters as shown [here](https://www.diffchecker.com/89wBRG5v/). Specifically, OpenEvolve's CCA lowers initial transmission rates and makes the algorithm more sensitive and responsive to changes. This allows the algorithm to avoid congestion and respond to rate changes quickly to utilize the bandwidth.
 
 ![Fig 5. One of the changes made by OpenEvolve](/blog/congestion-control-optimization/image-5.png)
 
 ## What about Side Effects?
 
-While OpenEvolve's solution improved on the NS3 10:1 incast benchmark, we want to learn bout the side effects of the changes made by OpenEvolve. **Are other aspects of the algorithm compromised to improve evaluation scores?** To evaluate OpenEvolve's solution in more detail, we benchmark OpenEvolve's CCA on two additional benchmarks presented in PowerTCP paper.
+While OpenEvolve's solution improved on the NS3 10:1 incast benchmark, we want to learn about the side effects of the changes made by OpenEvolve. **Are other aspects of the algorithm compromised to improve evaluation scores?** To evaluate OpenEvolve's solution in more detail, we benchmark OpenEvolve's CCA on two additional benchmarks presented in PowerTCP paper.
 
 ### Fairness
 
@@ -82,11 +82,11 @@ In congestion control algorithms, fairness refers to how a network's total avail
 
 ![Fig 6b. θ-PowerTCP in the Fairness Benchmark](/blog/congestion-control-optimization/image-7.png)
 
-The results shows that OpenEvolve's CCA achieves better fairness compared to the initial θ-PowerTCP program, with more stable bandwidth allocation and less over corrections.
+The results show that OpenEvolve's CCA achieves better fairness compared to the initial θ-PowerTCP program, with more stable bandwidth allocation and less overcorrection.
 
 ### Web Search Workload
 
-We additionally benchmark OpenEvolve's solution on a web search workload and measure 99.9 percentile flow completion times. DatacenterTCP is the algorithm generated by OpenEvolve (see purple line in Figure 7), and it shows a slowdown with smaller flow sizes, while outperforming θ-PowerTCP(Green line in Figure 7) on larger flows. We think this is due to OpenEvolve favoring algorithms that perform well in the 10:1 incast large flow benchmark and putting less emphasis on performance of shorter flows. This leads to an algorithm that works especially well in large flows but performs worse in small flows.
+We additionally benchmark OpenEvolve's solution on a web search workload and measure 99.9th percentile flow completion times. DatacenterTCP is the algorithm generated by OpenEvolve (see purple line in Figure 7), and it shows a slowdown with smaller flow sizes, while outperforming θ-PowerTCP(Green line in Figure 7) on larger flows. We think this is due to OpenEvolve favoring algorithms that perform well in the 10:1 incast large flow benchmark and putting less emphasis on performance of shorter flows. This leads to an algorithm that works especially well in large flows but performs worse in small flows.
 
 ![image.png](/blog/congestion-control-optimization/image-8.png)
 

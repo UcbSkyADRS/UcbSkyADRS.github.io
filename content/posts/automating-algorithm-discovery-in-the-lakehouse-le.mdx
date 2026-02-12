@@ -4,7 +4,7 @@ author: "Jacopo Tagliabue, Audrey Cheng, Shu Liu, Ion Stoica, ADRS Team"
 date: "2026-01-15"
 tags: ["Case Study", "Databases", "Industry"]
 image: "/automating-algorithm-discovery-in-the-lakehouse-le.png"
-excerpt: "in the carpet corresponds to a place in the city and all the things"
+excerpt: "This post is the tenth in our ADRS series, where we use AI to automatically discover better algorithms for real-world systems problems. In this blog, we partner with Bauplan to explore how ADRS can optimize policy generation for data pipeline systems. By combining simulation-driven evaluation with an evolutionary search loop, we demonstrate how AI can iteratively refine scheduling policies and configuration parameters, achieving significant performance improvements over hand-tuned baselines."
 ---
 > This post is part of our **AI-Driven Research for Systems (ADRS)** case study series, where we use AI to automatically discover better algorithms for real-world systems problems. We feature exciting work from Bauplan this week!
 >
@@ -63,7 +63,7 @@ The Data Lakehouse (DLH) is the *de facto* standard for analytics, data engineer
 
 What we need is a computational policy, i.e. an algorithm that observes ongoing computation and incoming functions and properly schedules the workloads as closely as possible to user-defined priorities, e.g. a query typically has a human waiting on the other side of the screen, while a daily job may start five minutes later without affecting any downstream system. Importantly, interleaving latency sensitive and latency insensitive workloads for better resource utilization is a common pattern in architectures for heterogeneous, containerized computation (Borg, [XFaaS](https://dl.acm.org/doi/10.1145/3600006.3613155)), less so in data systems.
 
-As building and testing such policies on the real, cloud-based, high-performace system is costly and error-prone, we developed a Python simulator to quickly iterate offline: little did we know that a tool built for human researchers would turn out to be well suited for AI ones as well.
+As building and testing such policies on the real, cloud-based, high-performance system is costly and error-prone, we developed a Python simulator to quickly iterate offline: little did we know that a tool built for human researchers would turn out to be well suited for AI ones as well.
 
 ## Eudoxia, a FaaS Simulator
 
@@ -83,7 +83,7 @@ On top of the usual ADRS perks, pulling off cheap policy generation in a multi-t
 
 ## Putting It All Together
 
-The combination of a complex, multi-dimensional decision problem such as scheduling data workloads, and the availability of a quick, deterministic verifier such as Eudoxia fit perfectly the prerequisites of the *AI-Driven Research for Systems* agenda: as long as the solution is verifiable, we can ask LLMs to iteratively generate and refines solutions.
+The combination of a complex, multi-dimensional decision problem such as scheduling data workloads, and the availability of a quick, deterministic verifier such as Eudoxia fit perfectly the prerequisites of the *AI-Driven Research for Systems* agenda: as long as the solution is verifiable, we can ask LLMs to iteratively generate and refine solutions.
 
 Following the ADRS generate → evaluate → refine recipe, we frame scheduler design as a loop: an LLM proposes a policy by generating Python code, the simulator evaluates it on standardized traces, and structured feedback steers subsequent generations (e.g. "policy not valid", "latency is worse than FIFO").
 

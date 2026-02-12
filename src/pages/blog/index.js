@@ -2,18 +2,19 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import SEO from "../../components/SEO";
+import AuthorList from "../../components/AuthorList";
 import { getAllPosts } from "../../lib/posts";
 
 /* ── Tag colours ── */
 const TAG_STYLE = {
   "Case Study":          "bg-blue-50 text-blue-700 border-blue-100",
   "Position Paper":      "bg-purple-50 text-purple-700 border-purple-100",
-  "AI Systems":          "bg-indigo-50 text-indigo-700 border-indigo-100",
   "Distributed Systems": "bg-cyan-50 text-cyan-700 border-cyan-100",
-  "GPU Optimization":    "bg-orange-50 text-orange-700 border-orange-100",
   Databases:             "bg-amber-50 text-amber-700 border-amber-100",
-  Industry:              "bg-rose-50 text-rose-700 border-rose-100",
   Networking:            "bg-teal-50 text-teal-700 border-teal-100",
+  "AI Systems":          "bg-indigo-50 text-indigo-700 border-indigo-100",
+  "GPU Optimization":    "bg-orange-50 text-orange-700 border-orange-100",
+  Industry:              "bg-rose-50 text-rose-700 border-rose-100",
 };
 
 const ALL_TAGS = Object.keys(TAG_STYLE);
@@ -92,7 +93,11 @@ export default function Blog({ mdxPosts }) {
             Blog
           </h1>
           <p className="mt-2 text-gray-400 text-[15px]">
-            Insights and case studies from AI-Driven Research Systems.
+            Insights and case studies on AI-Driven Research for Systems.
+          </p>
+          <p className="mt-2 text-xs text-gray-400">
+            {filtered.length} total post{filtered.length !== 1 ? "s" : ""}.
+            {filtered.length !== allPosts.length && ` (filtered from ${allPosts.length})`}
           </p>
         </header>
 
@@ -180,11 +185,11 @@ export default function Blog({ mdxPosts }) {
                   <Link key={post.slug} href={post.href} className="block">
                     <div className="group flex flex-col sm:flex-row rounded-2xl border border-gray-200/80 bg-white shadow-sm hover:shadow-lg hover:border-gray-300 hover:-translate-y-0.5 transition-all duration-200 overflow-hidden cursor-pointer">
                       {/* Thumb */}
-                      <div className="sm:w-52 flex-shrink-0 bg-gradient-to-br from-gray-50 to-gray-100/50 flex items-center justify-center p-6">
+                      <div className="h-44 sm:h-auto sm:w-64 md:w-72 flex-shrink-0 bg-gradient-to-br from-gray-50 to-gray-100/50 flex items-center justify-center p-3">
                         <img
                           src={post.image}
                           alt=""
-                          className="w-full h-24 sm:h-28 object-contain group-hover:scale-[1.03] transition-transform duration-300"
+                          className="w-full h-full object-contain object-center scale-[1.02] group-hover:scale-[1.05] transition-transform duration-300"
                         />
                       </div>
                       {/* Body */}
@@ -192,11 +197,11 @@ export default function Blog({ mdxPosts }) {
                         <h3 className="text-base font-semibold text-primary leading-snug group-hover:text-berkeleyBlue transition-colors line-clamp-2">
                           {post.title}
                         </h3>
-                        <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
-                          <span className="font-medium text-gray-500">{post.author}</span>
-                          <span className="w-0.5 h-0.5 rounded-full bg-gray-300" />
-                          <span>{formatDate(post.date)}</span>
-                        </div>
+                          <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
+                            <AuthorList author={post.author} className="font-medium text-gray-500" />
+                            <span className="w-0.5 h-0.5 rounded-full bg-gray-300" />
+                            <span>{formatDate(post.date)}</span>
+                          </div>
                         <p className="mt-2.5 text-sm text-gray-500 leading-relaxed line-clamp-2">
                           {post.excerpt}
                         </p>

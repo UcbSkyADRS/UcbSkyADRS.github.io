@@ -4,7 +4,7 @@ author: "ADRS Team"
 date: "2025-11-06"
 tags: ["Case Study", "Databases"]
 image: "/optimizing-llm-queries-over-relational-workloads.png"
-excerpt: "This post is part of our AI-Driven Research for Systems (ADRS) case study series, where we use AI to automatically discover better algorithms for real-world systems problems."
+excerpt: "This post is the third in our ADRS series, where we use AI to automatically discover better algorithms for real-world systems problems. In this blog, we revisit a recent research challenge from our MLSys'25 paper, Optimizing LLM Queries in Relational Data Analytics Workloads, which tackles the high cost and latency of executing LLM queries over relational data. We show how using OpenEvolve, ADRS autonomously discovered a 3x faster algorithm that achieves the same prefix reuse ratio as the published solution."
 ---
 💡
 
@@ -20,7 +20,7 @@ In this blog, we revisit a recent research challenge from our MLSys '25 paper, [
 
 # **The Problem: LLM Queries are Slow and Expensive**
 
-Large language models (LLMs) are increasingly used in **relational** **data analytic workloads**, where SQL queries or DataFrame operations invoke LLMs over relational (table-based) data. Major analytics platforms, such as [AWS Redshift](https://aws.amazon.com/redshift/), [Databricks](https://docs.databricks.com/aws/en/large-language-models/ai-functions), and [Google BigQuery](https://cloud.google.com/bigquery), ****now integrate LLM functionality directly into their SQL APIs. Similarly, modern DataFrame libraries like [LOTUS](https://lotus-data.github.io/) support LLM calls over structured data.
+Large language models (LLMs) are increasingly used in **relational** **data analytic workloads**, where SQL queries or DataFrame operations invoke LLMs over relational (table-based) data. Major analytics platforms, such as [AWS Redshift](https://aws.amazon.com/redshift/), [Databricks](https://docs.databricks.com/aws/en/large-language-models/ai-functions), and [Google BigQuery](https://cloud.google.com/bigquery), now integrate LLM functionality directly into their SQL APIs. Similarly, modern DataFrame libraries like [LOTUS](https://lotus-data.github.io/) support LLM calls over structured data.
 
 For example, a user might issue the following query to check whether a product *description* matches its *review:*
 
@@ -45,7 +45,7 @@ In practice, standard table orderings rarely align these shared prefixes, forcin
 
 # SOTA Algorithm: Greedy Group Recursion (GGR)
 
-To exploit the structure of relational tables, the reordering algorithm aims to **maximize prefix cache hit rate (PHR),** i.e., ****the fraction of tokens reused across consecutive LLM inference requests. However, finding the optimal ordering is combinatorially intractable: a table with $n$ rows and $m$ fields has  $n!\times(m!^n)$ possible orderings.
+To exploit the structure of relational tables, the reordering algorithm aims to **maximize prefix cache hit rate (PHR),** i.e., the fraction of tokens reused across consecutive LLM inference requests. However, finding the optimal ordering is combinatorially intractable: a table with $n$ rows and $m$ fields has  $n!\times(m!^n)$ possible orderings.
 
 The **Greedy Group Recursion (GGR)** algorithm proposed by the paper provides a practical approximation. It works by recursively scanning the table to find the value that contributes most to prefix reuse (typically one that is both frequent and long). Once this value is found, GGR prioritizes the column in which it occurs, moving that field earlier in the ordering. After selecting that column, GGR partitions the table into smaller subsets: rows sharing that value form one group, and the rest form another. The same process is then applied recursively within each subset (Figure 4).
 
