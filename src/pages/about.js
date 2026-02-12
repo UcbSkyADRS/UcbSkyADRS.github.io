@@ -143,7 +143,8 @@ export default function About() {
           </div>
         </section>
 
-        {/* ── Team ── */}
+        {/*
+        ── Team ──
         <section className="mb-16">
           <h2 className="text-xl md:text-2xl font-bold text-primary tracking-tight mb-2">
             Team
@@ -169,7 +170,7 @@ export default function About() {
           </p>
         </section>
 
-        {/* ── Affiliations & Funding ── */}
+        ── Affiliations & Funding ──
         <section className="mb-16">
           <div className="grid md:grid-cols-2 gap-8">
             <div>
@@ -197,6 +198,7 @@ export default function About() {
             </div>
           </div>
         </section>
+        */}
 
         {/* ── Contact ── */}
         <section>
