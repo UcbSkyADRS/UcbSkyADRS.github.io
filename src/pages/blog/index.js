@@ -21,7 +21,9 @@ const ALL_TAGS = Object.keys(TAG_STYLE);
 
 /* ── Helpers ── */
 function formatDate(d) {
-  return new Date(d).toLocaleDateString("en-US", {
+  const dateStr = String(d || "").trim();
+  const asLocalNoon = dateStr && !dateStr.includes("T") ? dateStr + "T12:00:00" : dateStr;
+  return new Date(asLocalNoon).toLocaleDateString("en-US", {
     year: "numeric", month: "long", day: "numeric",
   });
 }
@@ -198,7 +200,7 @@ export default function Blog({ mdxPosts }) {
                           {post.title}
                         </h3>
                           <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
-                            <AuthorList author={post.author} className="font-medium text-gray-500" />
+                            <AuthorList author={post.author} className="font-medium text-gray-500" link={false} />
                             <span className="w-0.5 h-0.5 rounded-full bg-gray-300" />
                             <span>{formatDate(post.date)}</span>
                           </div>

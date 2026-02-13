@@ -14,6 +14,12 @@ const stats = [
 /* ── Latest posts (local blog) ── */
 const recentPosts = [
   {
+    title: "Improving Multi-Agent Reasoning Systems using MAST (Part 2)",
+    date: "Feb 13, 2026",
+    image: "/improving-multi-agent-reasoning-systems-using-mast.png",
+    href: "/blog/improving-multi-agent-reasoning-systems-using-mast/",
+  },
+  {
     title: "Congestion Control Optimization",
     date: "Feb 5, 2026",
     image: "/congestion-control-optimization.png",
@@ -171,7 +177,7 @@ export default function Home() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recentPosts.map((post) => (
+            {recentPosts.slice(0, 3).map((post) => (
               <Link
                 key={post.title}
                 href={post.href}
