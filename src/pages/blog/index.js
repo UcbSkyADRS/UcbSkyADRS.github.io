@@ -1,9 +1,24 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { FaSearch, FaTimes } from "react-icons/fa";
+import { FaSearch, FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 import SEO from "../../components/SEO";
 import AuthorList from "../../components/AuthorList";
 import { getAllPosts } from "../../lib/posts";
+
+/* ── Cross-posted external entries ── */
+const CROSS_POSTS = [
+  {
+    slug: "skydiscover-framework",
+    title: "SkyDiscover: A Flexible Framework for AI-Driven Scientific and Algorithmic Discovery",
+    author: "Shu Liu, Mert Cemri, Shubham Agarwal, Alexander Krentsel, Ion Stoica, SkyDiscover Team",
+    date: "2026-02-26",
+    tags: ["AI Systems", "Case Study"],
+    image: "/skydiscover-framework.png",
+    excerpt: "SkyDiscover is a modular, open-source framework for LLM-driven evolutionary search — achieving new state-of-the-art on Frontier-CS, ADRS systems benchmarks, and 200+ optimization tasks spanning competitive programming, circle packing, MoE load balancing, and GPU model placement.",
+    href: "https://skydiscover-ai.github.io/blog.html",
+    external: true,
+  },
+];
 
 /* ── Tag colours ── */
 const TAG_STYLE = {
@@ -53,7 +68,10 @@ export default function Blog({ mdxPosts }) {
     );
 
   const allPosts = useMemo(() => {
-    const posts = mdxPosts.map((p) => ({ ...p, href: `/blog/${p.slug}/` }));
+    const posts = [
+      ...mdxPosts.map((p) => ({ ...p, href: `/blog/${p.slug}/` })),
+      ...CROSS_POSTS,
+    ];
     posts.sort((a, b) => new Date(b.date) - new Date(a.date));
     return posts;
   }, [mdxPosts]);
@@ -183,39 +201,50 @@ export default function Blog({ mdxPosts }) {
               </div>
 
               <div className="space-y-4">
-                {yp.map((post) => (
-                  <Link key={post.slug} href={post.href} className="block">
-                    <div className="group flex flex-col sm:flex-row rounded-2xl border border-gray-200/80 bg-white shadow-sm hover:shadow-lg hover:border-gray-300 hover:-translate-y-0.5 transition-all duration-200 overflow-hidden cursor-pointer">
-                      {/* Thumb */}
-                      <div className="h-44 sm:h-auto sm:w-64 md:w-72 flex-shrink-0 bg-gradient-to-br from-gray-50 to-gray-100/50 flex items-center justify-center p-3">
-                        <img
-                          src={post.image}
-                          alt=""
-                          className="w-full h-full object-contain object-center scale-[1.02] group-hover:scale-[1.05] transition-transform duration-300"
-                        />
-                      </div>
-                      {/* Body */}
-                      <div className="flex-1 min-w-0 px-6 py-5">
-                        <h3 className="text-base font-semibold text-primary leading-snug group-hover:text-berkeleyBlue transition-colors line-clamp-2">
-                          {post.title}
-                        </h3>
+                {yp.map((post) => {
+                  const Wrapper = post.external ? "a" : Link;
+                  const wrapperProps = post.external
+                    ? { href: post.href, target: "_blank", rel: "noopener noreferrer" }
+                    : { href: post.href };
+                  return (
+                    <Wrapper key={post.slug} {...wrapperProps} className="block">
+                      <div className="group flex flex-col sm:flex-row rounded-2xl border border-gray-200/80 bg-white shadow-sm hover:shadow-lg hover:border-gray-300 hover:-translate-y-0.5 transition-all duration-200 overflow-hidden cursor-pointer">
+                        {/* Thumb */}
+                        <div className="h-44 sm:h-auto sm:w-64 md:w-72 flex-shrink-0 bg-gradient-to-br from-gray-50 to-gray-100/50 flex items-center justify-center p-3">
+                          <img
+                            src={post.image}
+                            alt=""
+                            className="w-full h-full object-contain object-center scale-[1.02] group-hover:scale-[1.05] transition-transform duration-300"
+                          />
+                        </div>
+                        {/* Body */}
+                        <div className="flex-1 min-w-0 px-6 py-5">
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-base font-semibold text-primary leading-snug group-hover:text-berkeleyBlue transition-colors line-clamp-2">
+                              {post.title}
+                            </h3>
+                            {post.external && (
+                              <FaExternalLinkAlt className="flex-shrink-0 text-[10px] text-gray-300" />
+                            )}
+                          </div>
                           <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
                             <AuthorList author={post.author} className="font-medium text-gray-500" link={false} />
                             <span className="w-0.5 h-0.5 rounded-full bg-gray-300" />
                             <span>{formatDate(post.date)}</span>
                           </div>
-                        <p className="mt-2.5 text-sm text-gray-500 leading-relaxed line-clamp-2">
-                          {post.excerpt}
-                        </p>
-                        <div className="mt-3 flex flex-wrap gap-1.5">
-                          {post.tags.map((t) => (
-                            <Tag key={t} tag={t} />
-                          ))}
+                          <p className="mt-2.5 text-sm text-gray-500 leading-relaxed line-clamp-2">
+                            {post.excerpt}
+                          </p>
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            {post.tags.map((t) => (
+                              <Tag key={t} tag={t} />
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Wrapper>
+                  );
+                })}
               </div>
             </section>
           );
