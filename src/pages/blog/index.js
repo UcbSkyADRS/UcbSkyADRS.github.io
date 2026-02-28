@@ -11,7 +11,7 @@ const CROSS_POSTS = [
     slug: "skydiscover-framework",
     title: "SkyDiscover: A Flexible Framework for AI-Driven Scientific and Algorithmic Discovery",
     author: "Shu Liu, Mert Cemri, Shubham Agarwal, Alexander Krentsel, Ion Stoica, SkyDiscover Team",
-    date: "2026-02-26",
+    date: "2026-03-02",
     tags: ["AI Systems", "Case Study"],
     image: "/skydiscover-framework.png",
     excerpt: "SkyDiscover is a modular, open-source framework for LLM-driven evolutionary search — achieving new state-of-the-art on Frontier-CS, ADRS systems benchmarks, and 200+ optimization tasks spanning competitive programming, circle packing, MoE load balancing, and GPU model placement.",
