@@ -15,7 +15,7 @@ const stats = [
 const recentPosts = [
   {
     title: "SkyDiscover: AI-Driven Scientific and Algorithmic Discovery",
-    date: "Mar 2, 2026",
+    date: "Mar 3, 2026",
     image: "/skydiscover-framework.png",
     href: "https://skydiscover-ai.github.io/blog.html",
     external: true,
