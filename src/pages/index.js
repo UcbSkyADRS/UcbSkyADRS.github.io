@@ -14,6 +14,19 @@ const stats = [
 /* ── Latest posts (local blog) ── */
 const recentPosts = [
   {
+    title: "SkyDiscover: AI-Driven Scientific and Algorithmic Discovery",
+    date: "Mar 3, 2026",
+    image: "/skydiscover-framework.png",
+    href: "https://skydiscover-ai.github.io/blog.html",
+    external: true,
+  },
+  {
+    title: "Improving Multi-Agent Reasoning Systems using MAST (Part 2)",
+    date: "Feb 13, 2026",
+    image: "/improving-multi-agent-reasoning-systems-using-mast.png",
+    href: "/blog/improving-multi-agent-reasoning-systems-using-mast/",
+  },
+  {
     title: "Congestion Control Optimization",
     date: "Feb 5, 2026",
     image: "/congestion-control-optimization.png",
@@ -171,29 +184,35 @@ export default function Home() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recentPosts.map((post) => (
-              <Link
-                key={post.title}
-                href={post.href}
-                className="block group rounded-2xl border border-gray-200/80 bg-white shadow-sm hover:shadow-xl hover:border-gray-300 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
-              >
-                <div className="aspect-[16/10] bg-gradient-to-br from-gray-50 to-gray-100/50 flex items-center justify-center p-4">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-contain group-hover:scale-[1.04] transition-transform duration-300"
-                  />
-                </div>
-                <div className="px-5 pb-5 pt-4">
-                  <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-2">
-                    {post.date}
-                  </p>
-                  <h3 className="text-base font-semibold text-primary leading-snug line-clamp-2 group-hover:text-berkeleyBlue transition-colors">
-                    {post.title}
-                  </h3>
-                </div>
-              </Link>
-            ))}
+            {recentPosts.slice(0, 3).map((post) => {
+              const Wrapper = post.external ? "a" : Link;
+              const wrapperProps = post.external
+                ? { href: post.href, target: "_blank", rel: "noopener noreferrer" }
+                : { href: post.href };
+              return (
+                <Wrapper
+                  key={post.title}
+                  {...wrapperProps}
+                  className="block group rounded-2xl border border-gray-200/80 bg-white shadow-sm hover:shadow-xl hover:border-gray-300 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+                >
+                  <div className="aspect-[16/10] bg-gradient-to-br from-gray-50 to-gray-100/50 flex items-center justify-center p-4">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-contain group-hover:scale-[1.04] transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="px-5 pb-5 pt-4">
+                    <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-2">
+                      {post.date}
+                    </p>
+                    <h3 className="text-base font-semibold text-primary leading-snug line-clamp-2 group-hover:text-berkeleyBlue transition-colors">
+                      {post.title}
+                    </h3>
+                  </div>
+                </Wrapper>
+              );
+            })}
           </div>
 
           <div className="mt-6 text-center sm:hidden">

@@ -1,3 +1,4 @@
+import React from "react";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import remarkGfm from "remark-gfm";
@@ -39,12 +40,20 @@ const components = {
       {...props}
     />
   ),
-  p: (props) => (
-    <p
-      className="text-[15px] md:text-base text-gray-700 leading-[1.8] mb-5"
-      {...props}
-    />
-  ),
+  p: (props) => {
+    const arr = React.Children.toArray(props.children);
+    const singleChild = arr.length === 1 ? arr[0] : null;
+    const isBlockChild =
+      singleChild &&
+      typeof singleChild === "object" &&
+      singleChild !== null &&
+      typeof singleChild.type !== "string";
+    const className = "text-[15px] md:text-base text-gray-700 leading-[1.8] mb-5";
+    if (isBlockChild) {
+      return <div className={className}>{props.children}</div>;
+    }
+    return <p className={className} {...props} />;
+  },
   a: (props) => (
     <a
       className="text-berkeleyBlue font-medium hover:underline underline-offset-2 decoration-berkeleyBlue/30"

@@ -21,6 +21,7 @@ const AUTHOR_LINKS = {
   "Yifan Qiao": "https://yifanqiao.com/",
   "Jacopo Tagliabue": "https://jacopotagliabue.it/",
   "Aditya Desai": "https://apd10.github.io/",
+  "Arin Kadakia": "https://www.linkedin.com/in/arinkadakia/",
   "SkyLight Team": "https://sky-light.eecs.berkeley.edu/#/about",
   "Shulu Li": "https://www.linkedin.com/in/shulu-li/",
   "Alvin Cheung": "https://people.eecs.berkeley.edu/~akcheung/",
