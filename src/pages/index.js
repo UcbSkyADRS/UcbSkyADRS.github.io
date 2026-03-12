@@ -14,6 +14,13 @@ const stats = [
 /* ── Latest posts (local blog) ── */
 const recentPosts = [
   {
+    title: "AdaEvolve: Adaptive LLM-Driven Zeroth-Order Optimization",
+    date: "Mar 12, 2026",
+    image: "/adaevolve-fig1.png",
+    href: "https://skydiscover-ai.github.io/blog-adaevolve.html",
+    external: true,
+  },
+  {
     title: "SkyDiscover: AI-Driven Scientific and Algorithmic Discovery",
     date: "Mar 3, 2026",
     image: "/skydiscover-framework.png",

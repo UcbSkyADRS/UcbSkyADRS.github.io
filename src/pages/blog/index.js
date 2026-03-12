@@ -8,6 +8,17 @@ import { getAllPosts } from "../../lib/posts";
 /* ── Cross-posted external entries ── */
 const CROSS_POSTS = [
   {
+    slug: "adaevolve",
+    title: "AdaEvolve: Adaptive LLM-Driven Zeroth-Order Optimization",
+    author: "Mert Cemri, Shubham Agarwal, Akshat Gupta, Shu Liu, Ion Stoica, SkyDiscover Team",
+    date: "2026-03-12",
+    tags: ["AI Systems", "Case Study"],
+    image: "/adaevolve-fig1.png",
+    excerpt: "AdaEvolve is a hierarchical adaptive algorithm for LLM-driven evolutionary search that treats fitness improvement trajectories as a gradient analogue. A single accumulated improvement signal drives three synchronized adaptation levels, achieving SOTA across 185 diverse optimization tasks — including ADRS systems benchmarks.",
+    href: "https://skydiscover-ai.github.io/blog-adaevolve.html",
+    external: true,
+  },
+  {
     slug: "skydiscover-framework",
     title: "SkyDiscover: A Flexible Framework for AI-Driven Scientific and Algorithmic Discovery",
     author: "Shu Liu, Mert Cemri, Shubham Agarwal, Alexander Krentsel, Ion Stoica, SkyDiscover Team",
