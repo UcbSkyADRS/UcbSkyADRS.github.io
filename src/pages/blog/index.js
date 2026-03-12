@@ -8,11 +8,22 @@ import { getAllPosts } from "../../lib/posts";
 /* ── Cross-posted external entries ── */
 const CROSS_POSTS = [
   {
+    slug: "adaevolve",
+    title: "AdaEvolve: Adaptive LLM-Driven Zeroth-Order Optimization",
+    author: "Mert Cemri, Shubham Agarwal, Akshat Gupta, Shu Liu, Audrey Cheng, Ashwin Naren, Qiuyang Mang, Lutfi Eren Erdogan, Koushik Sen, Matei Zaharia, Alexandros G. Dimakis, Ion Stoica",
+    date: "2026-03-12",
+    tags: ["AI Systems"],
+    image: "/adaevolve_fig.png",
+    excerpt: "AdaEvolve introduces a three-level adaptive framework for LLM-driven evolutionary search — where a single improvement signal simultaneously adjusts local exploration intensity, reallocates compute across subpopulations via bandit algorithms, and generates high-level strategic guidance, achieving state-of-the-art results across 185 diverse tasks.",
+    href: "https://skydiscover-ai.github.io/blog-adaevolve.html",
+    external: true,
+  },
+  {
     slug: "skydiscover-framework",
     title: "SkyDiscover: A Flexible Framework for AI-Driven Scientific and Algorithmic Discovery",
     author: "Shu Liu, Mert Cemri, Shubham Agarwal, Alexander Krentsel, Ion Stoica, SkyDiscover Team",
     date: "2026-03-03",
-    tags: ["AI Systems", "Case Study"],
+    tags: ["AI Systems"],
     image: "/skydiscover-framework.png",
     excerpt: "SkyDiscover is a modular, open-source framework for LLM-driven evolutionary search — achieving new state-of-the-art on Frontier-CS, ADRS systems benchmarks, and 200+ optimization tasks spanning competitive programming, circle packing, MoE load balancing, and GPU model placement.",
     href: "https://skydiscover-ai.github.io/blog.html",
