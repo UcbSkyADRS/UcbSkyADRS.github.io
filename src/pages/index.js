@@ -14,6 +14,13 @@ const stats = [
 /* ── Latest posts (local blog) ── */
 const recentPosts = [
   {
+    title: "EvoX: Letting AI Evolve Its Own Evolution Process",
+    date: "Mar 17, 2026",
+    image: "/evox-overview.png",
+    href: "https://skydiscover-ai.github.io/blog-evox.html",
+    external: true,
+  },
+  {
     title: "AdaEvolve: Adaptive LLM-Driven Zeroth-Order Optimization",
     date: "Mar 12, 2026",
     image: "/adaevolve-fig1.png",

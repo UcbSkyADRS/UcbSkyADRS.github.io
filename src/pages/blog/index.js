@@ -8,6 +8,17 @@ import { getAllPosts } from "../../lib/posts";
 /* ── Cross-posted external entries ── */
 const CROSS_POSTS = [
   {
+    slug: "evox",
+    title: "EvoX: Letting AI Evolve Its Own Evolution Process",
+    author: "Shu Liu, Shubham Agarwal, Monishwaran Maheswaran, Mert Cemri, Ion Stoica, SkyDiscover Team",
+    date: "2026-03-17",
+    tags: ["AI Systems", "Case Study"],
+    image: "/evox-overview.png",
+    excerpt: "EvoX introduces meta-evolution for LLM-driven optimization: a two-level evolutionary process that evolves both candidate solutions and the strategy guiding their generation. Outperforms AlphaEvolve, OpenEvolve, GEPA, and ShinkaEvolve across ~200 diverse optimization tasks — including ADRS systems benchmarks.",
+    href: "https://skydiscover-ai.github.io/blog-evox.html",
+    external: true,
+  },
+  {
     slug: "adaevolve",
     title: "AdaEvolve: Adaptive LLM-Driven Zeroth-Order Optimization",
     author: "Mert Cemri, Shubham Agarwal, Akshat Gupta, Shu Liu, Ion Stoica, SkyDiscover Team",
