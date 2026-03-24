@@ -27,6 +27,7 @@ const AUTHOR_LINKS = {
   "Alvin Cheung": "https://people.eecs.berkeley.edu/~akcheung/",
   "Yakun Sophia Shao": "https://people.eecs.berkeley.edu/~ysshao/",
   "Sahil Bhatia": "https://x.com/sahilb17",
+  "Temoor Tanveer": "https://ttanv.github.io/",
 };
 
 export default AUTHOR_LINKS;
