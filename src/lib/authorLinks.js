@@ -28,6 +28,12 @@ const AUTHOR_LINKS = {
   "Yakun Sophia Shao": "https://people.eecs.berkeley.edu/~ysshao/",
   "Sahil Bhatia": "https://x.com/sahilb17",
   "Temoor Tanveer": "https://ttanv.github.io/",
+  "Lakshya A Agrawal": "https://lakshyaaagrawal.github.io/",
+  "Shiyi Cao": "https://shiyicao.com/",
+  "Alex Dimakis": "https://people.eecs.berkeley.edu/~alexdimakis/",
+  "Koushik Sen": "https://people.eecs.berkeley.edu/~ksen",
+  "Matei Zaharia": "https://people.eecs.berkeley.edu/~matei/",
+  "ADRS Team": "https://ucbskyadrs.github.io/about/",
 };
 
 export default AUTHOR_LINKS;

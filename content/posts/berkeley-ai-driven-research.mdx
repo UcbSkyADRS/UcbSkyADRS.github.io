@@ -1,0 +1,262 @@
+---
+title: "AI-Driven Research at Berkeley"
+author: "Audrey Cheng, Shu Liu, Shubham Agarwal, Mert Cemri, Lakshya A Agrawal, Shiyi Cao, Alex Dimakis, Koushik Sen, Matei Zaharia, Ion Stoica, ADRS Team"
+date: "2026-04-02"
+tags: ["AI Systems"]
+image: "/ai-stack.png"
+excerpt: "This post provides an overview of recent work from Berkeley on automated discovery using AI. We cover the main solutions and frameworks we've developed so far, along with the problems they are designed to address, and describe how these efforts fit together as part of a broader push toward AI-driven discovery."
+---
+> This post provides an overview of recent work from Berkeley on automated discovery using AI. We cover the main solutions and frameworks we've developed so far, along with the problems they are designed to address. We also describe how these efforts fit together as part of a broader push toward AI-driven discovery.
+>
+> - **✍️ Previous ADRS Blogs:** [https://ucbskyadrs.github.io/](https://ucbskyadrs.github.io/)
+> - 💬 **Join us**: [join.slack.com/t/adrs-global](https://join.slack.com/t/adrs-global/shared_invite/zt-3fgme22n5-PKYyAc9aIeTyX5iSQTKIoA) and [Discord](https://discord.gg/mz8gAnpt)
+> - **Follow us**: [x.com/ai4research_ucb](https://x.com/ai4research_ucb)
+
+## Accelerating Discovery with AI
+
+One of the most ambitious goals of artificial intelligence is to automate the scientific discovery process itself. A number of recent efforts appear to be making real progress toward that goal. [FunSearch](https://www.nature.com/articles/s41586-023-06924-6) from Google DeepMind demonstrated it was possible to improve state-of-the-art algorithms in mathematics. Subsequently, [AlphaEvolve](https://storage.googleapis.com/deepmind-media/DeepMind.com/Blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/AlphaEvolve.pdf) from Google showed evolutionary techniques could dramatically improve system performance. Open-source frameworks, such as [OpenEvolve](https://github.com/codelion/openevolve) and [ShinkaEvolve](https://arxiv.org/pdf/2509.19349), further emerged as powerful tools enabling AI-driven discovery. Various research efforts, such as MIT's [Glia](https://arxiv.org/abs/2510.27176) and UW's [SDS](https://foci.uw.edu/papers/whitepaper2025-sds.pdf), also center on this approach. At Berkeley, as early as December 2024, our framework [GEPA](https://arxiv.org/abs/2507.19457) demonstrated success in discovering high-performing solutions using reflective text evolution in hard problems like writing kernels for new hardware architectures and optimizing agents, [even outperforming RL](https://arxiv.org/abs/2507.19457). Most recently, Andrej Karpathy's [autoresearch](https://github.com/karpathy/autoresearch) has gained significant attention by demonstrating how an AI agent can be used to autonomously conduct research. Taken together, these efforts suggest that AI-driven discovery is emerging as a practical reality.
+
+At Berkeley, we've been working on automated discovery for over a year and are excited to share our results in this space. As Figure 1 shows, we have worked across the stack to build the various components needed to realize the vision of AI-driven discovery. We started with building the foundations of this approach with [**GEPA**](https://arxiv.org/abs/2507.19457), demonstrating an end-to-end framework for optimizing agents and writing optimized kernels for AMD's NPUs. We further demonstrated the broad-applicability and promise of this approach with our work on [**AI-Driven Research for Systems (ADRS)**](https://arxiv.org/abs/2510.06189) by applying these techniques to 10 diverse systems research problems. Next, realizing that frameworks like GEPA, OpenEvolve, and ShinkaEvolve all perform text optimization in various paradigms, we developed a universal declarative API ([**optimize_anything**](https://gepa-ai.github.io/gepa/blog/2026/02/18/introducing-optimize-anything/)) to decouple problem specification from different solver backends which can all be invoked via the same unified API. Subsequently, we have developed [**K-Search**](https://arxiv.org/abs/2602.19128v1) and [**SkyDiscover**](https://github.com/skydiscover-ai/skydiscover) ([AdaEvolve](https://arxiv.org/abs/2602.20133) and [EvoX](https://arxiv.org/abs/2602.23413)), frameworks that drive the loop of automated search, and are also compatible with optimize_anything; alongside [**KISS**](https://github.com/ksenxx/kiss_ai/tree/main), a coding agent that also enables these goals.
+
+![Figure 1. The AI-driven discovery stack, highlighting recent efforts from Berkeley and others.](/blog/berkeley-ai-driven-research/Berkeley_AI-Driven_Research_Stack.png)
+
+*Figure 1. The AI-driven discovery stack, highlighting recent efforts from Berkeley and others.*
+
+As an overview, we provide a brief summary of each of our efforts below:
+
+- [**AI-Driven Research for Systems (ADRS)**](https://arxiv.org/abs/2510.06189)**:** We describe the foundations of AI-driven research and provide results on a range of real-world research problems, demonstrating that this approach can significantly outperform existing state-of-the-art baselines. We provide our analysis and a benchmark of use cases in this work.
+- [**optimize_anything**](https://gepa-ai.github.io/gepa/blog/2026/02/18/introducing-optimize-anything/)**:** We present a universal API for text optimization that separates the user-facing interface from the underlying search algorithm. This makes it easy to define artifacts, evaluators, and objectives once, then swap in any optimization backend through configuration. The API allows expressing a broad class of optimization problems (spanning 3 optimization paradigms including single task, multi task, and generalization) as a text optimization problem through the same interface.
+- [**GEPA**](https://arxiv.org/abs/2507.19457)**:** We introduce a dependency-free, extensible framework that uses reflective mutation and Pareto-efficient search to optimize any text artifact including prompts, code, agent architectures and skills, and more. By reflecting on rich evaluation feedback in natural language rather than collapsing it into scalar rewards, GEPA can outperform RL in agent optimization while using 35× fewer rollouts. It supports all 3 optimization paradigms (single-task, multi-task and generalization) and serves as the primary backend for optimize_anything.
+- [**KISS**](https://github.com/ksenxx/kiss_ai/tree/main)**:** We introduce a simple agent framework built around composable Python primitives rather than heavy abstractions. It enables long-running agent workflows, supports self-improving agents, and provides a practical foundation for building and optimizing coding agents.
+- [**K-Search**](https://arxiv.org/abs/2602.19128v1)**:** We present a new approach to automated GPU kernel generation that uses LLMs as a world model to guide search. By separating high-level strategy from low-level implementation, K-Search can explore more effective multi-step optimizations and achieves strong results on real kernel workloads.
+- [**SkyDiscover**](https://github.com/skydiscover-ai/skydiscover)**:** We release a modular framework for AI-driven discovery that breaks the discovery loop into reusable components such as context building, solution generation, evaluation, and selection. It provides a common foundation for implementing, benchmarking, and comparing discovery algorithms across a wide range of tasks.
+
+## AI-Driven Research for Systems (ADRS)
+
+As described in our previous [blog post](https://adrs-ucb.notion.site/) and [paper](https://arxiv.org/abs/2510.06189), ADRS automates the core iterative loop of research.
+
+![Figure 2. The AI-driven Research for Systems (ADRS) architecture shown in the context of the systems research process. ADRS (grey area) automates the Solution and Evaluation stages.](/blog/berkeley-ai-driven-research/Screenshot_2025-10-16_at_10.16.46_AM.png)
+
+*Figure 2. The AI-driven Research for Systems (ADRS) architecture shown in the context of the systems research process. ADRS (grey area) automates the Solution and Evaluation stages.*
+
+This automated loop is the foundation of several existing implementations, ranging from specialized frameworks like Google's [AlphaEvolve](https://storage.googleapis.com/deepmind-media/DeepMind.com/Blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/AlphaEvolve.pdf), [GEPA](https://arxiv.org/abs/2507.19457), [OpenEvolve](https://github.com/codelion/openevolve), and [ShinkaEvolve](https://github.com/SakanaAI/ShinkaEvolve), to workflows using interactive coding assistants like Cursor.
+
+To rigorously evaluate the capability of ADRS, we expanded our investigation to three open-source frameworks—[GEPA](https://arxiv.org/abs/2507.19457), [OpenEvolve](https://github.com/algorithmicsuperintelligence/openevolve), and [ShinkaEvolve](https://github.com/SakanaAI/ShinkaEvolve)—on ten real-world research problems across diverse sub-domains, including networking, databases, and core systems. We use GPT-5 and Gemini-3.0, capped at 100 iterations per run to ensure a fair comparison, and provide the specific configs used in the appendix of [our paper](https://arxiv.org/abs/2512.14806).
+
+Most of these solutions were discovered in **under 8 hours**, at a cost of **less than $30**. Importantly, the results we're sharing should be seen as a starting point; as the frameworks and models improve, we expect even more improvements.
+
+![Table 1: Comparison of OpenEvolve (OE), GEPA, and Shinka(Evolve) across GPT-5 and Gemini-3.](/blog/berkeley-ai-driven-research/Screenshot_2025-12-17_at_4.08.30_PM.png)
+
+*Table 1: Comparison of OpenEvolve (OE), GEPA, and Shinka(Evolve) across GPT-5 and Gemini-3.*
+
+One of the most exciting capabilities of ADRS is its ability to generate solutions by drawing on techniques from different domains. While systems researchers typically specialize in a particular subfield (e.g., networking or databases), LLMs are trained on vast, diverse datasets that span the entire spectrum of human knowledge. This breadth allows ADRS to identify structural parallels between systems performance problems and challenges in unrelated fields—connections that are easily overlooked by experts focused on a single domain. Table 6 provides an overview of cross-domain techniques discovered by ADRS frameworks across our case studies.
+
+**Paper:** [https://arxiv.org/abs/2510.06189](https://arxiv.org/abs/2510.06189)
+
+**Code:** [https://github.com/UCB-ADRS/ADRS](https://github.com/UCB-ADRS/ADRS)
+
+**Blog:** [https://ucbskyadrs.github.io/](https://ucbskyadrs.github.io/)
+
+## Open-Source Frameworks
+
+We describe the various efforts from our lab below that tackle different parts of the automated discovery loop. We present the API layer first and then the frameworks in alphabetical order.
+
+### optimize_anything: A Universal API for Text Optimization and Evolution
+
+> Instead of locking users into specific search algorithms, optimize_anything provides a **common frontend API** where strategies like Genetic-Pareto and EvoX are plugged in as backends.
+
+![Figure 3. Evaluate a text artifact, capture diagnostic feedback (ASI), and let an LLM propose targeted improvements. Code, prompts, configs, agent architectures — if you can measure it, optimize_anything can optimize it.](/blog/berkeley-ai-driven-research/image.png)
+
+*Figure 3. Evaluate a text artifact, capture diagnostic feedback (ASI), and let an LLM propose targeted improvements. Code, prompts, configs, agent architectures — if you can measure it, optimize_anything can optimize it.*
+
+Prior frameworks tightly couple the optimization task with specific search algorithms (e.g., prompt samplers, island topologies). This makes it difficult to experiment with different strategies without rewriting code. optimize_anything removes this limitation by establishing a backend-agnostic interface. Users simply install optimize_anything, define their optimization scenario through just 2 required inputs: 1) what to optimize (initial artifact, or natural language description), 2) How to measure it, and the backend handles the rest.
+
+Specifically, optimize_anything provides:
+
+- **Common Frontend API:** A unified interface for defining artifacts, evaluators, and objectives, independent of the underlying search logic.
+- **Pluggable Backends:** GEPA is the default backend implementation, but the system allows users to plug in and try multiple search algorithms via a simple config.
+
+By treating the search strategy as a modular backend, optimize_anything enables seamless experimentation with different optimization engines while keeping the user interface constant. In our optimize_anything blog, we demonstrate that with just one API, we can:
+
+- [create agent skills achieving near-perfect Claude Code task completion 47% faster](https://gepa-ai.github.io/gepa/blog/2026/02/18/introducing-optimize-anything/#1-coding-agent-skills),
+- [optimize cloud scheduling policies that cut costs by 40%, beating expert heuristics](https://gepa-ai.github.io/gepa/blog/2026/02/18/introducing-optimize-anything/#2-systems-research),
+- [find detailed system prompts to boost GPT's math reasoning accuracy](https://gepa-ai.github.io/gepa/blog/2026/02/18/introducing-optimize-anything/#4-prompt-optimization),
+- [discover bespoke agent harnesses that nearly triple Gemini Flash's ARC-AGI accuracy](https://gepa-ai.github.io/gepa/blog/2026/02/18/introducing-optimize-anything/#3-agent-architecture-discovery),
+- [write custom solvers to match and exceed Optuna in blackbox mathematical optimization](https://gepa-ai.github.io/gepa/blog/2026/02/18/introducing-optimize-anything/#7-blackbox-optimization),
+- [model a 3D unicorn](https://gepa-ai.github.io/gepa/blog/2026/02/18/introducing-optimize-anything/#8-3d-unicorn),
+- and many other applications.
+
+**Code:** [https://github.com/gepa-ai/gepa](https://github.com/gepa-ai/gepa)
+
+**Blog:** [https://gepa-ai.github.io/gepa/blog/2026/02/18/introducing-optimize-anything/](https://gepa-ai.github.io/gepa/blog/2026/02/18/introducing-optimize-anything/)
+
+### GEPA
+
+> GEPA optimizes any text artifact—prompts, code, policies, hypotheses—by reflecting on evaluation feedback in natural language. The same framework that optimizes an LLM agent also discovers scheduling algorithms or writes GPU kernels.
+
+[GEPA](https://arxiv.org/abs/2507.19457) (ICLR 2026) is a dependency-free Python framework for optimizing any text artifact—prompts, agent architectures, code, scheduling policies, hypotheses and more—using **reflective mutation** and **Pareto-efficient search**. Given an artifact and an evaluator, GEPA iteratively has an LLM reflect on evaluation feedback (agent execution traces, compiler errors, profiling data, test outcomes, human feedback or any other signal) to diagnose shortcomings and propose diverse improved candidates. GEPA maintains a Pareto frontier over candidates, preserving specialists that excel on different subsets of the evaluation (avoiding local optima), naturally supporting multi-objective and multi-task optimization. Across six benchmarks (multi-hop QA, math, instruction following, privacy, retrieval verification), GEPA outperforms GRPO by up to 19pp while using **35× fewer rollouts** (679 vs. 24,000).
+
+Every component in the optimization loop is independently swappable: candidate selection strategies (Pareto, epsilon-greedy, or custom), batch samplers, component update order, merge strategies, evaluation policy, proposal mechanisms, stopping conditions, including the LLM-framework itself. Users start with a simple `optimize_anything()` call and progressively customize any piece without switching frameworks. This flexibility makes GEPA straightforward to integrate into any existing system regardless of its shape; it has been adopted as a core optimizer in [DSPy](https://dspy.ai/api/optimizers/GEPA/overview/), [Pydantic AI](https://pydantic.dev/articles/prompt-optimization-with-gepa), [Comet ML's Opik](https://www.comet.com/docs/opik/agent_optimization/algorithms/gepa_optimizer), [MLflow](https://mlflow.org/blog/mlflow-prompt-optimization), and [verifiers](https://github.com/PrimeIntellect-ai/verifiers/tree/main/configs/gepa). GEPA natively supports all three optimization paradigms exposed by optimize_anything (single-task, multi-task, and generalization) and serves as its primary backend. It has been downloaded over 13M+ times, deployed by [25+ organizations](https://gepa-ai.github.io/gepa/guides/use-cases/), including at [Databricks where GEPA-optimized open-source models outperform Claude Opus 4.1 and GPT-5 at 90× lower cost](https://www.databricks.com/blog/building-state-art-enterprise-agents-90x-cheaper-automated-prompt-optimization) and by [OpenAI for building Self-Evolving Agents](https://developers.openai.com/cookbook/examples/partners/self_evolving_agents/autonomous_agent_retraining/).
+
+Notably, GEPA complements RL: [Arc.computer](https://www.arc.computer/blog/supercharging-rl-with-online-optimization) applied GEPA on top of an already RL-tuned model in their ATLAS framework, yielding **+142% student performance improvement**. Researchers have also used GEPA for [AI safety](https://forum.effectivealtruism.org/posts/2Qj738FkgdHrerSTZ/paper-prompt-optimization-makes-misalignment-legible-1), [GPU parallelization](https://gepa-ai.github.io/gepa/guides/use-cases/) (boosting compilation success to 100% and increasing functional speedups by up to 50%), [production OCR](https://www.intrinsic-labs.ai/research/ocr-gepa-v1.pdf) (consistent error reduction across Gemini model classes), [healthcare multi-agent systems](https://kargarisaac.medium.com/building-and-optimizing-multi-agent-rag-systems-with-dspy-and-gepa-2b88b5838ce2), and [simulation-based agent training](https://openreview.net/pdf?id=53oRwdZe6k) ([Veris.AI](http://veris.ai/)'s RAISE, NeurIPS 2025: 12.5% → 62.5% task correctness). A full showcase of 50+ research and production use cases is available [here](https://gepa-ai.github.io/gepa/guides/use-cases/).
+
+**Code:** [https://github.com/gepa-ai/gepa](https://github.com/gepa-ai/gepa)
+
+**Paper:** [https://arxiv.org/abs/2507.19457](https://arxiv.org/abs/2507.19457)
+
+**Website:** [https://gepa-ai.github.io/gepa/](https://gepa-ai.github.io/gepa/)
+
+**Blog:** [https://gepa-ai.github.io/gepa/blog/](https://gepa-ai.github.io/gepa/blog/)
+
+### KISS
+
+> Modern AI agent frameworks often introduce excessive layers of abstraction and boilerplate. **KISS** takes the opposite approach: by treating agents and tools as simple, composable Python primitives, it enables agents to relentlessly tackle long-running tasks and even optimize their own codebase.
+
+The AI agent ecosystem has grown increasingly complex, creating steep learning curves that hinder developer productivity. **KISS** strips away unnecessary complexity, allowing complex tasks and constraints to be expressed purely in natural language. Its core engine, the **RelentlessCodingAgent**, runs an LLM-powered ReAct loop designed to hammer at long-running tasks across multiple sub-sessions until it succeeds or exhausts its budget.
+
+**Key Features & Results:**
+
+- **Smart Auto-Continuation:** Seamlessly executes massive tasks across tens of thousands of sub-sessions (e.g., 10,000+) of 100-step ReAct agents, using a chronological list of steps taken by the agent along with explanations and relevant code snippets, to perfectly track and resume progress.
+- **Self-Evolution:** Since agents are simple Python classes, they can easily optimize their own codebase. Using the AgentEvolver, the relentless agent self-evolved overnight, reducing its API costs by 98%.
+- **Zero-Boilerplate Tools:** Core tools (Bash, Edit, Read, Write) are just plain Python functions with type hints—no complex wrappers or config ceremonies required.
+- **Integrated Ecosystem:** Runs natively in Docker for isolated execution, provides implementations of the GEPA optimizer, Agent Evolver, and OpenEvolve/ShinkEvolve, and powers **KISS Sorcar**, a fully open-source local AI IDE. Repo optimizer and agent optimizer present the simplest and most modern techniques for evolving repositories and agents (including prompts, tools, and agent code), effectively by exploiting frontier models to the fullest.
+
+![KISS Sorcar](/blog/berkeley-ai-driven-research/KISSSorcar.png)
+
+**Code:** [https://github.com/ksenxx/kiss_ai/tree/main](https://github.com/ksenxx/kiss_ai/tree/main)
+
+### K-Search
+
+> Traditional methods treat LLMs as stochastic code generators inside heuristic loops — but this misses a key point: ***LLMs are powerful planners with rich domain priors***.
+
+![Figure 4. Overview of K-search.](/blog/berkeley-ai-driven-research/overview-2.png)
+
+*Figure 4. Overview of K-search.*
+
+We introduce **K-Search**, a new paradigm for automated GPU kernel generation that leverages LLMs as a **co-evolving intrinsic world model** to guide the search process. By decoupling high-level optimization strategy from low-level code implementation, K-Search can pursue multi-step transformations even when intermediate implementations do not immediately improve performance.
+
+**Key Results:**
+
+- Our discovered kernels achieve an average speedup of ~2.10× over state-of-the-art evolutionary search across 4 FlashInfer kernels on H100/B200.
+- Up to 14.3× gain on complex Mixture-of-Experts (MoE) kernels, compared to OpenEvolve.
+- State-of-the-art performance on GPUMode TriMul (H100) task — beating both automated and human solutions.
+
+**Code:** [https://github.com/caoshiyi/K-Search](https://github.com/caoshiyi/K-Search)
+
+**Paper:** [https://arxiv.org/abs/2602.19128v1](https://arxiv.org/abs/2602.19128v1)
+
+### SkyDiscover: A Modular Foundation for AI-Driven Discovery
+
+> To address the lack of reusable infrastructure in prior work, we built **SkyDiscover**, a modular foundation for AI-driven discovery that makes it easy to **build, run, and compare discovery algorithms** across domains.
+
+Existing evolutionary discovery systems (OpenEvolve, GEPA, ShinkaEvolve) tightly couple selection logic, prompt construction, evaluation, and resource allocation. Changing how parents are selected often means rewriting how prompts are built. This coupling makes it difficult to experiment with new search strategies, compare methods fairly, or scale to new problem domains. SkyDiscover solves this by decomposing the discovery loop into four independently replaceable components, connected by a programmable control loop:
+
+![Figure 5. SkyDiscover decomposes AI-driven discovery into four reusable components: Context Builder, Solution Generator, Evaluator, and Solution Selector.](/blog/berkeley-ai-driven-research/image%201.png)
+
+*Figure 5. SkyDiscover decomposes AI-driven discovery into four reusable components: Context Builder, Solution Generator, Evaluator, and Solution Selector.*
+
+- **Context Builder** — constructs problem + history + guidance
+- **Solution Generator** — proposes candidates (LLMs + tools)
+- **Evaluator** — scores solutions with rich feedback
+- **Solution Selector** — maintains and evolves the search process
+
+Both the components and the orchestration logic that connects them are programmable. Algorithms can modify how experience is accumulated, how candidates are generated, how selection operates, and even how the control loop itself behaves. This programmability is what enables adaptive algorithms like AdaEvolve and EvoX to be implemented in ~2,500 lines of code each.
+
+#### Three Evaluator Formats
+
+A key design goal of SkyDiscover is making it easy to bring any problem into the framework. To that end, SkyDiscover supports three evaluator formats and auto-detects which one is being used:
+
+1. **Python evaluator** — a single file with an `evaluate(program_path)` function that returns a score and optional artifacts (feedback strings, metrics, traces). This is the simplest option and covers most use cases:
+
+```python
+def evaluate(program_path):
+    score = run_and_grade(program_path)
+    return {
+        "combined_score": score,
+        "artifacts": {"feedback": "Off by one in the loop boundary"},
+    }
+```
+
+2. **Containerized evaluator** — a directory with a `Dockerfile` and `evaluate.sh` that writes JSON to stdout. Runs in Docker, so it can have arbitrary dependencies (GPU runtimes, system libraries, custom compilers). This is useful for systems benchmarks like GPU kernel optimization or network simulation.
+3. **Harbor-format tasks** — a directory following the [Harbor](https://github.com/codegenning/harbor) standard (`instruction.md` + `environment/Dockerfile` + `tests/`). SkyDiscover natively supports Harbor-format benchmarks, enabling out-of-the-box compatibility with external benchmark suites including **AlgoTune, EvoEval, HumanEvalFix, BigCodeBench, LiveCodeBench, USACO, CRUSTBench, and CodePDE**
+
+This means researchers can bring their own evaluation infrastructure without modifying SkyDiscover's internals; whether it's a 5-line Python function, a Docker container with CUDA dependencies, or an existing community benchmark.
+
+#### What SkyDiscover Enables:
+
+- **Plug-and-play discovery algorithms**
+Swap selection strategies (Top-K, Pareto, MAP-Elites, etc.) or entire search paradigms without rewriting the system
+- **Search over strategies, not just solutions**
+Treat the *optimization process itself* as an object of search
+- **Unified benchmarking across tasks and methods**
+Run different algorithms under identical settings for fair comparison
+- **Broad task coverage (~200+ problems)**
+Across math, systems, programming, kernels, and prompts
+- **Seamless integration with optimize_anything + ADRS**
+Same abstraction across problem specification → search → evaluation
+
+### SOTA Adaptive Discovery Algorithms (Built on SkyDiscover)
+
+On top of this modular foundation, SkyDiscover supports a **broad class of LLM-driven evolutionary algorithms**, and enables two key advances:
+
+#### Adaptive Evolution (progress-aware search)
+
+Discovery is treated as a **non-stationary optimization process**, where the system dynamically adjusts:
+
+- exploration vs exploitation — shifts search behavior as the run progresses
+- compute allocation
+- search strategies
+
+based on real-time progress signals.
+
+#### Self-Evolving Optimization (AI optimizes itself)
+
+Beyond adapting parameters, the system **evolves the optimization strategy itself**:
+
+- rewrites how solutions are selected and combined
+- changes mutation / refinement strategies
+
+#### Result
+
+![Table 2: Comparison of AdaEvolve, EvoX, OpenEvolve, GEPA, and Shinka(Evolve).](/blog/berkeley-ai-driven-research/image%202.png)
+
+*Table 2: Comparison of AdaEvolve, EvoX, OpenEvolve, GEPA, and Shinka(Evolve).*
+
+Across 200+ tasks under fixed budgets and models, **AdaEvolve / EvoX achieve the strongest open-source performance**.
+
+- **Outperform OpenEvolve, GEPA, and ShinkaEvolve** across math, systems, and programming
+- **Match or exceed AlphaEvolve / human SOTA** on multiple tasks
+- **+34% median improvement** on 172 Frontier-CS problems
+- Real-world gains: **41% lower cloud transfer cost, 14% better MoE balance, 29% lower KV-cache pressure**
+
+![Figure 6. Comparison on Frontier-CS benchmark.](/blog/berkeley-ai-driven-research/image%203.png)
+
+*Figure 6. Comparison on Frontier-CS benchmark.*
+
+**Code:** [https://github.com/skydiscover-ai/skydiscover](https://github.com/skydiscover-ai/skydiscover)
+
+**Blog:** [https://skydiscover-ai.github.io/blog.html](https://skydiscover-ai.github.io/blog.html)
+
+**AdaEvolve:** [https://arxiv.org/abs/2602.20133](https://arxiv.org/abs/2602.20133)
+
+**EvoX:** [https://arxiv.org/abs/2602.23413](https://arxiv.org/abs/2602.23413)
+
+## What's Next?
+
+We are actively pursuing research on ADRS. In the coming weeks, we will introduce a standardized **leaderboard** to benchmark AI performance on a range of different tasks. We will also continue our blog series and feature success stories from both academia and industry. Stay tuned!
+
+## Acknowledgments
+
+This research was supported (in alphabetical order) by gifts from Accenture, AMD, Anyscale, Broadcom Inc., Google, IBM, Intel, Intesa Sanpaolo, Lambda, Mibura Inc, Samsung SDS, and SAP.
+
+## Contribute to the ADRS Blog Series!
+
+> The **AI-Driven Research Systems (ADRS)** initiative is an open, collaborative effort to explore how AI can accelerate scientific discovery itself, from evolving algorithms to optimizing real-world systems.
+>
+> If you've built, optimized, or experimented with AI-driven research tools, we'd love to hear from you. Share your experiences, insights, or case studies with us in the **ADRS Blog Series**.
+
+👉 Reach out to us via email: [ucbskyadrs@gmail.com](mailto:ucbskyadrs@gmail.com)
+
+💬 Join us: [join.slack.com/t/adrs-global](https://join.slack.com/t/adrs-global/shared_invite/zt-3fgme22n5-PKYyAc9aIeTyX5iSQTKIoA) and [Discord](https://discord.gg/mz8gAnpt)
+
+🗞️ Follow us: [x.com/ai4research_ucb](https://x.com/ai4research_ucb)
