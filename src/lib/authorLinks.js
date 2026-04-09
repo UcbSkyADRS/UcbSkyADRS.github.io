@@ -33,6 +33,10 @@ const AUTHOR_LINKS = {
   "Alex Dimakis": "https://people.eecs.berkeley.edu/~alexdimakis/",
   "Koushik Sen": "https://people.eecs.berkeley.edu/~ksen",
   "Matei Zaharia": "https://people.eecs.berkeley.edu/~matei/",
+  "Johannes Wehrstein": "https://www.informatik.tu-darmstadt.de/systems/systems_tuda/group/team_detail_120128.en.jsp",
+  "Timo Eckmann": "https://www.informatik.tu-darmstadt.de/systems/systems_tuda/group/team_detail_147136.en.jsp",
+  "Matthias Jasny": "https://www.informatik.tu-darmstadt.de/systems/systems_tuda/group/team_detail_111232.en.jsp",
+  "Carsten Binnig": "https://www.informatik.tu-darmstadt.de/systems/systems_tuda/group/team_detail_18624.en.jsp",
   "ADRS Team": "https://ucbskyadrs.github.io/about/",
 };
 
