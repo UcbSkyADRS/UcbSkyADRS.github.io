@@ -37,6 +37,9 @@ const AUTHOR_LINKS = {
   "Timo Eckmann": "https://www.informatik.tu-darmstadt.de/systems/systems_tuda/group/team_detail_147136.en.jsp",
   "Matthias Jasny": "https://www.informatik.tu-darmstadt.de/systems/systems_tuda/group/team_detail_111232.en.jsp",
   "Carsten Binnig": "https://www.informatik.tu-darmstadt.de/systems/systems_tuda/group/team_detail_18624.en.jsp",
+  "Yuhao Zhang": "https://yhzhang.info/",
+  "Eric Liang": "https://scholar.google.com/citations?user=wmZTE5gAAAAJ&hl=en",
+  "Ryan Marcus": "https://rmarcus.info/",
   "ADRS Team": "https://ucbskyadrs.github.io/about/",
 };
 
