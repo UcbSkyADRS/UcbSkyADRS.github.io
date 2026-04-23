@@ -1,12 +1,12 @@
 ---
 title: "How Do LLM Agents Think Through SQL Join Orders?"
 author: "Yuhao Zhang, Eric Liang, Ryan Marcus, Sid Taneja, ADRS Team"
-date: "2026-04-16"
+date: "2026-04-23"
 tags: ["Case Study", "Databases", "Industry"]
 image: "/databricks.jpg"
 excerpt: "This blog is part of a research collaboration with Databricks. We explore how LLM agents reason about SQL join orderings, analyzing their thinking traces to understand the strategies they employ — from anchor table selection and cluster decomposition to iterative hypothesis testing."
 ---
-> This blog is part of a research collaboration with Databricks. In a prior Databricks blog, we discussed how LLMs are highly effective at iteratively optimizing SQL join orderings. This blog is a followup exploring the details of the LLM thinking process.
+> This blog is part of a research collaboration with Databricks. In a prior [Databricks blog](https://www.databricks.com/blog/are-llm-agents-good-join-order-optimization), we discussed how LLMs are highly effective at iteratively optimizing SQL join orderings. This blog is a followup exploring the details of the LLM thinking process.
 >
 > - **✍️ Previous ADRS Blogs:** [https://ucbskyadrs.github.io/](https://ucbskyadrs.github.io/)
 > - 💬 **Join us**: [join.slack.com/t/adrs-global](https://join.slack.com/t/adrs-global/shared_invite/zt-3fgme22n5-PKYyAc9aIeTyX5iSQTKIoA) and [Discord](https://discord.gg/mz8gAnpt)
@@ -14,7 +14,7 @@ excerpt: "This blog is part of a research collaboration with Databricks. We expl
 
 ## Problem Statement
 
-Since relational databases were first introduced, automated query optimizers and practitioners have [struggled](https://www.vldb.org/pvldb/vol9/p204-leis.pdf) to find good join orderings for SQL queries. In the earlier blog we explored the ability of LLMs to optimize the join order of SQL queries, which can be thought of as a form of [ADRS optimization](https://arxiv.org/abs/2510.06189) against the SQL DSL instead of a full programmatic language. In that blog we showed that LLMs had promising performance for join ordering compared to state of the art approaches.
+Since relational databases were first introduced, automated query optimizers and practitioners have [struggled](https://www.vldb.org/pvldb/vol9/p204-leis.pdf) to find good join orderings for SQL queries. In the [earlier blog](https://www.databricks.com/blog/are-llm-agents-good-join-order-optimization) we explored the ability of LLMs to optimize the join order of SQL queries, which can be thought of as a form of [ADRS optimization](https://arxiv.org/abs/2510.06189) against the SQL DSL instead of a full programmatic language. In that blog we showed that LLMs had promising performance for join ordering compared to state of the art approaches.
 
 In this posting, we dive deeper into the problem and explore the question of how LLMs are doing so well. While the ability of frontier models to reach state of the art results in domains such as this is no longer surprising, what is still interesting is the "thought process" of how LLMs are achieving these results. For example, one could ask:
 
@@ -48,6 +48,27 @@ We examine three representative queries that illustrate different facets of the 
 | --- | --- | --- |
 | Verified (ms) | 2,543 | 524 |
 
+```sql
+SELECT MIN(t.title) AS american_vhs_movie
+FROM company_type AS ct,
+     info_type AS it,
+     movie_companies AS mc,
+     movie_info AS mi,
+     title AS t
+WHERE ct.kind = 'production companies'
+  AND mc.note LIKE '%(VHS)%'
+  AND mc.note LIKE '%(USA)%'
+  AND mc.note LIKE '%(1994)%'
+  AND mi.info IN ('USA',
+                  'America')
+  AND t.production_year > 2010
+  AND t.id = mi.movie_id
+  AND t.id = mc.movie_id
+  AND mc.movie_id = mi.movie_id
+  AND ct.id = mc.company_type_id
+  AND it.id = mi.info_type_id;
+```
+
 Query: 5-table join (movie_companies, movie_info, title, company_type, info_type) filtering for American VHS movies from production companies.
 
 What happened: The default optimizer drives the plan from movie_info (mi), which has a highly selective info IN ('USA', 'America') filter producing ~12 rows. On paper this seems optimal, but the LLM's very first rollout tried a completely different approach - starting from movie_companies (mc) with its note filters (LIKE '%VHS%' AND '%USA%' AND '%1994%') - and immediately achieved **655ms** vs. the default's **2,543ms**.
@@ -61,6 +82,43 @@ Key insight: Starting from the table with the most selective composite filter ca
 |  | Default | LLM Opt |
 | --- | --- | --- |
 | Verified (ms) | 6,590 | 2,044 |
+
+```sql
+SELECT MIN(n.name) AS voicing_actress,
+       MIN(t.title) AS jap_engl_voiced_movie
+FROM aka_name AS an,
+     char_name AS chn,
+     cast_info AS ci,
+     company_name AS cn,
+     info_type AS it,
+     movie_companies AS mc,
+     movie_info AS mi,
+     name AS n,
+     role_type AS rt,
+     title AS t
+WHERE ci.note IN ('(voice)',
+                  '(voice: Japanese version)',
+                  '(voice) (uncredited)',
+                  '(voice: English version)')
+  AND cn.country_code ='[us]'
+  AND it.info = 'release dates'
+  AND n.gender ='f'
+  AND rt.role ='actress'
+  AND t.production_year > 2000
+  AND t.id = mi.movie_id
+  AND t.id = mc.movie_id
+  AND t.id = ci.movie_id
+  AND mc.movie_id = ci.movie_id
+  AND mc.movie_id = mi.movie_id
+  AND mi.movie_id = ci.movie_id
+  AND cn.id = mc.company_id
+  AND it.id = mi.info_type_id
+  AND n.id = ci.person_id
+  AND rt.id = ci.role_id
+  AND n.id = an.person_id
+  AND ci.person_id = an.person_id
+  AND chn.id = ci.person_role_id;
+```
 
 Query: 10-table join involving cast_info, name, aka_name, char_name, movie_info, movie_companies, company_name, title, info_type, and role_type - searching for female voice actresses in Japanese/English-voiced movies by US companies.
 
@@ -85,6 +143,68 @@ Key insight: For complex multi-table queries, the LLM exhibits a structured deco
 |  | Default | LLM Opt | Ablation |
 | --- | --- | --- | --- |
 | Verified (ms) | 3,431 | 1,832 | 3,348 |
+
+```sql
+SELECT MIN(cn.name) AS movie_company,
+       MIN(mi_idx.info) AS rating,
+       MIN(t.title) AS complete_euro_dark_movie
+FROM complete_cast AS cc,
+     comp_cast_type AS cct1,
+     comp_cast_type AS cct2,
+     company_name AS cn,
+     company_type AS ct,
+     info_type AS it1,
+     info_type AS it2,
+     keyword AS k,
+     kind_type AS kt,
+     movie_companies AS mc,
+     movie_info AS mi,
+     movie_info_idx AS mi_idx,
+     movie_keyword AS mk,
+     title AS t
+WHERE cct1.kind = 'crew'
+  AND cct2.kind != 'complete+verified'
+  AND cn.country_code != '[us]'
+  AND it1.info = 'countries'
+  AND it2.info = 'rating'
+  AND k.keyword IN ('murder',
+                    'murder-in-title',
+                    'blood',
+                    'violence')
+  AND kt.kind IN ('movie',
+                  'episode')
+  AND mc.note NOT LIKE '%(USA)%'
+  AND mc.note LIKE '%(200%)%'
+  AND mi.info IN ('Sweden',
+                  'Germany',
+                  'Swedish',
+                  'German')
+  AND mi_idx.info > '6.5'
+  AND t.production_year > 2005
+  AND kt.id = t.kind_id
+  AND t.id = mi.movie_id
+  AND t.id = mk.movie_id
+  AND t.id = mi_idx.movie_id
+  AND t.id = mc.movie_id
+  AND t.id = cc.movie_id
+  AND mk.movie_id = mi.movie_id
+  AND mk.movie_id = mi_idx.movie_id
+  AND mk.movie_id = mc.movie_id
+  AND mk.movie_id = cc.movie_id
+  AND mi.movie_id = mi_idx.movie_id
+  AND mi.movie_id = mc.movie_id
+  AND mi.movie_id = cc.movie_id
+  AND mc.movie_id = mi_idx.movie_id
+  AND mc.movie_id = cc.movie_id
+  AND mi_idx.movie_id = cc.movie_id
+  AND k.id = mk.keyword_id
+  AND it1.id = mi.info_type_id
+  AND it2.id = mi_idx.info_type_id
+  AND ct.id = mc.company_type_id
+  AND cn.id = mc.company_id
+  AND cct1.id = cc.subject_id
+  AND cct2.id = cc.status_id;
+```
 
 Query: 14-table join - the most complex query type in the benchmark - involving movie metadata, keywords, ratings, companies, and cast completeness, filtering for European dark/violent movies with high ratings.
 
