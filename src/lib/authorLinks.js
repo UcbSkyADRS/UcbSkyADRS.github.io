@@ -41,6 +41,9 @@ const AUTHOR_LINKS = {
   "Eric Liang": "https://scholar.google.com/citations?user=wmZTE5gAAAAJ&hl=en",
   "Ryan Marcus": "https://rmarcus.info/",
   "ADRS Team": "https://ucbskyadrs.github.io/about/",
+  "Yahya Emara": "https://yahya010.github.io/",
+  "Ali Tehrani": "https://tehrani.xyz/",
+  "Mohamed Abdelfattah": "https://www.mohsaied.com/",
 };
 
 export default AUTHOR_LINKS;

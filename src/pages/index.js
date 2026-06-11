@@ -14,6 +14,12 @@ const stats = [
 /* ── Latest posts (local blog) ── */
 const recentPosts = [
   {
+    title: "Agentic Memory Management for GPU Code Generation",
+    date: "Jun 11, 2026",
+    image: "/makora.png",
+    href: "/blog/makora/",
+  },
+  {
     title: "EvoX: Letting AI Evolve Its Own Evolution Process",
     date: "Mar 17, 2026",
     image: "/evox-overview.png",
