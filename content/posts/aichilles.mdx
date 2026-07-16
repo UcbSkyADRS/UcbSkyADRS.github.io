@@ -1,0 +1,183 @@
+---
+title: "AIChilles: Automatically Uncovering Hidden Weaknesses in AI-Evolved Systems"
+author: "Lesley(Yajie) Zhou, Ao Li, Ashwin Silla, Zaoxing Liu, Vyas Sekar"
+date: "2026-07-16"
+tags: ["Case Study", "AI Systems"]
+image: "/aichilles.png"
+excerpt: "AIChilles is an agentic weakness-finding tool that treats the human-written program as a differential oracle for an AI-evolved program, searching for valid workloads where the evolved program regresses. Across 5 systems and 30 AI-evolved programs, AIChilles finds 49 hidden weaknesses."
+---
+> This post is part of the **AI-Driven Research for Systems (ADRS)** blog series, where we explore how AI can be applied to systems research. We feature exciting work on **AIChilles** this week — an automated framework for uncovering hidden weaknesses in AI-evolved systems.
+>
+> AI-evolving frameworks like **[AdaEvolve](https://arxiv.org/pdf/2602.20133), [OpenEvolve](https://github.com/algorithmicsuperintelligence/openevolve), and [Engram](https://dl.acm.org/doi/epdf/10.1145/3786335.3813138)** rewrite core systems algorithms and report big performance score gains over human-designed heuristics. But these evolved programs are evaluated on a *fixed* set of workloads, and the scoring function may be incomplete. System operators would ask: Should I really deploy the evolved program? What's the risk here?
+>
+> In a motivating case study, we found that AI-evolved programs can score worse and run much slower on unseen but valid workloads. Therefore, given the speed and scale of AI-evolution, we need automated ways to find these weaknesses before the code reaches production.
+>
+> We introduce **AIChilles**, an automatic framework that uncovers the *"Achilles' heel"* of AI-evolved systems. It treats the human-written program *P* as a **differential oracle** for the evolved program *P′*, and searches for valid workloads where *P′* regresses in **correctness, runtime, memory, or output quality**.
+>
+> **Key findings:**
+>
+> - 🔎 Across **5 systems × 3 frameworks × 2 LLMs** (30 evolved programs), AIChilles finds **49 distinct hidden weaknesses**
+> - 🧭 Weaknesses in AI-evolved programs depend on both the application and the evolution framework.
+> - 🛡️ Putting AIChilles *inside* the evolution loop removes the weaknesses, but the score gains shrink (e.g., Prism **19%→0%**, TXN **49%→3.9%**).
+>
+> AIChilles serves as a **cautionary tale** for AI-evolved systems: (1) Be careful with AI overfitting to the test workloads. (2) Operators must make implicit system constraints explicit in the objective, or AI may sacrifice them silently.
+>
+> - **📝 Paper:** [arxiv.org/abs/2606.15834](https://arxiv.org/abs/2606.15834)
+> - **👩‍💻 Code:** [github.com/lesleychou/aichilles](https://github.com/lesleychou/aichilles)
+> - **🏠 Project Page:** [lesleychou.github.io/aichilles](https://lesleychou.github.io/aichilles/)
+> - **✍️ Previous Blogs:** [https://ucbskyadrs.github.io/](https://ucbskyadrs.github.io/)
+> - 💬 **Join us**: [join.slack.com/t/adrs-global](https://join.slack.com/t/adrs-global/shared_invite/zt-3fgme22n5-PKYyAc9aIeTyX5iSQTKIoA) and [Discord](https://discord.gg/mz8gAnpt)
+> - **Follow us**: [x.com/ai4research_ucb](https://x.com/ai4research_ucb)
+
+# The Problem: High Scores Are Not Equal to High Robustness
+
+A wave of AI-evolving frameworks now casts systems-algorithm design as an **agentic code-improvement loop**: an AI agent proposes a candidate program, an *evaluator* scores it on a fixed set of workloads, and the highest-scoring candidates are fed back into the next round. This has been applied to ADRS applications such as transaction scheduling, MoE load balancing, multi-cloud transfer, prefix-cache optimization, and GPU model placement, often beating hand-written heuristics.
+
+There is a catch. When a human writes these heuristics, the KPI score is only part of what they care about. They also weigh **robustness, scalability, and predictable resource use**, but these goals stay *implicit*: they may live in the engineer's judgment, not in the evaluator.
+
+This produces two possible risk modes:
+
+1. **Overfitting to the test workloads.** The evolved program tunes itself to the evaluator's fixed inputs and regresses on other valid workloads it was never scored on.
+2. **Incomplete objective.** Because robustness and scalability are not scored, the AI can lift the KPI by sacrificing them: it swaps a compact heuristic for much more complex logic (sometimes an order of magnitude longer) that hides crashes, DoS-style resource blowups, and silent quality regressions.
+
+Because these programs sit on the **critical path of production systems**, these risks may lead to a big effect. A placement controller that stalls, a scheduler that exhausts memory, or an expert-assignment routine that crashes can take down the very system the optimization was meant to improve. Before deploying an AI-evolved program, an operator has to ask what valid workload could make it fail, and whether that risk is acceptable.
+
+> 💡 The research question we ask: **given a human baseline *P* and an AI-evolved *P′*, is there a valid workload on which *P′* is actually worse than *P*?**
+
+![Figure 1. AI-driven system optimization turns a human program P into an evolved program P′ that scores higher on a fixed workload W. AIChilles searches for an adversarial workload W′ where P′ instead crashes, explodes in resource use, or degrades quality.](/blog/aichilles/problem_overview.png)
+
+# A Motivating Case: Prism Model Placement
+
+We first stumbled on this risk by hand, inspecting AI-evolved versions of [Prism](https://arxiv.org/abs/2505.04021), a KV-cache-aware model-placement policy for multi-LLM serving. The human design is a **single greedy pass** (~45 lines): for each model, place it on the GPU with the lowest current KV-cache pressure.
+
+The evolved versions look impressive but hide regressions:
+
+- **OpenEvolve** (~66 lines) keeps a greedy shape but, for every candidate GPU, scans *all other* GPUs to compute a balance penalty. Its penalty also "reward-hacks" patterns specific to the benchmark, mis-ranking GPUs on workloads with many small high-pressure models.
+- **Engram** (~456 lines) replaces the single pass with repeated heuristic search: many model orders, placement rules, and an aggressive local search over swaps/moves, each trial recomputing GPU pressure. Great on the benchmark; far slower as GPUs and feasible moves grow, and prone to getting trapped in locally-attractive placements.
+
+Both improve the benchmark score while introducing a **runtime regression** (a placement controller that now takes seconds can leave a cluster on a stale placement) and an **optimality regression** on shifted workloads. Figure 2 shows the details.
+
+<div style={{ maxWidth: "70%", margin: "1.5rem auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+  <img src="/blog/aichilles/prism_motivation_time.png" alt="" className="rounded-lg w-full" />
+  <img src="/blog/aichilles/prism_motivation_kpi.png" alt="" className="rounded-lg w-full" />
+</div>
+
+*Figure 2. Prism regressions exposed by changing the workload. Left: the evolved P′ shows worse and faster-growing execution time than P as #GPUs increases. Right: P′ achieves a worse balance score than P under some #GPUs.*
+
+# What Counts as a Weakness
+
+AIChilles runs both programs on the same valid workload *w*. Each execution returns a metric tuple ⟨q, t, m⟩ (quality, time, peak memory) or an abnormal outcome ⊥. A **hidden weakness/risk** is a *divergence violation*: a valid input on which *P′* is worse than *P* under a security- or system-relevant metric.
+
+| Weakness type | Condition (exists *w*) | Intuition |
+| --- | --- | --- |
+| **Correctness** | *P′(w)* → ⊥ ∧ *P(w)* ↛ ⊥ | *P′* crashes / returns invalid output where *P* succeeds |
+| **Scalability–Time** | *t′* > *Fₜ* · *t* | *P′* is *Fₜ×* slower on the same input |
+| **Scalability–Memory** | *m′* > *Fₘ* · *m* | *P′* uses *Fₘ×* more peak memory |
+| **Optimality** | *q′* < *q* | *P′* runs fine but returns a worse solution |
+
+# How AIChilles Works
+
+Naively pointing an LLM at "finding weaknesses" fails for three reasons: (1) the workload space has hidden, application-specific validity constraints that an agent may miss; (2) a single agent often fixates on the first crash it finds and fails to find more distinct weakness types; and (3) it wastes budget re-triggering the same faulty code path. To this end, AIChilles is a three-stage pipeline built to improve the efficiency of weakness search.
+
+![Figure 3. AIChilles in three stages: workload-space inference → divergence-guided search (one agent per weakness type) → weakness dedup & root-cause analysis, with an evolving knowledge base that warm-starts future programs.](/blog/aichilles/aichilles_overview.png)
+
+## Stage 1 · Semantic-Aware Workload-Space Inference
+
+Workload knobs are buried inside evaluators, helper functions, and constants, and some validity rules are only implied by program logic (e.g., in Prism a model must fit on one GPU, so `model_size_max` is bounded by GPU memory). Prompting an agent to extract parameters directly is unstable: different runs recover different parameter sets.
+
+AIChilles therefore **separates deterministic extraction from semantic reasoning**. A Python-AST (Abstract Syntax Tree) pass extracts concrete candidate parameters (module constants, default arguments, literal call values); the agent then infers valid ranges and cross-parameter constraints into a **workload grammar**. The result is a workload sampler, validated by running it on *P* (typically one revision suffices).
+
+> 🔧 On Prism, prompt-only agents recover anywhere from 2 to 5 "parameters" across different trials. We propose a deterministic pass that first anchors the agent to a stable, real parameter set, eliminating false positives from invalid workloads.
+
+## Stage 2 · Divergence-Guided Search, One Agent per Weakness Type
+
+We found that a single monolithic agent collapses onto the first failure mode it finds. AIChilles instead assigns a **separate sub-agent per weakness type** (correctness, time, memory, optimality). Each mutates workloads to maximize evidence for *its* target, then both programs are executed and checked against that type's divergence condition. The search is **divergence-guided**: it prioritizes workloads where *P′* is measurably worse than *P*.
+
+AIChilles uses **execution trajectory** as a proxy for behavioral diversity. For each workload, it records how often each line of *P′* executes and represents it as a vector. A candidate is prioritized when its trajectory differs from those already explored. This steers the search toward **new program behavior** rather than surface-level input changes, and it also helps group repeated witnesses during root-cause analysis.
+
+> 🔧 We compare three diversity signals: workload distance, path coverage, and execution frequency. **Execution frequency exposes the most distinct weaknesses** because it is finer-grained than path coverage and more root-cause aligned than raw workload distance.
+
+## Stage 3 · Deduplication, Root Cause, and a Warm-Start Knowledge Base
+
+Several adversarial workloads may share the same root cause. AIChilles deduplicates by mapping each workload's dominant lines back to a **trigger function**, then groups workloads by trigger function and keeps the highest-divergence representative. A **distinct weakness** is one such group. An agent then writes a root-cause explanation for each weakness group by analyzing the program behavior.
+
+Finally, AIChilles keeps an **evolving knowledge base** per application: confirmed adversarial workloads, near-miss high-divergence workloads, and weakness-type statistics. When testing the next *P′* for the same application, it replays these as warm-start seeds (re-validated against the new program), discovering distinct weaknesses faster.
+
+# Results: 49 Hidden Weaknesses
+
+We evaluated AIChilles on **5 systems applications from ADRS:** transaction scheduling (TXN-Sched), EPLB, Cloudcast, LLM-SQL, Prism, **3 evolution frameworks** (AdaEvolve, OpenEvolve, Engram), and **2 frontier LLMs** (GPT-5, Claude Opus-4.6): 30 evolved programs in total, always testing the *highest-scoring* program each framework produced.
+
+Across this spectrum, AIChilles finds **49 distinct weaknesses**: the most common are runtime regressions (25 instances), then memory (11), correctness (7), and optimality (6).
+
+![Figure 4. Distinct weaknesses across 5 applications × 3 frameworks × 2 LLMs, by type. Op = Claude-Opus-4.6, G5 = GPT-5; Ada/Op/En = AdaEvolve/OpenEvolve/Engram.](/blog/aichilles/heatmap.png)
+
+Against four weakness-finding baselines under an identical 6-hour budget (all using AIChilles' recovered parameters), AIChilles finds more distinct weaknesses across *every* type. AIChilles is also cheap: on Prism it converges in 20–30 minutes and uses fewer tokens than a naive agent.
+
+![Figure 5. Distinct weaknesses discovered as a function of elapsed time. AIChilles finds more distinct weaknesses, and finds them faster, than random, mutational, property-based, and naive-agent baselines under the same budget.](/blog/aichilles/pass_at_t_summary.png)
+
+# Case Studies: What the Weaknesses Look Like
+
+**EPLB: a correctness crash from batching.** The human program assigns expert replicas *one at a time*, recomputing load each step. Opus/AdaEvolve batches assignments with a fixed `topk` list and implicitly assumes the batch size never exceeds the number of experts returned. With 8 logical experts but 288 physical replicas, a batch of 20 indexes past an 8-element tensor and **crashes**, on a perfectly valid workload. The same batching also causes an **optimality** regression: a fixed top-k list can't track the load distribution as it shifts, producing worse balance as experts and layers grow.
+
+**TXN-Sched: a scheduler that becomes the bottleneck.** The baseline keeps one active prefix with bounded sampling. GPT/AdaEvolve turns this into A*/beam search with large-neighborhood refinement, caches every explored prefix, and restarts its trial budget after each improvement. Time and memory grow with the number of explored prefixes: an optimization meant to reduce lock conflicts instead burns CPU and memory *before transactions even run*.
+
+A recurring pattern: evolved programs improve the score by **storing more intermediate state** (search prefixes, device-transfer copies, dense cost matrices) that fits small evaluator workloads but explodes on larger valid inputs.
+
+| Application | Original *P* | Opus/AdaEvolve *P′* |
+| --- | --- | --- |
+| TXN (*N* transactions) | O(*N*) | O(*N*²) |
+| EPLB (*L* layers, *E* experts, *R* replicas, *B* max replicas) | O(*LEB*) | O(*LEB* + *LR*) |
+| Prism (*M* models, *G* GPUs) | O(*M*+*G*) | O(*MG*) |
+
+*Table 1. Complexity of the human baseline vs. the AI-evolved program.*
+
+> 🔎 Dig into more details on the **[results explorer](https://lesleychou.github.io/aichilles/explorer/)**: browse every weakness with side-by-side P vs P′ source, the triggering workload, and P-vs-P′ regression curves.
+
+# Can We Fix It? AIChilles in the Loop
+
+If AIChilles can find these weaknesses, can it prevent them? We tried two mitigations with AdaEvolve + Opus-4.6.
+
+**Prompt patching** (warning the model about the four weakness types) is *not enough*: the evolved programs still contain weaknesses across applications.
+
+**AIChilles-in-the-loop** works: after each candidate is generated, we run AIChilles for 100 iterations; any adversarial workload triggers a large penalty and is returned as feedback. A candidate must now both improve the score *and* pass the weakness checks: AIChilles effectively becomes CI/CD for ADRS. The final selected programs no longer expose AIChilles-found weaknesses.
+
+![Table 2. Mitigation results for Opus/AdaEvolve. Prompt patching still leaves weaknesses across applications; with AIChilles in the loop, the selected programs pass all weakness checks, but the evaluator-score gains shrink toward the human baseline.](/blog/aichilles/mitigation_table.png)
+
+> ⚖️ **Robustness has a price.** Once the weaknesses found by AIChilles are fed back to the evolution loop, the gains of AI shrink: Prism falls from a **19% improvement to 0%** (back to the human baseline) and TXN-Sched from **49% to 3.9%**. This implies that part of the reported "improvement" may have come from sacrificed robustness on the evaluator's blind spots.
+
+# Conclusion
+
+AI-driven system evolution has great potential, but its gains may come with hidden weaknesses that fixed benchmarks did not reveal during evaluation. AIChilles is a **cautionary tale for optimizing systems with AI**: an evolution loop optimizes only what its objective measures, so any goal left implicit (robustness, scalability, predictable resource use) is a goal the AI can trade away for score.
+
+AIChilles argues that evaluating AI-evolved systems requires testing worst-case behavior across valid workload spaces, not just average-case scores. It automatically surfaces distinct hidden weaknesses across evolved programs and can be added back into the evolution loop to prevent them.
+
+Given the speed and scale of AI-generated code development, we believe automated weakness discovery is a necessary step toward safely deploying AI-generated systems code.
+
+## Try It!
+
+AIChilles is open-source. If you build or audit AI-evolved systems, we'd love you to try AIChilles to stress-test them. More exciting findings are coming on the [project page](https://lesleychou.github.io/aichilles/).
+
+> 📬 Please feel free to contact [Lesley (Yajie) Zhou](https://lesleychou.github.io/) or [open an issue on GitHub](https://github.com/lesleychou/aichilles/issues) if you have any questions or suggestions. We look forward to pushing AI-driven system optimization to the next level with the community. :)
+
+# Citation
+
+If you find AIChilles helpful, please cite:
+
+```bibtex
+@article{zhou2026aichilles,
+  title={AIChilles: Automatically Uncovering Hidden Weaknesses in AI-Evolved Systems},
+  author={Zhou, Yajie and Li, Ao and Silla, Ashwin and Liu, Zaoxing and Sekar, Vyas},
+  year={2026},
+  journal={arXiv preprint arXiv:2606.15834}
+}
+```
+
+# Contribute to the ADRS Blog Series!
+
+> The **AI-Driven Research Systems (ADRS)** initiative is an open, collaborative effort to explore how AI can accelerate scientific discovery itself, from evolving algorithms to optimizing real-world systems.
+>
+> If you've built, optimized, or experimented with AI-driven research tools, we'd love to hear from you. Share your experiences, insights, or case studies with us in the **ADRS Blog Series**.
+
+👉 Reach out to the UCB team via email: [ucbskyadrs@gmail.com](mailto:ucbskyadrs@gmail.com)
+
+💬 Join UCB on [join.slack.com/t/adrs-global](https://join.slack.com/t/adrs-global/shared_invite/zt-3fgme22n5-PKYyAc9aIeTyX5iSQTKIoA) and [Discord](https://discord.gg/mz8gAnpt)

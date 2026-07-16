@@ -44,6 +44,10 @@ const AUTHOR_LINKS = {
   "Yahya Emara": "https://yahya010.github.io/",
   "Ali Tehrani": "https://tehrani.xyz/",
   "Mohamed Abdelfattah": "https://www.mohsaied.com/",
+  "Lesley(Yajie) Zhou": "https://lesleychou.github.io/",
+  "Ao Li": "https://aoli.al/",
+  "Zaoxing Liu": "https://zaoxing.github.io/",
+  "Vyas Sekar": "https://users.ece.cmu.edu/~vsekar/",
 };
 
 export default AUTHOR_LINKS;

@@ -14,6 +14,12 @@ const stats = [
 /* ── Latest posts (local blog) ── */
 const recentPosts = [
   {
+    title: "AIChilles: Uncovering Hidden Weaknesses in AI-Evolved Systems",
+    date: "Jul 16, 2026",
+    image: "/aichilles.png",
+    href: "/blog/aichilles/",
+  },
+  {
     title: "Agentic Memory Management for GPU Code Generation",
     date: "Jun 11, 2026",
     image: "/makora.png",
