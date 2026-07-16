@@ -45,6 +45,7 @@ const AUTHOR_LINKS = {
   "Ali Tehrani": "https://tehrani.xyz/",
   "Mohamed Abdelfattah": "https://www.mohsaied.com/",
   "Lesley(Yajie) Zhou": "https://lesleychou.github.io/",
+  "Ashwin Silla": "https://www.linkedin.com/in/ashwinsilla/",
   "Ao Li": "https://aoli.al/",
   "Zaoxing Liu": "https://zaoxing.github.io/",
   "Vyas Sekar": "https://users.ece.cmu.edu/~vsekar/",
