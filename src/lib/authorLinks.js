@@ -49,6 +49,14 @@ const AUTHOR_LINKS = {
   "Ao Li": "https://aoli.al/",
   "Zaoxing Liu": "https://zaoxing.github.io/",
   "Vyas Sekar": "https://users.ece.cmu.edu/~vsekar/",
+  "Mert Yuksekgonul": "https://www.linkedin.com/in/mertyuksekgonul/",
+  "Daniel Koceja": "https://www.linkedin.com/in/koceja/",
+  "Xinhao Li": "https://www.linkedin.com/in/xinhao-li-627225145/",
+  "Federico Bianchi": "https://www.linkedin.com/in/federico-bianchi-3b7998121/",
+  "Yejin Choi": "https://www.linkedin.com/in/yejin-choi-0b900b1/",
+  "James Zou": "https://www.linkedin.com/in/james-zou-2123a4133/",
+  "Carlos Guestrin": "https://guestrin.su.domains/",
+  "Yu Sun": "https://yueatsprograms.github.io/",
 };
 
 export default AUTHOR_LINKS;

@@ -14,6 +14,12 @@ const stats = [
 /* ── Latest posts (local blog) ── */
 const recentPosts = [
   {
+    title: "TTT-Discover: Learning to Discover at Test Time",
+    date: "Aug 13, 2026",
+    image: "/ttt.png",
+    href: "/blog/ttt/",
+  },
+  {
     title: "AIChilles: Uncovering Hidden Weaknesses in AI-Evolved Systems",
     date: "Jul 16, 2026",
     image: "/aichilles.png",
